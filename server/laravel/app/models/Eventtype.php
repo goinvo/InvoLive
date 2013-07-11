@@ -3,7 +3,7 @@ class Eventtype extends Eloquent
 {
 	public $timestamps = false;
 
-	protected $fillable = array("name");
+    private static $aggregationCodes = array( 0 => 'COUNT', 1 => 'AVG');
 
 	public static function getId($name)
     {
@@ -24,6 +24,10 @@ class Eventtype extends Eloquent
             $event->save();
             return True;
         }
+    }
+
+    public function aggregateMethod(){
+        return Eventtype::aggregationCodes($this->aggregation);
     }
 
 }

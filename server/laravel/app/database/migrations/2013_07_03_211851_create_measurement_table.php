@@ -14,9 +14,9 @@ class CreateMeasurementTable extends Migration {
 		Schema::create('measurements', function($table)
 		{
 			$table->increments('id');
-			$table->int('eventtype_id');
-			$table->int('source_id');
-			$table->int('user_id');
+			$table->integer('eventtype_id');
+			$table->integer('source_id');
+			$table->integer('user_id');
 			$table->float('value');
 			$table->dateTime('timestamp');
 
@@ -26,6 +26,7 @@ class CreateMeasurementTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('name')->unique();
+			$table->string('aggregation');
 		});
 
 

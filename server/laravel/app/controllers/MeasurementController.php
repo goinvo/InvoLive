@@ -66,15 +66,32 @@ class MeasurementController extends BaseController {
 	 */
 	public function get()
 	{
-		$query = Measurement::query();
+		
 
 		$event = Input::get('eventtype');
 		$user = Input::get('user');
 		$source = Input::get('source');
+		$time = Input::get('time');
+		$aggregate= Input::get('aggregate');
 
-		if($event != null) $query->where('eventtype_id', Eventtype::getId($event));
-		if($user != null) $query->where('user_id', User::getId($user));
-		if($source != null) $query->where('source_id', Source::getId($source));
+
+		//$results = Measurement::getMeasurement($user, $event, $source);
+
+		$query = Measurement::getMeasurement($user, $event, $source);
+
+
+		if($time != null) {
+			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time));
+		}
+		if($aggregate != null){
+			$event_id = Eventtype::getId($event);
+			if($event_id == null) {
+				return Response::json(array(
+			        'message'=>'Cannot aggregate results without an event type.'),400
+				);
+			}
+			$query = Measurement::aggregateMethod($query, Eventtype::find($event_id)->aggregateMethod);
+		}
 
 		$results = $query->get();
 		$payload = array();

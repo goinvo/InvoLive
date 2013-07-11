@@ -40,6 +40,22 @@ class Measurement extends Eloquent
 		return array('success' => True);
 	}
 
+	public static function aggregateMethod($query, $method_id){
+		return $query->select(DB::raw('user_id, eventtype_id, source_id, '.$method.'(value) as value, timestamp'));
+	}
+
+	public static function getMeasurement($user = null, $event = null, $source = null){
+		
+		$query = Measurement::query();
+
+		if($event != null) $query->where('eventtype_id', Eventtype::getId($event));
+		if($user != null) $query->where('user_id', User::getId($user));
+		if($source != null) $query->where('source_id', Source::getId($source));
+
+		return $query;
+
+	}
+
 	public function user()
 	{
 	 	return $this->belongsTo('User');
