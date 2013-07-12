@@ -52,6 +52,14 @@ class EventtypeController extends BaseController {
 		}
 	}
 
+	public function get(){
+		$events = DB::table('eventtypes')->lists('name');
+
+		return Response::json(array(
+		        'message'=>$events),200
+		);
+	}
+
 	/**
 	 * Display the specified resource.
 	 *

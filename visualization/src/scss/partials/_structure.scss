@@ -1,0 +1,17 @@
+/*
+	File Overview:	Basic structural styles.
+	Author:			Michael Bester
+*/
+
+html {
+	min-height: 100%;
+	margin-bottom: 1px;
+}
+
+body {
+	@include reset-box-model;
+}
+
+.group {
+	@include pie-clearfix;
+}

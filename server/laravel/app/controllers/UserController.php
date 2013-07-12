@@ -96,4 +96,13 @@ class UserController extends BaseController {
 		//
 	}
 
+	public function get(){
+		$events = DB::table('users')->lists('name');
+
+		return Response::json(array(
+		        'message'=>$events),200
+		);
+	}
+
+
 }

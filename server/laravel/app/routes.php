@@ -16,8 +16,10 @@ Route::group(array('prefix' => 'api'), function()
     //group(array('prefix' => 'api'), function()
     Route::get('measurement', 'MeasurementController@get');
     Route::post('measurement', 'MeasurementController@store');
-    Route::resource('eventtype', 'EventtypeController');
-    Route::resource('user', 'UserController');
+    Route::get('eventtype', 'EventtypeController@get');
+    Route::post('eventtype', 'EventtypeController@store');
+    Route::get('user', 'UserController@get');
+    Route::post('user', 'UserController@store');
 });
 
 Route::get('test', function()
