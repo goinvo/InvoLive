@@ -21,7 +21,7 @@ class DropboxWorker extends Command {
 	protected $description = 'Command description.';
 
 
-	private $convertDropboxEvents = array('added' => 'Files created', 'deleted' => 'Files deleted', 'renamed' => 'Files renamed', 'edited' => 'Files edited');
+	private $convertDropboxEvents = array('added' => 'Files created', 'deleted' => 'Files deleted', 'renamed' => 'Files renamed', 'edited' => 'Files edited', 'moved' => 'Files moved');
 
 	/**
 	 * Create a new command instance.
@@ -124,7 +124,11 @@ class DropboxWorker extends Command {
 		$this->info('Featching RSS entries');
 
 		// get RSS data
-		$url = 'https://www.dropbox.com/150201753/240872885/URGXXobt3CP7GQaQ-FXEcO_Gy_T3qmE7S1Bg2pBw/events.xml';
+		$url = Config::get('live.url');
+
+		echo $this->info($url);
+		return;
+
 		$events = $this->getEventsFromRSS($url);
 		$this->info('Fectched '.count($events).' RSS entries');
 

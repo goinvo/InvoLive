@@ -28,7 +28,8 @@ $app->redirectIfTrailingSlash();
 
 $env = $app->detectEnvironment(array(
 
-	'local' => array('your-machine-name'),
+	'develop' => array('fnks-MacBook-Pro.*'),
+	'twinkie' => array('Twinkie.*')
 
 ));
 
