@@ -20,6 +20,7 @@ Route::group(array('prefix' => 'api'), function()
     Route::post('eventtype', 'EventtypeController@store');
     Route::get('user', 'UserController@get');
     Route::post('user', 'UserController@store');
+    Route::get('user/image', 'UserController@getimage');
 });
 
 Route::get('test', function()

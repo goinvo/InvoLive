@@ -1,20 +1,57 @@
 #chart{
+	.axis path{
+  		fill: none;
+	}
 
+
+	.axis line{
+		stroke: black;
+	}
+
+	.line{
+		fill-opacity:0.05;
+		stroke-width:2px;
+		stroke-dasharray: 5, 5;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+	}
 
 }
-	.axis line,path{
-	  fill: none;
-	  shape-rendering: crispEdges;
-	  display: none;
-	}
-
-	.line {
-	  fill: none;
-	  stroke: steelblue;
-	  stroke-width: 1.5px;
-	}
 
 
 #dchart{
+
+}
+
+#user-list-container{
+
+	margin-top: 20px;
+	td{
+		vertical-align: middle;
+	}
+
+	.sort{
+		cursor: pointer;
+	}
+
+	#user-list{
+
+		tr{
+			margin-top: 5px;
+		}
+
+		img{
+			width: 60px;
+			height: 60px;
+			border-radius: 10px;
+		}
+
+		.pic{
+			width: 90px;
+			border-radius: 5px;
+		}
+
+
+	}
 
 }

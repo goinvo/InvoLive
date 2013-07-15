@@ -93,7 +93,7 @@ class UserController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		//res
 	}
 
 	public function get(){
@@ -103,6 +103,18 @@ class UserController extends BaseController {
 		        'message'=>$events),200
 		);
 	}
+
+	public function getimage(){
+		$id = User::getId(Input::get('user'));
+		if($id == null) {
+			return Response::json(array(
+			        'message'=>'User not found.'),400
+			);
+		} else {
+			return Response::download(User::find($id)->getImage(), 'pic.jpg');
+		}
+	}
+
 
 
 }

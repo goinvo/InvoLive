@@ -27,10 +27,12 @@ live.queries = function () {
         var jxhr = [];
         var result = [];
 
-        $.each(users, function () {
+        log($eventtype.val());
+
+        $.each(users, function (i, user) {
             jxhr.push(
                 $.getJSON(url+'measurement', {
-                    user : this,
+                    user : user,
                     eventtype : $eventtype.val(),
                     time : $time.val(),
                     compression : compression[$time.val()]
@@ -40,7 +42,10 @@ live.queries = function () {
                     $.each(data, function(){
                         this.timestamp = new Date(this.timestamp);
                     });
-
+                    data.user = user;
+                    data.color = colors[i];
+                    data.pic = getuserpic(user);
+                    data.eventtype = $eventtype.val();
                     result.push(data);
 
                 })
@@ -48,9 +53,26 @@ live.queries = function () {
         });
 
         $.when.apply($, jxhr).done(function() {
-            live.visualizations.initializeChart(result, $time.val());
-            live.visualizations.initializeDchart(result);
+            var nodata = true;
+            $.each(result, function(){
+                if(this.length != 0) nodata = false;
+            })
+
+            if(nodata) {
+                $('#results').slideUp();
+                $('#nodata').fadeIn();
+            } else {
+                live.visualizations.initializeChart(result, $time.val());
+                live.visualizations.initializeDchart(result);
+                live.visualizations.initializeList(result);
+                $('#nodata').hide();
+                $('#results').slideDown();
+            }
         });
+    },
+
+    getuserpic = function(name){
+        return url+'user/image?user='+name;
     },
 
 
@@ -80,6 +102,7 @@ live.queries = function () {
 
     return {
         initialize: initialize,
-        query : query
+        query : query,
+        getuserpic : getuserpic
     }
 }();

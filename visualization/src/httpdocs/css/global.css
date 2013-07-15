@@ -33,7 +33,7 @@ body {
 .group {
   *zoom: 1;
 }
-/* line 38, ../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../../../var/lib/gems/1.9.1/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .group:after {
   content: "";
   display: table;
@@ -52,7 +52,7 @@ body {
 
 /* line 9, ../../scss/partials/_live.scss */
 #visualizations {
-  margin-top: 100px;
+  margin-top: 20px;
 }
 
 /* line 13, ../../scss/partials/_live.scss */
@@ -69,16 +69,47 @@ body {
   opacity: 0;
 }
 
-/* line 5, ../../scss/partials/_visualizations.scss */
-.axis line, path {
+/* line 2, ../../scss/partials/_visualizations.scss */
+#chart .axis path {
   fill: none;
-  shape-rendering: crispEdges;
-  display: none;
+}
+/* line 7, ../../scss/partials/_visualizations.scss */
+#chart .axis line {
+  stroke: black;
+}
+/* line 11, ../../scss/partials/_visualizations.scss */
+#chart .line {
+  fill-opacity: 0.05;
+  stroke-width: 2px;
+  stroke-dasharray: 5, 5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
-/* line 11, ../../scss/partials/_visualizations.scss */
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+/* line 26, ../../scss/partials/_visualizations.scss */
+#user-list-container {
+  margin-top: 20px;
+}
+/* line 29, ../../scss/partials/_visualizations.scss */
+#user-list-container td {
+  vertical-align: middle;
+}
+/* line 33, ../../scss/partials/_visualizations.scss */
+#user-list-container .sort {
+  cursor: pointer;
+}
+/* line 39, ../../scss/partials/_visualizations.scss */
+#user-list-container #user-list tr {
+  margin-top: 5px;
+}
+/* line 43, ../../scss/partials/_visualizations.scss */
+#user-list-container #user-list img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+}
+/* line 49, ../../scss/partials/_visualizations.scss */
+#user-list-container #user-list .pic {
+  width: 90px;
+  border-radius: 5px;
 }

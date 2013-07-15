@@ -55,6 +55,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return True;
     }
 
+    public function getImage(){
+    	return 'img/users/'.strtolower($this->name).'.jpg';
+    }
+
 
 	/**
 	 * Get the unique identifier for the user.

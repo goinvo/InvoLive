@@ -15,6 +15,7 @@
 	<script type="text/javascript" src ="/js/lib/mustache/mustache.js"></script>
 	<script type="text/javascript" src ="/js/lib/chart/Chart.js"></script>
 	<script type="text/javascript" src ="/js/lib/moment/moment.js"></script>
+	<script type="text/javascript" src ="/js/lib/list/list.js"></script>
 
 	<script src="js/queries.js"></script>
 	<script src="js/visualizations.js"></script>
@@ -32,9 +33,9 @@
 
 	<div class="container">
 
-	<h1 style="margin-top:20px">Invo Live</h1>
+		<h1 style="margin-top:20px">Invo Live</h1>
 
-	<hr style="width:100%">
+		<hr style="width:100%">
 
 		<div id="queries" class="row">
 			<div class="span3">
@@ -59,29 +60,48 @@
 
 				<h4>  &zwnj;</h4>
 				<button id="button-query" class="btn btn-success  pull-right" type="button">
-          		Query
-          </button></li>
+					Query
+				</button></li>
 			</div>
 		</div>
 
 		<hr>
 
-		<div class="row" id="visualizations">
-			<div id="chart-container" class="span8 nomargin"> 
+		<h1 id="nodata" style="display:none"> No data collect yet. Try again later.</h1>
+
+		<div id="results">
+
+			<h1> At a glance </h1>
+
+			<div class="row" id="visualizations">
+				<div id="chart-container" class="span8 nomargin"> 
+				</div>
+				<div class="span4 nomargin" > 
+					<canvas id="dchart" width=250 height=250 class="pull-right"></canvas>
+				</div>
 			</div>
-			<div class="span4 nomargin" > 
-				<canvas id="dchart" width=250 height=250 class="pull-right"></canvas>
+			<hr>
+
+			<h1 > Stats </h1>
+
+			<div class="row">
+
+				<div id="user-list-container" class="span12"> 
+
+				</div>
 			</div>
+
 		</div>
 
 
 	</div>
 
-	<script type="text/html" id="option-template">
-		{{#.}}
-			<option value={{.}}>{{.}}</option>
-		{{/.}}
-	</script>
+
+
+
+	<?php
+	include_once "includes/templates.php";
+	?>
 
 
 

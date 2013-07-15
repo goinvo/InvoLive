@@ -1,3 +1,9 @@
+
+/*
+*	Global variables
+*/
+var colors = d3.scale.category10().range();
+
 /*
 *	Helper functions
 */
