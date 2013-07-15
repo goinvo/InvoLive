@@ -74,21 +74,22 @@
 			<h1> At a glance </h1>
 
 			<div class="row" id="visualizations">
-				<div id="chart-container" class="span8 nomargin"> 
+				<div id="chart-container" class="span12 nomargin"> 
 				</div>
-				<div class="span4 nomargin" > 
-					<canvas id="dchart" width=250 height=250 class="pull-right"></canvas>
-				</div>
+
 			</div>
 			<hr>
 
 			<h1 > Stats </h1>
 
 			<div class="row">
-
-				<div id="user-list-container" class="span12"> 
+							<div id="user-list-container" class="span8"> 
 
 				</div>
+				<div class="span4 nomargin" style="text-align:center"> 
+					<canvas id="dchart" width=250 height=250 class="pull-right"></canvas>
+				</div>
+
 			</div>
 
 		</div>

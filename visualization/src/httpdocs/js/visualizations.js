@@ -84,8 +84,7 @@ live.visualizations = function () {
 	    users.append("path")
       .attr("class", "line")
       .attr("d", function(d) { return line(d); })
-      .style("stroke", function(d){return d.color})
-      .style("fill", function(d){return d.color});
+      .style("stroke", function(d){return d.color});
 
 
     },

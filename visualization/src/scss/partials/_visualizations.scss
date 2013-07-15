@@ -9,7 +9,7 @@
 	}
 
 	.line{
-		fill-opacity:0.05;
+		fill: none;
 		stroke-width:2px;
 		stroke-dasharray: 5, 5;
 		stroke-linejoin: round;
@@ -20,7 +20,7 @@
 
 
 #dchart{
-
+	margin-top: 50px;
 }
 
 #user-list-container{
