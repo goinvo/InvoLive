@@ -126,9 +126,6 @@ class DropboxWorker extends Command {
 		// get RSS data
 		$url = Config::get('live.url');
 
-		echo $this->info($url);
-		return;
-
 		$events = $this->getEventsFromRSS($url);
 		$this->info('Fectched '.count($events).' RSS entries');
 
