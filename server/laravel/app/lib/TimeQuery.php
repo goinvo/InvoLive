@@ -9,8 +9,8 @@ class TimeQuery {
 		if($start == 'lastweek') return \Carbon\Carbon::now()->subWeek();
 		if($start == 'lastmonth') return \Carbon\Carbon::now()->subMonth();
 		if($start == 'lastyear') return \Carbon\Carbon::now()->subYear();
-		if($start == 'alltime') return new DateTime(1970,1,1,0,0,0,0);
-		return null;
+		if($start == 'alltime') return DateTime::createFromFormat('U',0);
+		return \Carbon\Carbon::now()->subHour();
 	}
 
 	public static function interval($query, $start, $end=null) {
@@ -20,13 +20,13 @@ class TimeQuery {
 	}
 
 	public static function aggregateBy($delta){
-		if($delta == 'hour') return 'YEAR(datefield), MONTH(datefield), DAY(datefield), HOUR(datefield)';
-		if($delta == 'day') return 'YEAR(datefield), MONTH(datefield), DAY(datefield)';
-		return null;
+		if($delta == 'hour') return 'YEAR(timestamp), MONTH(timestamp), DAY(timestamp), HOUR(timestamp)';
+		if($delta == 'day') return 'YEAR(timestamp), MONTH(timestamp), DAY(timestamp)';
+		return aggregateBy('hour');
 	}
 
-	public static function aggregate($query, $delta, $mode){
-		return $query->groupBy($delta);
+	public static function aggregate($query, $delta){
+		return $query->groupBy(DB::raw($delta));
 	}
 
 }

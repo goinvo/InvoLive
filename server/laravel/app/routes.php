@@ -28,22 +28,6 @@ Route::get('test', function()
 	var_dump($measurement);
 });
 
-Route::get('group', function()
-{
-	$measurements = Measurement::select(DB::raw('type,user,MAX(value) as value,timestamp'))->groupBy(DB::raw('type, user'))->get();
-	
-	foreach ($measurements as $measurement){
-		echo $measurement->type.' '.$measurement->user.' '.$measurement->value.' '.$measurement->timestamp;
-		echo '<br>';
-	}
-
-
-	// $measurements->each(function($measurement) {
-	// 	echo $measurement->type.' '.$measurement->user.' '.$measurement->value.' '.$measurement->timestamp;
-	// 	echo '<br>';
-	// });
-});
-
 Route::get('/', function()
 {
 	$measurements = Measurement::all();

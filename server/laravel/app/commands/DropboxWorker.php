@@ -49,16 +49,18 @@ class DropboxWorker extends Command {
 
 			// get two a tags containing folder and filename
 			$tags = $dom->getElementsByTagName('a');
-			$folderNode = $tags->item(0);
-			$fileNode = $tags->item(1);
+			$folder = $tags->item(0)->nodeValue;
+			$file = $tags->item(1)->nodeValue;
 
-			$folder = $folderNode->nodeValue;
-			$file = $fileNode->nodeValue;
+			$moreFiles = 0;
+			if($tags->item(2) != null){
+				
+			}
 
-			// remove file and folder tags after data is extracted
-			$folderNode->parentNode->removeChild($folderNode);
-			$fileNode->parentNode->removeChild($fileNode);
-
+			for($i=$tags->length-1; $i>=0; $i--){
+				$tag = $tags->item($i);
+				$tag->parentNode->removeChild($tag);
+			}
 
 			// do further string cleaning and explode
 			$userAction = $dom->documentElement->nodeValue;
@@ -105,8 +107,7 @@ class DropboxWorker extends Command {
 		$url = 'https://www.dropbox.com/150201753/240872885/URGXXobt3CP7GQaQ-FXEcO_Gy_T3qmE7S1Bg2pBw/events.xml';
 		$events = $this->getEventsFromRSS($url);
 		foreach($events as $event){
-			$result = $this->storeDropboxEvent($event);
-			//var_dump($result);
+			//$result = $this->storeDropboxEvent($event);
 		}
 	}
 

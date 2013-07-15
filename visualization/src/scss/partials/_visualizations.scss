@@ -1,6 +1,19 @@
 #chart{
-	width:100%;
+
+
 }
+	.axis line,path{
+	  fill: none;
+	  shape-rendering: crispEdges;
+	  display: none;
+	}
+
+	.line {
+	  fill: none;
+	  stroke: steelblue;
+	  stroke-width: 1.5px;
+	}
+
 
 #dchart{
 

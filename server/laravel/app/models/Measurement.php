@@ -40,7 +40,7 @@ class Measurement extends Eloquent
 		return array('success' => True);
 	}
 
-	public static function aggregateMethod($query, $method_id){
+	public static function aggregateMethod($query, $method){
 		return $query->select(DB::raw('user_id, eventtype_id, source_id, '.$method.'(value) as value, timestamp'));
 	}
 
@@ -48,7 +48,7 @@ class Measurement extends Eloquent
 		
 		$query = Measurement::query();
 
-		if($event != null) $query->where('eventtype_id', Eventtype::getId($event));
+		if($event != null && $event != 'all') $query->where('eventtype_id', Eventtype::getId($event));
 		if($user != null) $query->where('user_id', User::getId($user));
 		if($source != null) $query->where('source_id', Source::getId($source));
 
@@ -59,6 +59,11 @@ class Measurement extends Eloquent
 	public function user()
 	{
 	 	return $this->belongsTo('User');
+	}
+
+	public function eventtype()
+	{
+	 	return $this->belongsTo('Eventtype');
 	}
 
 

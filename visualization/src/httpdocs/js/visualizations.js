@@ -2,56 +2,83 @@ var live = live || {};
 
 live.visualizations = function () {
 
-    var initializeChart = function (){
-    	var $chart = $('#chart');
-		var lineChartData = {
-					labels : ["January","February","March","April","May","June","July"],
-					datasets : [
-						{
-							fillColor : "rgba(220,220,220,0.5)",
-							strokeColor : "rgba(220,220,220,1)",
-							pointColor : "rgba(220,220,220,1)",
-							pointStrokeColor : "#fff",
-							data : [65,59,90,81,56,55,40]
-						},
-						{
-							fillColor : "rgba(151,187,205,0.5)",
-							strokeColor : "rgba(151,187,205,1)",
-							pointColor : "rgba(151,187,205,1)",
-							pointStrokeColor : "#fff",
-							data : [28,48,40,19,96,27,100]
-						}
-					]
-					
-				}
+	var colors = d3.scale.category20().range();
 
-		var myLine = new Chart(document.getElementById("chart").getContext("2d")).Line(lineChartData);
+    var initializeChart = function (data){
+    	var $container = $('#chart-container');
+
+    	var margin = {top: 20, right: 80, bottom: 30, left: 50},
+	    width = $container.width() - margin.left - margin.right,
+	    height = 300 - margin.top - margin.bottom;
+
+	    var svg = d3.select($container.get(0)).append('svg')
+	    .attr('id', 'chart')
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  	.append("g")
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	    var x = d3.time.scale()
+    	.range([0, width]);
+
+		var y = d3.scale.linear()
+		    .range([height, 0]);
+
+		var color = d3.scale.category10();
+
+		var xAxis = d3.svg.axis()
+		    .scale(x)
+		    .orient("bottom");
+
+		var yAxis = d3.svg.axis()
+		    .scale(y)
+		    .orient("left");
+
+		var line = d3.svg.line()
+	    .interpolate("basis")
+	    .x(function(d) { log(x(d.timestamp)); return x(d.timestamp); })
+	    .y(function(d) { return y(d.value); });
+
+		x.domain([
+		    d3.min(data, function(c) { return d3.min(c, function(d) { return d.timestamp; }); }),
+		    d3.max(data, function(c) { return d3.max(c, function(d) { return d.timestamp; }); })
+		]);
+
+		y.domain([
+		    d3.min(data, function(c) { return d3.min(c, function(d) { return d.value; }); }),
+		    d3.max(data, function(c) { return d3.max(c, function(d) { return d.value; }); })
+		]);
+
+		svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(0," + height + ")")
+		.call(xAxis);
+
+		svg.append("g")
+		.attr("class", "axis")
+		.call(yAxis);
+
+		var users = svg.selectAll(".user")
+	    .data(data)
+	    .enter().append("g")
+	    .attr("class", "user");
+
+	    users.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d); });
+
+
     },
 
-    initializeDchart = function(){
-    			var doughnutData = [
-				{
-					value: 30,
-					color:"#F7464A"
-				},
-				{
-					value : 50,
-					color : "#46BFBD"
-				},
-				{
-					value : 100,
-					color : "#FDB45C"
-				},
-				{
-					value : 40,
-					color : "#949FB1"
-				},
-				{
-					value : 120,
-					color : "#4D5360"
-				}
-			
-			];
+    initializeDchart = function(data){
+    	var doughnutData = [];
+    	// accumulate data
+    	$.each(data, function(i){
+    		doughnutData.push({
+    			color : colors[i],
+    			value : d3.sum(this, function(d){ return d.value })
+    		});
+    	})
 
 		var myDoughnut = new Chart(document.getElementById("dchart").getContext("2d")).Doughnut(doughnutData);
 	
@@ -60,11 +87,11 @@ live.visualizations = function () {
 
 
     var initialize = function () {
-    	initializeChart();
-    	initializeDchart();
     };
 
     return {
-        initialize: initialize
+        initialize: initialize,
+        initializeChart : initializeChart,
+    	initializeDchart : initializeDchart
     }
 }();

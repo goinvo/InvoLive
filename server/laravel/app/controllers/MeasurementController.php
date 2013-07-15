@@ -66,31 +66,23 @@ class MeasurementController extends BaseController {
 	 */
 	public function get()
 	{
-		
+		$data =  Input::all();
 
 		$event = Input::get('eventtype');
 		$user = Input::get('user');
 		$source = Input::get('source');
 		$time = Input::get('time');
-		$aggregate= Input::get('aggregate');
-
-
-		//$results = Measurement::getMeasurement($user, $event, $source);
+		$resolution = Input::get('resolution');
 
 		$query = Measurement::getMeasurement($user, $event, $source);
-
 
 		if($time != null) {
 			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time));
 		}
-		if($aggregate != null){
-			$event_id = Eventtype::getId($event);
-			if($event_id == null) {
-				return Response::json(array(
-			        'message'=>'Cannot aggregate results without an event type.'),400
-				);
-			}
-			$query = Measurement::aggregateMethod($query, Eventtype::find($event_id)->aggregateMethod);
+
+		if($resolution != null) {
+			$query = TimeQuery::aggregate($query, TimeQuery::aggregateBy($resolution));
+			Measurement::aggregateMethod($query, 'COUNT');
 		}
 
 		$results = $query->get();
@@ -99,7 +91,9 @@ class MeasurementController extends BaseController {
 		foreach($results as $result){
 			array_push($payload, array(
 				'user'=>$result->user->name,
-				'result'=>$result->value)
+				'eventtype'=>$result->eventtype->name,
+				'value'=>$result->value,
+				'timestamp'=>$result->timestamp)
 			);
 		}
 
