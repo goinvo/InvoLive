@@ -55,8 +55,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return True;
     }
 
-    public function getImage(){
-    	return 'img/users/'.strtolower($this->name).'.jpg';
+    public function getAvatar(){
+    	return 'http://www.gravatar.com/avatar/'.md5($this->email);
     }
 
 

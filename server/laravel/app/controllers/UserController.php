@@ -97,24 +97,16 @@ class UserController extends BaseController {
 	}
 
 	public function get(){
-		$events = DB::table('users')->lists('name');
+		$users = User::all();
+
+		$result = array();
+		foreach($users as $user){
+			array_push($result, array('name' => $user->name, 'avatar' => $user->getAvatar()));
+		}
 
 		return Response::json(array(
-		        'message'=>$events),200
+		        'message'=>$result),200
 		);
 	}
-
-	public function getimage(){
-		$id = User::getId(Input::get('user'));
-		if($id == null) {
-			return Response::json(array(
-			        'message'=>'User not found.'),400
-			);
-		} else {
-			return Response::download(User::find($id)->getImage(), 'pic.jpg');
-		}
-	}
-
-
 
 }

@@ -9,25 +9,25 @@ live.queries = function () {
         alltime : 'day'
     }
 
-    var populateSelector = function($selector, url){
+    var populateSelector = function($selector, url, template){
     	$.getJSON(url, function(data){
     		var content = data.message;
-    		$selector.html(Mustache.render($('#option-template').html(), content));
+    		$selector.html(Mustache.render($(template).html(), content));
             $selector.chosen();
     	})
     },
 
     query = function(){
 
-        var users = $user.val() || 
+        var users = $user.val() ||
         $user.find('option').map(function(){
            return $(this).val();
-        }).get();;
+        }).get();
+
+        log(users);
 
         var jxhr = [];
         var result = [];
-
-        log($eventtype.val());
 
         $.each(users, function (i, user) {
             jxhr.push(
@@ -42,9 +42,9 @@ live.queries = function () {
                     $.each(data, function(){
                         this.timestamp = new Date(this.timestamp);
                     });
-                    data.user = user;
+                    data.user = user,
                     data.color = colors[i];
-                    data.pic = getuserpic(user);
+                    data.pic = $('#selector-user option[value="' + user + '"]').data('avatar');
                     data.eventtype = $eventtype.val();
                     result.push(data);
 
@@ -71,10 +71,6 @@ live.queries = function () {
         });
     },
 
-    getuserpic = function(name){
-        return url+'user/image?user='+name;
-    },
-
 
 
     initialize = function (div) {
@@ -87,8 +83,8 @@ live.queries = function () {
     	$time.chosen({disable_search_threshold: 10});
     	$grouping.chosen({disable_search_threshold: 10});
     	
-    	populateSelector($eventtype, url+'eventtype');
-    	populateSelector($user, url+'user');
+    	populateSelector($eventtype, url+'eventtype', '#event-template');
+    	populateSelector($user, url+'user', '#user-template');
 
         setTimeout(function(){
             live.queries.query()
@@ -102,7 +98,6 @@ live.queries = function () {
 
     return {
         initialize: initialize,
-        query : query,
-        getuserpic : getuserpic
+        query : query
     }
 }();

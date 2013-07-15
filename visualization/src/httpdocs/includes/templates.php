@@ -21,7 +21,13 @@
 	</table>
 </script>
 
-<script type="text/html" id="option-template">
+<script type="text/html" id="user-template">
+	{{#.}}
+		<option data-avatar="{{avatar}}" value="{{name}}">{{name}}</option>
+	{{/.}}
+</script>
+
+<script type="text/html" id="event-template">
 	{{#.}}
 		<option value="{{.}}">{{.}}</option>
 	{{/.}}

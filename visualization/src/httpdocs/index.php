@@ -33,7 +33,7 @@
 
 	<div class="container">
 
-		<h1 style="margin-top:20px">Invo Live</h1>
+		<h1 style="margin-top:20px">Invo Live v.0.1</h1>
 
 		<hr style="width:100%">
 

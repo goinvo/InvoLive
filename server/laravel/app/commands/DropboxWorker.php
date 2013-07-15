@@ -21,7 +21,7 @@ class DropboxWorker extends Command {
 	protected $description = 'Command description.';
 
 
-	private $convertDropboxEvents = array('added' => 'file_create', 'deleted' => 'file_delete', 'renamed' => 'file_rename', 'edited' => 'file_edit');
+	private $convertDropboxEvents = array('added' => 'Files created', 'deleted' => 'Files deleted', 'renamed' => 'Files renamed', 'edited' => 'Files edited');
 
 	/**
 	 * Create a new command instance.
@@ -120,11 +120,43 @@ class DropboxWorker extends Command {
 	 */
 	public function fire()
 	{
+		$this->info('DropboxWorker started...');
+		$this->info('Featching RSS entries');
+
+		// get RSS data
 		$url = 'https://www.dropbox.com/150201753/240872885/URGXXobt3CP7GQaQ-FXEcO_Gy_T3qmE7S1Bg2pBw/events.xml';
 		$events = $this->getEventsFromRSS($url);
+		$this->info('Fectched '.count($events).' RSS entries');
+
+		// will be used to print summary
+		$new = 0;
+		$old = 0;
+		$invalid = 0;
+
+		// store fetched data
 		foreach($events as $event){
 			$result = $this->storeDropboxEvent($event);
+
+			// check for error messages
+			if($result['success']){
+				$new += 1;
+			} else {
+				if($result['message'] == 'Duplicate.'){
+					$old += 1;
+				} else {
+					$invalid += 1;
+					$this->info('---');
+					$this->info('Error in adding entry:');
+					$this->info($result['message']);
+					$this->info('---');
+				}
+			}
 		}
+		$this->info('Summary:');
+		$this->info($new.' new entries added.');
+		$this->info($old.' old entries skipped.');
+		$this->info($invalid.' invalid entries skipped.');
+
 	}
 
 	/**
@@ -135,7 +167,8 @@ class DropboxWorker extends Command {
 	protected function getArguments()
 	{
 		return array(
-			array('example', InputArgument::REQUIRED, 'An example argument.'),
+			// array();
+			array('url', InputArgument::OPTIONAL, 'RSS feek url.', null),
 		);
 	}
 

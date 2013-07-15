@@ -36,7 +36,7 @@ live.visualizations = function () {
 		    .orient("left");
 
 		var line = d3.svg.line()
-	    .interpolate("monotone")
+	    // .interpolate("monotone")
 	    .x(function(d) { return x(d.timestamp); })
 	    .y(function(d) { return y(d.value); });
 

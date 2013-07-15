@@ -7,15 +7,16 @@ class Measurement extends Eloquent
 
 		// check for valid user
 		$user_id = User::getId($user);
-		if ($user_id == null) return array('success' => False, 'message' => 'User"'.$user.'" not found.');
+		if ($user_id == null) return array('success' => False, 'message' => 'User '.$user.' not found.');
 
 		// check for valid event type
 		$event_id = Eventtype::getId($eventtype);
-		if($event_id == null) return array('success' => False, 'message' => 'Event type "'.$eventtype.'"" not found.');
-		
+
+		if($event_id == null) return array('success' => False, 'message' => 'Event type '.$eventtype.' not found.');
+
 		// check for valid source
 		$source_id = Source::getId($source);
-		if($source_id == null) return array('success' => False, 'message' => 'Source"'.$source.'" not found.');
+		if($source_id == null) return array('success' => False, 'message' => 'Source '.$source.' not found.');
 		
 		// check for duplicates
 		$dup_query = Measurement::where('user_id', $user_id)
