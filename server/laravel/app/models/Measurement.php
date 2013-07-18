@@ -62,7 +62,7 @@ class Measurement extends Eloquent
 		if($attr_id == null) return array('success' => False, 'message' => 'Attribute '.$attribute.' not found.');
 		
 		$newAttribute = new measurementAttribute;
-		$newAttribute->meausurement_id = $this->id;
+		$newAttribute->measurement_id = $this->id;
 		$newAttribute->attribute_id = $attr_id;
 		$newAttribute->value = $value;
 
