@@ -73,13 +73,16 @@ class MeasurementController extends BaseController {
 		$source = Input::get('source');
 		$time = Input::get('time');
 		$resolution = Input::get('resolution');
+		$attributes = Input::get('attributes');
 
 		$query = Measurement::getMeasurement($user, $event, $source);
 
+		// limits time scope of query
 		if($time != null) {
 			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time));
 		}
 
+		// does aggregation if needed
 		if($resolution != null) {
 			$query = TimeQuery::aggregate($query, TimeQuery::aggregateBy($resolution));
 			Measurement::aggregateMethod($query, 'COUNT');
@@ -89,12 +92,28 @@ class MeasurementController extends BaseController {
 		$payload = array();
 
 		foreach($results as $result){
-			array_push($payload, array(
+			$entry = array(
 				'user'=>$result->user->name,
 				'eventtype'=>$result->eventtype->name,
 				'value'=>$result->value,
-				'timestamp'=>$result->timestamp)
-			);
+				'timestamp'=>$result->timestamp);
+
+			if($attributes == 'all') {
+				$attrs = $result->getAllAttributes;
+				foreach($attrs as $attr){
+					$entry[$attr->name()] = $attr->value;
+				}
+			// 
+			} else if($attributes != null){
+				$attr = $result->getSingleAttribute($attributes);
+				if($attr != null) {
+					$entry[$attr->name()] = $attr->value;
+				}
+			} else {
+
+			}
+
+			array_push($payload,  $entry);
 		}
 
 		return Response::json(array(

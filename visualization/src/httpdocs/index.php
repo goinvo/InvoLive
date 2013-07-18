@@ -3,19 +3,19 @@
 <head>
 
 
-	<link rel="stylesheet" media="print" type="text/css" href="/css/print.css">
-	<link href="/css/lib/bootstrap/bootstrap.css" rel="stylesheet">
-	<link href="/css/lib/chosen/chosen.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="/css/global.css">
+	<link rel="stylesheet" media="print" type="text/css" href="css/print.css">
+	<link href="css/lib/bootstrap/bootstrap.css" rel="stylesheet">
+	<link href="css/lib/chosen/chosen.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/global.css">
 
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<script type="text/javascript" src ="/js/lib/chosen/chosen.jquery.js"></script>
-	<script type="text/javascript" src ="/js/lib/bootstrap/bootstrap.min.js"></script>
-	<script type="text/javascript" src ="/js/lib/mustache/mustache.js"></script>
-	<script type="text/javascript" src ="/js/lib/chart/Chart.js"></script>
-	<script type="text/javascript" src ="/js/lib/moment/moment.js"></script>
-	<script type="text/javascript" src ="/js/lib/list/list.js"></script>
+	<script type="text/javascript" src ="js/lib/chosen/chosen.jquery.js"></script>
+	<script type="text/javascript" src ="js/lib/bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src ="js/lib/mustache/mustache.js"></script>
+	<script type="text/javascript" src ="js/lib/chart/Chart.js"></script>
+	<script type="text/javascript" src ="js/lib/moment/moment.js"></script>
+	<script type="text/javascript" src ="js/lib/list/list.js"></script>
 
 	<script src="js/queries.js"></script>
 	<script src="js/visualizations.js"></script>

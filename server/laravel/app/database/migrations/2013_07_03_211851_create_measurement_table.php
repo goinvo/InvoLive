@@ -29,8 +29,6 @@ class CreateMeasurementTable extends Migration {
 			$table->string('aggregation');
 		});
 
-
-
 		Schema::create('sources', function($table)
 		{
 			$table->increments('id');
@@ -45,6 +43,7 @@ class CreateMeasurementTable extends Migration {
 			$table->string('email')->unique();
 			$table->timestamps();
 		});
+
 	}
 
 	/**

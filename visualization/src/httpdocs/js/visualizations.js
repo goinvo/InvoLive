@@ -6,9 +6,9 @@ live.visualizations = function () {
 
     var initializeChart = function (data){
 
-    	$chart.html('');
+    	d3.selectAll('svg').remove();
 
-    	var margin = {top: 20, right: 80, bottom: 30, left: 50},
+    	var margin = {top: 20, right: 80, bottom: 30, left: 80},
 	    width = $chart.width() - margin.left - margin.right,
 	    height = 300 - margin.top - margin.bottom;
 
@@ -22,8 +22,11 @@ live.visualizations = function () {
 	    var x = d3.time.scale()
     	.range([0, width]);
 
-		var y = d3.scale.linear()
-		    .range([height, 0]);
+		var r = d3.scale.linear()
+		    .range([4, 20]);
+
+		var yd = d3.scale.ordinal()
+			.rangePoints([height - 20, 0]);
 
 		var xAxis = d3.svg.axis()
 			.ticks(5)
@@ -31,8 +34,8 @@ live.visualizations = function () {
 		    .orient("bottom");
 
 		var yAxis = d3.svg.axis()
-			.ticks(5)
-		    .scale(y)
+			.ticks(10)
+		    .scale(yd)
 		    .orient("left");
 
 		var line = d3.svg.line()
@@ -41,11 +44,15 @@ live.visualizations = function () {
 	    .y(function(d) { return y(d.value); });
 
 		x.domain([
-		    d3.min(data, function(c) { var min = d3.min(c, function(d) { return d.timestamp; }); log(min); return min;}),
+		    d3.min(data, function(c) { var min = d3.min(c, function(d) { return d.timestamp; }); return min;}),
 		    d3.max(data, function(c) { var max = moment().toDate(); return max; })
 		]);
 
-		y.domain([
+		yd.domain(data.map(function(d){
+			return d.user
+		}))
+
+		r.domain([
 		    0,
 		    d3.max(data, function(c) { return d3.max(c, function(d) { return d.value; }); })
 		]);
@@ -70,21 +77,24 @@ live.visualizations = function () {
 	    	d3.select(this).selectAll('circle')
 	    	.data(data)
 	    	.enter().append('circle')
-	    	.attr('r',3)
+	    	.attr('r', function(d){
+	    		return r(d.value);
+	    	})
 	    	.attr('cx', function(d){
 	    		return x(d.timestamp);
 	    	})
 	    	.attr('cy', function(d){
-	    		return y(d.value);
+	    		return yd(d.user);
 	    	})
-	    	.style('fill', data.color);
+	    	.style('fill', data.color)
+	    	.style('opacity', 0.5);
 
 	    });
 
-	    users.append("path")
-      .attr("class", "line")
-      .attr("d", function(d) { return line(d); })
-      .style("stroke", function(d){return d.color});
+	    // users.append("path")
+     //  .attr("class", "line")
+     //  .attr("d", function(d) { return line(d); })
+     //  .style("stroke", function(d){return d.color});
 
 
     },
@@ -102,6 +112,24 @@ live.visualizations = function () {
 		var myDoughnut = new Chart(document.getElementById("dchart").getContext("2d")).Doughnut(doughnutData);
 	
     }
+
+  //     initializeDchart = function(data){
+  //   	var doughnutData = [];
+  //   	var users = [];
+  //   	// accumulate data
+  //   	$.each(data, function(i){
+  //   		users.push(this.user);
+  //   		doughnutData.push({
+  //   			"fillColor" : this.color,
+  //   			value : d3.sum(this, function(d){ return d.value })
+  //   		});
+  //   	})
+  //   	log(users);
+  //   	log(doughnutData)
+
+		// var myDoughnut = new Chart(document.getElementById("dchart").getContext("2d")).Pie(doughnutData);
+	
+  //   }
 
     initializeList = function(data){
     	$list.html(Mustache.render($('#table-template').html(), data[0]));

@@ -24,8 +24,6 @@ live.queries = function () {
            return $(this).val();
         }).get();
 
-        log(users);
-
         var jxhr = [];
         var result = [];
 
@@ -40,14 +38,13 @@ live.queries = function () {
                     var data = data.message;
                     // str to date
                     $.each(data, function(){
-                        this.timestamp = new Date(this.timestamp);
+                        this.timestamp = moment(this.timestamp).toDate();
                     });
                     data.user = user,
                     data.color = colors[i];
                     data.pic = $('#selector-user option[value="' + user + '"]').data('avatar');
                     data.eventtype = $eventtype.val();
                     result.push(data);
-
                 })
             );
         });

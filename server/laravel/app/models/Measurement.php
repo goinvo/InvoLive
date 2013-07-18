@@ -11,7 +11,6 @@ class Measurement extends Eloquent
 
 		// check for valid event type
 		$event_id = Eventtype::getId($eventtype);
-
 		if($event_id == null) return array('success' => False, 'message' => 'Event type '.$eventtype.' not found.');
 
 		// check for valid source
@@ -38,7 +37,7 @@ class Measurement extends Eloquent
 
 		$measurement->save();
 
-		return array('success' => True);
+		return array('success' => True, 'measurement' => $measurement);
 	}
 
 	public static function aggregateMethod($query, $method){
@@ -55,6 +54,34 @@ class Measurement extends Eloquent
 
 		return $query;
 
+	}
+
+	public function addAttribute($attribute, $value){
+		// check valid attribute
+		$attr_id = Attribute::getId($attribute);
+		if($attr_id == null) return array('success' => False, 'message' => 'Attribute '.$attribute.' not found.');
+		
+		$newAttribute = new measurementAttribute;
+		$newAttribute->meausurement_id = $this->id;
+		$newAttribute->attribute_id = $attr_id;
+		$newAttribute->value = $value;
+
+		$newAttribute->save();
+	}
+
+	// public function getAttribute($attribute){
+
+	// }
+
+	public function getSingleAttribute($attribute){
+		$attr_id = Attribute::getId($attribute);
+		if($attr_id == null) return null;
+		
+		return MeasurementAttribute::where('attribute_id', $attr_id)->where('measurement_id', $this->id)->first();
+	}
+
+	public function getAllAttributes(){
+		return $this->hasMany('MeasurementAttribute');
 	}
 
 	public function user()

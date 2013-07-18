@@ -22,21 +22,3 @@ Route::group(array('prefix' => 'api'), function()
     Route::post('user', 'UserController@store');
     Route::get('user/image', 'UserController@getimage');
 });
-
-Route::get('test', function()
-{
-	$measurement = Measurement::all();
-	var_dump($measurement);
-});
-
-Route::get('/', function()
-{
-	$measurements = Measurement::all();
-	// $paginator = Paginator::make($measurements->toArray(), 15, 15);
-	// echo $paginator;
-	$measurements->each(function($measurement) {
-		echo $measurement->type.' '.$measurement->user.' '.$measurement->value.' '.$measurement->timestamp;
-		echo '<br>';
-	});
-});
-

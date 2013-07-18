@@ -99,18 +99,22 @@ class DropboxWorker extends Command {
 			);
 
 		}
-
 		return $events;
 	}
 
 	private function storeDropboxEvent($entry){
-		return Measurement::createMeasurement(
+		$stored = Measurement::createMeasurement(
 			$entry['user'], 
 			$this->convertDropboxEvents[$entry['event']],
 			'dropbox',
 			$entry['quantity'],
 			$entry['timestamp']
 		);
+		if($stored['success']) {
+			$stored['measurement']->addAttribute('filename', $entry['file']);
+		}
+
+		return $stored;
 	}
 
 	/**
@@ -120,8 +124,8 @@ class DropboxWorker extends Command {
 	 */
 	public function fire()
 	{
-		$this->info('DropboxWorker started...');
-		$this->info('Featching RSS entries');
+		$this->info('DropboxWorker started at '.\Carbon\Carbon::now()->toDateTimeString());
+		$this->info('Fetching RSS entries');
 
 		// get RSS data
 		$url = Config::get('live.url');
@@ -157,6 +161,7 @@ class DropboxWorker extends Command {
 		$this->info($new.' new entries added.');
 		$this->info($old.' old entries skipped.');
 		$this->info($invalid.' invalid entries skipped.');
+		$this->info(' ');
 
 	}
 
