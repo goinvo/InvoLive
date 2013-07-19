@@ -1,0 +1,24 @@
+.nomargin{
+	margin-left: 0px;
+}
+
+#queries{
+	margin-bottom: 40px;
+}
+
+#visualizations{
+	margin-top: 20px;
+}
+
+#button-query{
+	margin-top: -4px;
+}
+
+.span-grouping{
+	&.disabled{
+		opacity: 0.15;
+		h4{
+			opacity: 0;
+		}
+	}
+}

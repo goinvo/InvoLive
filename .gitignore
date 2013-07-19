@@ -1,0 +1,5 @@
+app/config/twinkie
+app/config/develop
+vendor
+*.gz
+public/.sass-cache
