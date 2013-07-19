@@ -1,0 +1,120 @@
+/*
+	File Overview:	Global SCSS
+	Author:			Michael Bester
+	Description:	Includes all styles for primary styles for the site.
+*/
+/*
+	File Overview:	Base scss definitions
+	Author:			Michael Bester
+*/
+/* Compass global imports */
+/* Configure for target Browser Set
+   Chrome, IE8+
+============================================*/
+/* Global variables */
+/*
+	File Overview:	Basic structural styles.
+	Author:			Michael Bester
+*/
+/* line 6, ../scss/partials/_structure.scss */
+html {
+  min-height: 100%;
+  margin-bottom: 1px;
+}
+
+/* line 11, ../scss/partials/_structure.scss */
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* line 15, ../scss/partials/_structure.scss */
+.group {
+  *zoom: 1;
+}
+/* line 38, ../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+.group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* line 1, ../scss/partials/_live.scss */
+.nomargin {
+  margin-left: 0px;
+}
+
+/* line 5, ../scss/partials/_live.scss */
+#queries {
+  margin-bottom: 40px;
+}
+
+/* line 9, ../scss/partials/_live.scss */
+#visualizations {
+  margin-top: 20px;
+}
+
+/* line 13, ../scss/partials/_live.scss */
+#button-query {
+  margin-top: -4px;
+}
+
+/* line 18, ../scss/partials/_live.scss */
+.span-grouping.disabled {
+  opacity: 0.15;
+}
+/* line 20, ../scss/partials/_live.scss */
+.span-grouping.disabled h4 {
+  opacity: 0;
+}
+
+/* line 2, ../scss/partials/_visualizations.scss */
+#chart .axis path {
+  fill: none;
+}
+/* line 7, ../scss/partials/_visualizations.scss */
+#chart .axis line {
+  stroke: black;
+}
+/* line 11, ../scss/partials/_visualizations.scss */
+#chart .line {
+  fill: none;
+  stroke-width: 2px;
+  stroke-dasharray: 5, 5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* line 22, ../scss/partials/_visualizations.scss */
+#dchart {
+  margin-top: 50px;
+}
+
+/* line 26, ../scss/partials/_visualizations.scss */
+#user-list-container {
+  margin-top: 20px;
+}
+/* line 29, ../scss/partials/_visualizations.scss */
+#user-list-container td {
+  vertical-align: middle;
+}
+/* line 33, ../scss/partials/_visualizations.scss */
+#user-list-container .sort {
+  cursor: pointer;
+}
+/* line 39, ../scss/partials/_visualizations.scss */
+#user-list-container #user-list tr {
+  margin-top: 5px;
+}
+/* line 43, ../scss/partials/_visualizations.scss */
+#user-list-container #user-list img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+}
+/* line 49, ../scss/partials/_visualizations.scss */
+#user-list-container #user-list .pic {
+  width: 90px;
+  border-radius: 5px;
+}

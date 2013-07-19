@@ -1,3 +1,5 @@
-server/laravel/app/config/twinkie
-server/laravel/app/config/develop
+app/config/twinkie
+app/config/develop
+vendor
 *.gz
+public/.sass-cache
