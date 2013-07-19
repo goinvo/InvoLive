@@ -1,7 +1,7 @@
 var live = live || {};
 
 live.queries = function () {
-    var url = "http://live.dev/api/";
+    var url = "http://live.goinvo.com/api/";
     var $user, $eventtype, $time, $grouping;
     var compression = {
         lastday : 'hour',
@@ -18,6 +18,8 @@ live.queries = function () {
     },
 
     query = function(){
+
+        startPreloader();
 
         var users = $user.val() ||
         $user.find('option').map(function(){

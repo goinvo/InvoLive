@@ -33,7 +33,7 @@ body {
 .group {
   *zoom: 1;
 }
-/* line 38, ../../../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
+/* line 38, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/utilities/general/_clearfix.scss */
 .group:after {
   content: "";
   display: table;
@@ -67,6 +67,20 @@ body {
 /* line 20, ../scss/partials/_live.scss */
 .span-grouping.disabled h4 {
   opacity: 0;
+}
+
+/* line 26, ../scss/partials/_live.scss */
+#results {
+  position: relative;
+}
+
+/* line 30, ../scss/partials/_live.scss */
+#results-preloader {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  text-align: center;
 }
 
 /* line 2, ../scss/partials/_visualizations.scss */

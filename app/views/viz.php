@@ -16,6 +16,7 @@
 	<script type="text/javascript" src ="js/lib/chart/Chart.js"></script>
 	<script type="text/javascript" src ="js/lib/moment/moment.js"></script>
 	<script type="text/javascript" src ="js/lib/list/list.js"></script>
+	<script type="text/javascript" src ="js/lib/sonic/sonic.js"></script>
 
 	<script src="js/queries.js"></script>
 	<script src="js/visualizations.js"></script>
@@ -25,6 +26,8 @@
 		$(document).ready(function(){
 			live.queries.initialize();
 			live.visualizations.initialize();
+			initPreloader();
+			startPreloader(0);
 		});
 	</script>
 
@@ -71,21 +74,30 @@
 
 		<div id="results">
 
-			<h1> At a glance </h1>
-			<div class="row" id="visualizations">
-				<div id="chart-container" class="span12 nomargin"> 
-				</div>
-			</div>
-			<hr>
+			<div id="results-preloader"></div>
 
-			<h1 > Stats </h1>
-			<div class="row">
-				<div id="user-list-container" class="span8"> 
+
+			<div id="results-content">
+
+				<h1> At a glance </h1>
+				<div class="row" id="visualizations">
+					<div id="chart-container" class="span12 nomargin"> 
+					</div>
 				</div>
-				<div class="span4 nomargin" style="text-align:center"> 
-					<canvas id="dchart" width=250 height=250 class="pull-right"></canvas>
+				<hr>
+
+				<h1> Stats </h1>
+				<div class="row">
+					<div id="user-list-container" class="span8"> 
+					</div>
+					<div class="span4 nomargin" style="text-align:center"> 
+						<canvas id="dchart" width=250 height=250 class="pull-right"></canvas>
+					</div>
 				</div>
+
 			</div>
+
+
 		</div>
 	</div>
 

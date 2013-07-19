@@ -91,6 +91,8 @@ live.visualizations = function () {
 
 	    });
 
+	    stopPreloader();
+
 	    // users.append("path")
      //  .attr("class", "line")
      //  .attr("d", function(d) { return line(d); })
