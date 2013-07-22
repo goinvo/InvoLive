@@ -87,11 +87,15 @@ body {
 #chart .axis path {
   fill: none;
 }
-/* line 7, ../scss/partials/_visualizations.scss */
+/* line 6, ../scss/partials/_visualizations.scss */
+#chart .axis.y .tick line {
+  display: none;
+}
+/* line 11, ../scss/partials/_visualizations.scss */
 #chart .axis line {
   stroke: black;
 }
-/* line 11, ../scss/partials/_visualizations.scss */
+/* line 15, ../scss/partials/_visualizations.scss */
 #chart .line {
   fill: none;
   stroke-width: 2px;
@@ -100,34 +104,34 @@ body {
   stroke-linecap: round;
 }
 
-/* line 22, ../scss/partials/_visualizations.scss */
+/* line 26, ../scss/partials/_visualizations.scss */
 #dchart {
   margin-top: 50px;
 }
 
-/* line 26, ../scss/partials/_visualizations.scss */
+/* line 30, ../scss/partials/_visualizations.scss */
 #user-list-container {
   margin-top: 20px;
 }
-/* line 29, ../scss/partials/_visualizations.scss */
+/* line 33, ../scss/partials/_visualizations.scss */
 #user-list-container td {
   vertical-align: middle;
 }
-/* line 33, ../scss/partials/_visualizations.scss */
+/* line 37, ../scss/partials/_visualizations.scss */
 #user-list-container .sort {
   cursor: pointer;
 }
-/* line 39, ../scss/partials/_visualizations.scss */
+/* line 43, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list tr {
   margin-top: 5px;
 }
-/* line 43, ../scss/partials/_visualizations.scss */
+/* line 47, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list img {
   width: 60px;
   height: 60px;
   border-radius: 10px;
 }
-/* line 49, ../scss/partials/_visualizations.scss */
+/* line 53, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list .pic {
   width: 90px;
   border-radius: 5px;

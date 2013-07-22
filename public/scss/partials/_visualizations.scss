@@ -3,6 +3,10 @@
   		fill: none;
 	}
 
+	.axis.y .tick line{
+		display: none;
+	}
+
 
 	.axis line{
 		stroke: black;

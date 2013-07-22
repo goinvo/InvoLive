@@ -1,12 +1,12 @@
 var live = live || {};
 
 live.queries = function () {
-    var url = "http://live.dev/api/";
+    var url = "http://live.goinvo.com/api/";
     var $user, $eventtype, $time, $grouping;
     var compression = {
-        lastday : 'hour',
-        lastmonth : 'day',
-        alltime : 'day'
+        "lastday" : 'hour',
+        "lastmonth" : 'day',
+        "alltime" : 'day'
     }
 
     var populateSelector = function($selector, url, template){
@@ -34,10 +34,11 @@ live.queries = function () {
                 $.getJSON(url+'measurement', {
                     user : user,
                     eventtype : $eventtype.val(),
-                    time : $time.val(),
-                    compression : compression[$time.val()]
+                    time : $time.val()
                 }, function(data){
+
                     var data = data.message;
+                    $.each(data, function() {log(this);log(this.value)});
                     // str to date
                     $.each(data, function(){
                         this.timestamp = moment(this.timestamp).toDate();

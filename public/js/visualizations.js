@@ -36,6 +36,7 @@ live.visualizations = function () {
 		var yAxis = d3.svg.axis()
 			.ticks(10)
 		    .scale(yd)
+		    .tickPadding(10)
 		    .orient("left");
 
 		var line = d3.svg.line()
@@ -73,7 +74,6 @@ live.visualizations = function () {
 
 	    users.each(function(){
 	    	var data = d3.select(this).datum();
-
 	    	d3.select(this).selectAll('circle')
 	    	.data(data)
 	    	.enter().append('circle')
@@ -84,7 +84,7 @@ live.visualizations = function () {
 	    		return x(d.timestamp);
 	    	})
 	    	.attr('cy', function(d){
-	    		return yd(d.user);
+	    		return yd(data.user);
 	    	})
 	    	.style('fill', data.color)
 	    	.style('opacity', 0.5);
