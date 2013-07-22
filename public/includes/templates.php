@@ -29,6 +29,6 @@
 
 <script type="text/html" id="event-template">
 	{{#.}}
-		<option value="{{.}}">{{.}}</option>
+		<option value="{{name}}">{{name}}</option>
 	{{/.}}
 </script>

@@ -3,7 +3,16 @@ class Eventtype extends Eloquent
 {
 	public $timestamps = false;
 
-    private static $aggregationCodes = array( 0 => 'COUNT', 1 => 'AVG');
+    // identify groups of events
+    public static $groups = array(
+        'dropbox activity' => 
+        array(
+            'Files created',
+            'Files edited',
+            'Files moved',
+            'Files deleted'
+    ));
+
 
 	public static function getId($name)
     {

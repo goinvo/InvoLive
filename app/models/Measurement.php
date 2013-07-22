@@ -40,17 +40,39 @@ class Measurement extends Eloquent
 		return array('success' => True, 'measurement' => $measurement);
 	}
 
-	public static function aggregateMethod($query, $method){
-		return $query->select(DB::raw('user_id, eventtype_id, source_id, '.$method.'(value) as value, timestamp'));
-	}
-
-	public static function getMeasurement($user = null, $event = null, $source = null){
+	public static function getMeasurement($user = null, $event = null, $source = null, $time = null, $resolution = null){
 		
+
 		$query = Measurement::query();
 
-		if($event != null && $event != 'all') $query->where('eventtype_id', Eventtype::getId($event));
+		// handles grouping by day/month... grouping by users... etc
+		$grouping = new GroupQuery;
+
+		$query->where('eventtype_id', Eventtype::getId($event));
 		if($user != null) $query->where('user_id', User::getId($user));
 		if($source != null) $query->where('source_id', Source::getId($source));
+
+		// limits time scope of query if needed
+		if($time != null) {
+			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time));
+		}
+
+		// does daily aggregation if needed
+		if($resolution != null) {
+			$grouping->byTime($resolution);
+			// do not forget to also group by user if grouping by time
+			$grouping->byUser();
+
+			// each event needs to be aggregated in some way
+			// some use averages (eg. Temperature) some use sum (eg. Files created)
+			// these lines figure out what type of aggregation to use
+			if( Eventtype::getId($event) == null ) continue;
+			$aggregationType = Eventtype::find(Eventtype::getId($event))->first()->aggregation;
+			GroupQuery::using($query, $aggregationType);
+		}
+
+		// add grouping string to query
+		$grouping->apply($query);
 
 		return $query;
 
@@ -87,6 +109,11 @@ class Measurement extends Eloquent
 	public function user()
 	{
 	 	return $this->belongsTo('User');
+	}
+
+	public function source()
+	{
+	 	return $this->belongsTo('Source');
 	}
 
 	public function eventtype()

@@ -2,27 +2,6 @@
 
 class MeasurementController extends BaseController {
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		$measurements = Measurement::all();
-		var_dump($measurements);
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
 	private function validationFailure($msg){
 		return Response::json(array(
 	        'message'=> $msg),400
@@ -61,13 +40,9 @@ class MeasurementController extends BaseController {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
 	 * @return Response
 	 */
-	public function get()
-	{
-		$data =  Input::all();
-
+	public function get(){
 		$event = Input::get('eventtype');
 		$user = Input::get('user');
 		$source = Input::get('source');
@@ -75,45 +50,29 @@ class MeasurementController extends BaseController {
 		$resolution = Input::get('resolution');
 		$attributes = Input::get('attributes');
 
-		$query = Measurement::getMeasurement($user, $event, $source);
-
-		// limits time scope of query
-		if($time != null) {
-			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time));
-		}
-
-		// does aggregation if needed
-		if($resolution != null) {
-			$query = TimeQuery::aggregate($query, TimeQuery::aggregateBy($resolution));
-			Measurement::aggregateMethod($query, 'COUNT');
-		}
-
-		$results = $query->get();
+		// query results
 		$payload = array();
 
-		foreach($results as $result){
-			$entry = array(
-				'user'=>$result->user->name,
-				'eventtype'=>$result->eventtype->name,
-				'value'=>$result->value,
-				'timestamp'=>$result->timestamp);
 
-			if($attributes == 'all') {
-				$attrs = $result->getAllAttributes;
-				foreach($attrs as $attr){
-					$entry[$attr->name()] = $attr->value;
-				}
-			// 
-			} else if($attributes != null){
-				$attr = $result->getSingleAttribute($attributes);
-				if($attr != null) {
-					$entry[$attr->name()] = $attr->value;
-				}
-			} else {
+		// There are two scenarios
+		// 1 Specific event type 
+		// 2 Group of events
+		//
+		// Results for groups of events are built by issuing multiple
+		// queries for each event.
+		// This is done because each query should always be about
+		// a single event because a single event may have attributes, filters
+		// or aggreation methods only valid for itself and not other events.
 
+		// Group of events
+		$event = strtolower($event);
+		if(array_key_exists($event, Eventtype::$groups)){
+			foreach (Eventtype::$groups[$event] as $event) {
+				$payload = array_merge($payload, $this->getEventMeasurements($user, $event, $source, $time, $resolution, $attributes));
 			}
-
-			array_push($payload,  $entry);
+		// Specific event
+		} else {
+			$payload = array_merge($payload, $this->getEventMeasurements($user, $event, $source, $time, $resolution, $attributes));
 		}
 
 		return Response::json(array(
@@ -122,36 +81,69 @@ class MeasurementController extends BaseController {
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
+	 * Display the specified resource.
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function getEventMeasurements($user, $event, $source, $time, $resolution, $attributes)
 	{
-		//
-	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+		// query model
+		$query = Measurement::getMeasurement(
+			$user,
+			$event, 
+			$source, 
+			$time, 
+			$resolution
+		);
+		
+		$results = $query->get();
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
+		// prepare payload array
+		$payload = array();
+
+		foreach($results as $result){
+			// save query results
+			$entry = array(
+				'value'=>$result->value,
+				'time'=>$result->timestamp,
+				'eventtype'=>$result->eventtype->name
+			);
+			
+			// do not list the source name if user already specified it
+			if($source == null){
+				$entry['source'] = $result->source->name;
+			}
+			if($user == null){
+				$entry['user'] = $result->user->name;
+			}
+
+			// show attributes to the specific entry
+			// eg. Dropbox file creation event has a filename attribute
+
+			// do not show attributes if query has to be aggregated by day
+			// we cannot aggregate filenames as of yet (may get solved later)
+
+			// query asking for all events
+			if($resolution == null and $attributes == 'all') {
+				$attrs = $result->getAllAttributes;
+				foreach($attrs as $attr){
+					$entry[$attr->name()] = $attr->value;
+				}
+			// query is asking for a specific event
+			} else if($resolution == null and $attributes != null){
+				$attr = $result->getSingleAttribute($attributes);
+				if($attr != null) {
+					$entry[$attr->name()] = $attr->value;
+				}
+			} else {
+
+			}
+			array_push($payload,  $entry);
+		}
+		// return query results
+		return $payload;
 	}
 
 }

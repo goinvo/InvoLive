@@ -19,14 +19,4 @@ class TimeQuery {
 		return $query;
 	}
 
-	public static function aggregateBy($delta){
-		if($delta == 'hour') return 'YEAR(timestamp), MONTH(timestamp), DAY(timestamp), HOUR(timestamp)';
-		if($delta == 'day') return 'YEAR(timestamp), MONTH(timestamp), DAY(timestamp)';
-		return aggregateBy('hour');
-	}
-
-	public static function aggregate($query, $delta){
-		return $query->groupBy(DB::raw($delta));
-	}
-
 }

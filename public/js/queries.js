@@ -1,7 +1,7 @@
 var live = live || {};
 
 live.queries = function () {
-    var url = "http://live.goinvo.com/api/";
+    var url = "http://live.dev/api/";
     var $user, $eventtype, $time, $grouping;
     var compression = {
         lastday : 'hour',
@@ -13,7 +13,7 @@ live.queries = function () {
     	$.getJSON(url, function(data){
     		var content = data.message;
     		$selector.html(Mustache.render($(template).html(), content));
-            $selector.chosen();
+            $selector.chosen()
     	})
     },
 
