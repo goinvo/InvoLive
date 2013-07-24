@@ -6,6 +6,8 @@ live.visualizations = function () {
 
     var initializeChart = function (data){
 
+    	log(data);
+
     	d3.selectAll('svg').remove();
 
     	var margin = {top: 20, right: 80, bottom: 30, left: 80},
