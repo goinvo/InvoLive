@@ -7,7 +7,7 @@ live.visualizations = function () {
 	var initializeLegend = function (scale){
 		var legendEntries = 4;
 		$legend.find('.labl').text('Dropbox Activity');
-		for(var i=0; i<=legendEntries-1; i++){
+		for(var i=0; i<=legendEntries; i++){
 			// get current domain
 			var valueDomain = i*((scale.domain()[1] - scale.domain()[0])/legendEntries);
 			var valueRange = scale(valueDomain);
@@ -22,7 +22,7 @@ live.visualizations = function () {
 			.attr('cy', icon.attr('height')/2)
 			.style('fill', 'steelblue').style('opacity', 0.3);
 
-			$entry.append('<div class="labl">' + Math.round(scale.invert(valueRange)) + '</div>')
+			$entry.append('<div class="labl">' + Math.round(scale.invert(valueRange)/5)*5 + '</div>')
 		}
 	}
 

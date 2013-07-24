@@ -78,18 +78,18 @@
 
 
 			<div id="results-content">
-
-				<h1> At a glance </h1>
-
-				<div class="row">
+<!-- 
+				<h1> At a glance </h1> -->
 					<div id="chart-legend" class="nomargin">
 						<div class="labl"> </div>
 					</div>
-				</div>
+
+				<hr>
 
 				<div class="row" id="visualizations">
 					<div id="chart-container" class="nomargin"></div>
 				</div>
+
 				<hr>
 
 				<h1> Stats </h1>
