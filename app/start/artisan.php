@@ -12,3 +12,4 @@
 */
 
 Artisan::add(new DropboxWorker);
+Artisan::add(new StaffplanWorker);

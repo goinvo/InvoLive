@@ -334,7 +334,7 @@ class Application extends Container implements HttpKernelInterface, ResponsePrep
     }
     public static function getBootstrapFile()
     {
-        return '/Users/fnk/local/live/server/laravel/vendor/laravel/framework/src/Illuminate/Foundation' . '/start.php';
+        return '/Users/fnk/local/live/vendor/laravel/framework/src/Illuminate/Foundation' . '/start.php';
     }
     public function startExceptionHandling()
     {
@@ -9967,7 +9967,7 @@ class PrettyPageHandler extends Handler
             return Handler::DONE;
         }
         if (!($resources = $this->getResourcesPath())) {
-            $resources = '/Users/fnk/local/live/server/laravel/vendor/filp/whoops/src/Whoops/Handler' . '/../Resources';
+            $resources = '/Users/fnk/local/live/vendor/filp/whoops/src/Whoops/Handler' . '/../Resources';
         }
         $templateFile = "{$resources}/pretty-template.php";
         $cssFile = "{$resources}/pretty-page.css";
