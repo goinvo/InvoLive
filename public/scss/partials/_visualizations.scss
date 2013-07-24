@@ -24,12 +24,18 @@
 
 #chart-legend{
 	position: relative;
-	margin: 15px 0px 15px 0px;
+	margin: 15px 0px 15px 0px auto;
+
+	svg{
+		margin-right:5px;
+	}
 
 	.labl, .entry{
 		display: inline-block;
-		vertical-align: middle;
+		vertical-align: top;
 		height: 50px;
+		line-height: 50px;
+		margin-right: 30px;
 	}
 
 	.entry{

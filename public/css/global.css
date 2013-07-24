@@ -102,43 +102,49 @@ body {
 /* line 25, ../scss/partials/_visualizations.scss */
 #chart-legend {
   position: relative;
-  margin: 15px 0px 15px 0px;
+  margin: 15px 0px 15px 0px auto;
 }
 /* line 29, ../scss/partials/_visualizations.scss */
+#chart-legend svg {
+  margin-right: 5px;
+}
+/* line 33, ../scss/partials/_visualizations.scss */
 #chart-legend .labl, #chart-legend .entry {
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: top;
   height: 50px;
+  line-height: 50px;
+  margin-right: 30px;
 }
 
-/* line 41, ../scss/partials/_visualizations.scss */
+/* line 47, ../scss/partials/_visualizations.scss */
 #dchart {
   margin-top: 50px;
 }
 
-/* line 45, ../scss/partials/_visualizations.scss */
+/* line 51, ../scss/partials/_visualizations.scss */
 #user-list-container {
   margin-top: 20px;
 }
-/* line 48, ../scss/partials/_visualizations.scss */
+/* line 54, ../scss/partials/_visualizations.scss */
 #user-list-container td {
   vertical-align: middle;
 }
-/* line 52, ../scss/partials/_visualizations.scss */
+/* line 58, ../scss/partials/_visualizations.scss */
 #user-list-container .sort {
   cursor: pointer;
 }
-/* line 58, ../scss/partials/_visualizations.scss */
+/* line 64, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list tr {
   margin-top: 5px;
 }
-/* line 62, ../scss/partials/_visualizations.scss */
+/* line 68, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list img {
   width: 60px;
   height: 60px;
   border-radius: 10px;
 }
-/* line 68, ../scss/partials/_visualizations.scss */
+/* line 74, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list .pic {
   width: 90px;
   border-radius: 5px;
