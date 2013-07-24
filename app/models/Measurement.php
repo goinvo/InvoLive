@@ -3,7 +3,7 @@ class Measurement extends Eloquent
 {
 	public $timestamps = false;
 
-	public static function createMeasurement($user, $eventtype, $source, $value, $timestamp){
+	public static function createMeasurement($user, $eventtype, $source, $value, $timestamp, $overwriteOldEntries = True){
 
 		// check for valid user
 		$user_id = User::getId($user);
@@ -17,14 +17,17 @@ class Measurement extends Eloquent
 		$source_id = Source::getId($source);
 		if($source_id == null) return array('success' => False, 'message' => 'Source '.$source.' not found.');
 		
-		// check for duplicates
-		$dup_query = Measurement::where('user_id', $user_id)
-			->where('eventtype_id', $event_id)
-			->where('source_id', $source_id)
-			->where('value', $value)
-			->where('timestamp',$timestamp->format('Y-m-d H:i:s'));
-		if( $dup_query->first() != null){
-			return array('success' => False, 'message' => 'Duplicate.');
+		// check for old entries and overwrite them if needed
+		if ($overwriteOldEntries) {
+			$old_entry = Measurement::where('user_id', $user_id)
+				->where('eventtype_id', $event_id)
+				->where('source_id', $source_id)
+				->where('timestamp',$timestamp->format('Y-m-d H:i:s'));
+			if( $old_entry->first() != null){
+				$measurement = $old_entry->first();
+				$measurement->value = $value;
+				return array('success' => True, 'measurement' => $measurement);
+			}
 		}
 
 		// create new measurement and save
@@ -54,7 +57,7 @@ class Measurement extends Eloquent
 
 		// limits time scope of query if needed
 		if($time != null) {
-			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time));
+			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time), TimeQuery::stringToDate('now'));
 		}
 
 		// does daily aggregation if needed

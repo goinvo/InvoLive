@@ -51,30 +51,25 @@ body {
 }
 
 /* line 9, ../scss/partials/_live.scss */
-#visualizations {
-  margin-top: 20px;
-}
-
-/* line 13, ../scss/partials/_live.scss */
 #button-query {
   margin-top: -4px;
 }
 
-/* line 18, ../scss/partials/_live.scss */
+/* line 14, ../scss/partials/_live.scss */
 .span-grouping.disabled {
   opacity: 0.15;
 }
-/* line 20, ../scss/partials/_live.scss */
+/* line 16, ../scss/partials/_live.scss */
 .span-grouping.disabled h4 {
   opacity: 0;
 }
 
-/* line 26, ../scss/partials/_live.scss */
+/* line 22, ../scss/partials/_live.scss */
 #results {
   position: relative;
 }
 
-/* line 30, ../scss/partials/_live.scss */
+/* line 26, ../scss/partials/_live.scss */
 #results-preloader {
   position: absolute;
   width: 100%;
@@ -104,34 +99,46 @@ body {
   stroke-linecap: round;
 }
 
-/* line 26, ../scss/partials/_visualizations.scss */
+/* line 25, ../scss/partials/_visualizations.scss */
+#chart-legend {
+  position: relative;
+  margin: 15px 0px 15px 0px;
+}
+/* line 29, ../scss/partials/_visualizations.scss */
+#chart-legend .labl, #chart-legend .entry {
+  display: inline-block;
+  vertical-align: middle;
+  height: 50px;
+}
+
+/* line 41, ../scss/partials/_visualizations.scss */
 #dchart {
   margin-top: 50px;
 }
 
-/* line 30, ../scss/partials/_visualizations.scss */
+/* line 45, ../scss/partials/_visualizations.scss */
 #user-list-container {
   margin-top: 20px;
 }
-/* line 33, ../scss/partials/_visualizations.scss */
+/* line 48, ../scss/partials/_visualizations.scss */
 #user-list-container td {
   vertical-align: middle;
 }
-/* line 37, ../scss/partials/_visualizations.scss */
+/* line 52, ../scss/partials/_visualizations.scss */
 #user-list-container .sort {
   cursor: pointer;
 }
-/* line 43, ../scss/partials/_visualizations.scss */
+/* line 58, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list tr {
   margin-top: 5px;
 }
-/* line 47, ../scss/partials/_visualizations.scss */
+/* line 62, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list img {
   width: 60px;
   height: 60px;
   border-radius: 10px;
 }
-/* line 53, ../scss/partials/_visualizations.scss */
+/* line 68, ../scss/partials/_visualizations.scss */
 #user-list-container #user-list .pic {
   width: 90px;
   border-radius: 5px;

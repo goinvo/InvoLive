@@ -107,7 +107,7 @@ class MeasurementController extends BaseController {
 			// save query results
 			$entry = array(
 				'value'=>$result->value,
-				'timestamp'=> timestamp,
+				'timestamp'=> $result->timestamp,
 				'eventtype'=>$result->eventtype->name
 			);
 			

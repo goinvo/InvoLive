@@ -80,9 +80,15 @@
 			<div id="results-content">
 
 				<h1> At a glance </h1>
-				<div class="row" id="visualizations">
-					<div id="chart-container" class="span12 nomargin"> 
+
+				<div class="row">
+					<div id="chart-legend" class="nomargin">
+						<div class="labl"> </div>
 					</div>
+				</div>
+
+				<div class="row" id="visualizations">
+					<div id="chart-container" class="nomargin"></div>
 				</div>
 				<hr>
 

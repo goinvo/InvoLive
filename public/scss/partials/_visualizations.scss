@@ -22,6 +22,21 @@
 
 }
 
+#chart-legend{
+	position: relative;
+	margin: 15px 0px 15px 0px;
+
+	.labl, .entry{
+		display: inline-block;
+		vertical-align: middle;
+		height: 50px;
+	}
+
+	.entry{
+		// @include box-sizing(border-box);
+	}
+}
+
 
 #dchart{
 	margin-top: 50px;
