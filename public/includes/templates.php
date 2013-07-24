@@ -14,7 +14,7 @@
 			<th> </th>
 			<th class="sort" data-sort="user" > User </th>
 			<th class="sort" data-sort="actions"> {{eventtype}} </th>
-			<th> Last seen </th>
+			<th> Last update </th>
 		</thead>
 		<tbody id="user-list" class="list">
 		</tbody >

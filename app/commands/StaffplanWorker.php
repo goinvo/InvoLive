@@ -55,10 +55,8 @@ class StaffplanWorker extends Command {
 	}
 
 	public function deleteStaffplanEntries(){
-		Measurement::where('source', Source::getId('staffplan'))->delete();
+		Measurement::where('source_id', Source::getId('staffplan'))->delete();
 	}
-
-
 
 	public function filterUsers($userdata){
 		$filtered = array();
@@ -95,7 +93,8 @@ class StaffplanWorker extends Command {
 			$eventtype,
 			'staffplan',
 			$value,
-			$timestamp
+			$timestamp,
+			false
 		);
 		if($stored['success']) {
 			$stored['measurement']->addAttribute('project', $project);
@@ -108,8 +107,10 @@ class StaffplanWorker extends Command {
 		$project = $this->getProjectAttribute($assignment['project_id'], 'name');
 		$weeks = $assignment['work_weeks'];
 		foreach($weeks as $week){
-			// 
-			$timestamp = DateTime::createFromFormat('U', $week['beginning_of_week']/1000);
+			// do not accept any dates before 2010 as they are not valid
+			$date = $week['beginning_of_week'];
+			if($date < 1262304000000) continue;
+			$timestamp = DateTime::createFromFormat('U', $date/1000);
 			if (gettype($timestamp) != 'object'){
 				continue;
 			};
@@ -148,6 +149,7 @@ class StaffplanWorker extends Command {
 	 */
 	public function fire()
 	{
+		$this->deleteStaffplanEntries();
 		$data = $this->getStaffplanData();
 		$this->users = $this->filterUsers($data['users']);
 		$this->projects = $data['projects'];

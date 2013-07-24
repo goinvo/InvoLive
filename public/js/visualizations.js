@@ -2,17 +2,37 @@ var live = live || {};
 
 live.visualizations = function () {
 
-	var $chart, $dchart, $list;
+	var $chart, $dchart, $list, $legend;
+
+	var initializeLegend = function (scale){
+		var legendEntries = 4;
+		$legend.find('.labl').text('Dropbox Activity');
+		for(var i=0; i<=legendEntries-1; i++){
+			// get current domain
+			var valueDomain = i*((scale.domain()[1] - scale.domain()[0])/legendEntries);
+			var valueRange = scale(valueDomain);
+
+			// append div and assign slice
+			$entry = $('<div class="entry"> </div>').appendTo($legend);
+			var icon = d3.select($entry.get(0)).append('svg').attr('height',$legend.height())
+			.attr('width',scale.range()[1]*2 + 2);
+
+			icon.append('circle').attr('r', valueRange)
+			.attr('cx', icon.attr('width')/2)
+			.attr('cy', icon.attr('height')/2)
+			.style('fill', 'steelblue').style('opacity', 0.3);
+
+			$entry.append('<div class="labl">' + Math.round(scale.invert(valueRange)) + '</div>')
+		}
+	}
 
     var initializeChart = function (data){
 
-    	log(data);
-
     	d3.selectAll('svg').remove();
 
-    	var margin = {top: 20, right: 80, bottom: 30, left: 80},
+    	var margin = {top: 20, right: 0, bottom: 30, left: 90},
 	    width = $chart.width() - margin.left - margin.right,
-	    height = 300 - margin.top - margin.bottom;
+	    height = 350 - margin.top - margin.bottom;
 
 	    var svg = d3.select($chart.get(0)).append('svg')
 	    .attr('id', 'chart')
@@ -38,7 +58,7 @@ live.visualizations = function () {
 		var yAxis = d3.svg.axis()
 			.ticks(10)
 		    .scale(yd)
-		    .tickPadding(10)
+		    .tickPadding(20)
 		    .orient("left");
 
 		var line = d3.svg.line()
@@ -59,6 +79,8 @@ live.visualizations = function () {
 		    0,
 		    d3.max(data, function(c) { return d3.max(c, function(d) { return d.value; }); })
 		]);
+
+		initializeLegend(r);
 
 		svg.append("g")
 		.attr("class", "axis")
@@ -103,6 +125,36 @@ live.visualizations = function () {
 
     },
 
+    initializeLineChart = function(data){
+   		var datasets = [];
+   		var labels = [];
+
+   		for(var i=0; i<50; i++){
+   			labels.push('a');
+   		}
+
+
+   		$.each(data, function(i, userdata){
+   			data = [];
+   			$.each(userdata, function(){
+   				data.push(this.value);
+   			})
+   			datasets.push({
+   				strokeColor : this.color,
+   				fillColor : setOpacity(this.color, 0),
+   				data : data
+   			});
+   		});
+
+   		var data = {
+   			labels : labels,
+   			datasets : datasets
+   		}
+   		var ctx = $("#linechart").get(0).getContext("2d");
+   		var myLinechart = new Chart(ctx).Line(data, {pointDot : false});
+
+    },
+
     initializeDchart = function(data){
     	var doughnutData = [];
     	// accumulate data
@@ -116,24 +168,6 @@ live.visualizations = function () {
 		var myDoughnut = new Chart(document.getElementById("dchart").getContext("2d")).Doughnut(doughnutData);
 	
     }
-
-  //     initializeDchart = function(data){
-  //   	var doughnutData = [];
-  //   	var users = [];
-  //   	// accumulate data
-  //   	$.each(data, function(i){
-  //   		users.push(this.user);
-  //   		doughnutData.push({
-  //   			"fillColor" : this.color,
-  //   			value : d3.sum(this, function(d){ return d.value })
-  //   		});
-  //   	})
-  //   	log(users);
-  //   	log(doughnutData)
-
-		// var myDoughnut = new Chart(document.getElementById("dchart").getContext("2d")).Pie(doughnutData);
-	
-  //   }
 
     initializeList = function(data){
     	$list.html(Mustache.render($('#table-template').html(), data[0]));
@@ -158,6 +192,7 @@ live.visualizations = function () {
     var initialize = function () {
     	$chart = $('#chart-container');
     	$list = $('#user-list-container');
+    	$legend = $('#chart-legend');
 
     };
 

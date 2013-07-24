@@ -1,7 +1,7 @@
 var live = live || {};
 
 live.queries = function () {
-    var url = "http://live.goinvo.com/api/";
+    var url = "http://live.dev/api/";
     var $user, $eventtype, $time, $grouping;
     var resolution = {
         "lastday" : 'hour',
@@ -39,14 +39,12 @@ live.queries = function () {
                 }, function(data){
 
                     var data = data.message;
-                    log(user);
                     
-                    $.each(data, function() {log(this);log(this.value)});
+                    // $.each(data, function() {log(this);log(this.value)});
                     // str to date
                     $.each(data, function(){
                         this.timestamp = moment(this.timestamp).subtract('hours', 4).toDate();
                     });
-                    log(data);
                     data.user = user,
                     data.color = colors[i];
                     data.pic = $('#selector-user option[value="' + user + '"]').data('avatar');
