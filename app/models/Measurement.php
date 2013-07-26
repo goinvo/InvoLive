@@ -3,7 +3,7 @@ class Measurement extends Eloquent
 {
 	public $timestamps = false;
 
-	public static function createMeasurement($user, $eventtype, $source, $value, $timestamp, $overwriteOldEntries = True){
+	public static function createMeasurement($user, $eventtype, $source, $value, $timestamp, $attributes){
 
 		// check for valid user
 		$user_id = User::getId($user);
@@ -18,15 +18,18 @@ class Measurement extends Eloquent
 		if($source_id == null) return array('success' => False, 'message' => 'Source '.$source.' not found.');
 		
 		// check for old entries and overwrite them if needed
-		if ($overwriteOldEntries) {
-			$old_entry = Measurement::where('user_id', $user_id)
-				->where('eventtype_id', $event_id)
-				->where('source_id', $source_id)
-				->where('timestamp',$timestamp->format('Y-m-d H:i:s'));
-			if( $old_entry->first() != null){
-				$measurement = $old_entry->first();
-				$measurement->value = $value;
-				return array('success' => True, 'measurement' => $measurement);
+		$old_entries = Measurement::where('user_id', $user_id)
+			->where('eventtype_id', $event_id)
+			->where('source_id', $source_id)
+			->where('timestamp',$timestamp->format('Y-m-d H:i:s'))
+			->get();
+
+		if(count($old_entries) != 0){
+			foreach($old_entries as $measurement){
+				if($measurement->attributeIs($attributes)){
+					$measurement->value = $value;
+					return array('success' => True, 'measurement' => $measurement);
+				}
 			}
 		}
 
@@ -39,6 +42,11 @@ class Measurement extends Eloquent
 		$measurement->timestamp = $timestamp;
 
 		$measurement->save();
+
+		// add new attributes
+		foreach(array_keys($attributes) as $attr){
+			$measurement->addAttribute($attr, $attributes[$attr]);
+		}
 
 		return array('success' => True, 'measurement' => $measurement);
 	}
@@ -95,15 +103,25 @@ class Measurement extends Eloquent
 		$newAttribute->save();
 	}
 
-	// public function getAttribute($attribute){
+	public function attributeIs($attributes, $value = null){
+		$match = true;
+		if(gettype($attributes) == 'array'){
+			foreach(array_keys($attributes) as $attr){
+				if($this->getSingleAttribute($attr) != $attributes[$attr]) $match = false;
+			}
+		} else {
+			if($this->getSingleAttribute($attributes) != $value) $match = false;
+		}
+		return $match;
+	}
 
-	// }
 
 	public function getSingleAttribute($attribute){
 		$attr_id = Attribute::getId($attribute);
 		if($attr_id == null) return null;
 		
-		return MeasurementAttribute::where('attribute_id', $attr_id)->where('measurement_id', $this->id)->first();
+		return MeasurementAttribute::where('attribute_id', $attr_id)
+		->where('measurement_id', $this->id)->first()->value;
 	}
 
 	public function getAllAttributes(){

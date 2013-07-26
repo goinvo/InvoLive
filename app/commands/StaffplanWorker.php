@@ -22,6 +22,7 @@ class StaffplanWorker extends Command {
 
 	private $users;
 	private $projects; 
+	private $clients;
 	private $validUIDs = array();
 
 	/**
@@ -69,42 +70,30 @@ class StaffplanWorker extends Command {
 		return $filtered;
 	}
 
-	public function getUserAttribute($user_id, $attr){
-		foreach($this->users as $user){
-			if($user['id'] == $user_id){
-				return $user[$attr];
+	public function getEntryAttribute($entry_id, $entries, $attribute){
+		foreach($entries as $entry){
+			if($entry['id'] == $entry_id){ 
+				return $entry[$attribute];
 			}
 		}
-		return null;
 	}
 
-	public function getProjectAttribute($project_id, $attr){
-		foreach($this->projects as $project){
-			if($project['id'] == $project_id){
-				return $project[$attr];
-			}
-		}
-		return null;
-	}
-
-	public function storeStaffplanEvent($user, $project, $eventtype, $value, $timestamp){
+	public function storeStaffplanEvent($user, $client, $project, $eventtype, $value, $timestamp){
 		$stored = Measurement::createMeasurement(
 			$user,
 			$eventtype,
 			'staffplan',
 			$value,
 			$timestamp,
-			false
+			array( 'project' => $project, 'client' => $client)
 		);
-		if($stored['success']) {
-			$stored['measurement']->addAttribute('project', $project);
-		};
 		return $stored;
 	}
 
 	public function storeAssignment($assignment){
-		$userEmail = $this->getUserAttribute($assignment['user_id'], 'email');
-		$project = $this->getProjectAttribute($assignment['project_id'], 'name');
+		$userEmail = $this->getEntryAttribute($assignment['user_id'], $this->users, 'email');
+		$project = $this->getEntryAttribute($assignment['project_id'], $this->projects, 'name');
+		$client = $this->getEntryAttribute($assignment['client_id'], $this->clients, 'name');
 		$weeks = $assignment['work_weeks'];
 		foreach($weeks as $week){
 			// do not accept any dates before 2010 as they are not valid
@@ -121,6 +110,7 @@ class StaffplanWorker extends Command {
 			if(gettype($estimated) != 'NULL') {
 				$this->storeStaffplanEvent(
 					$userEmail, 
+					$client,
 					$project, 
 					'Estimated work hours', 
 					$estimated, 
@@ -132,6 +122,7 @@ class StaffplanWorker extends Command {
 			if(gettype($actual) != 'NULL') {
 				$this->storeStaffplanEvent(
 					$userEmail, 
+					$client,
 					$project, 
 					'Actual work hours', 
 					$actual, 
@@ -149,10 +140,12 @@ class StaffplanWorker extends Command {
 	 */
 	public function fire()
 	{
-		$this->deleteStaffplanEntries();
+
+		// $this->deleteStaffplanEntries();
 		$data = $this->getStaffplanData();
 		$this->users = $this->filterUsers($data['users']);
 		$this->projects = $data['projects'];
+		$this->clients = $data['clients'];
 		$assignments = $data['assignments'];
 
 		$saved = 0;
