@@ -56,7 +56,11 @@ class StaffplanWorker extends Command {
 	}
 
 	public function deleteStaffplanEntries(){
-		Measurement::where('source_id', Source::getId('staffplan'))->delete();
+		// need to call delete on models instead of raw query to delete related attributes
+		$entries = Measurement::where('source_id', Source::getId('staffplan'))->get();
+		foreach($entries as $entry){
+			$entry->delete();
+		}
 	}
 
 	public function filterUsers($userdata){
@@ -141,7 +145,7 @@ class StaffplanWorker extends Command {
 	public function fire()
 	{
 
-		// $this->deleteStaffplanEntries();
+		$this->deleteStaffplanEntries();
 		$data = $this->getStaffplanData();
 		$this->users = $this->filterUsers($data['users']);
 		$this->projects = $data['projects'];

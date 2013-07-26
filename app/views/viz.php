@@ -39,7 +39,10 @@
 
 	<div class="container">
 
-		<h1 style="margin-top:20px">Invo Live v0.2</h1>
+		<div> 
+			<h1 style="margin-top:20px; display:inline-block">Invo Live v0.2</h1>
+			<h4 style="display:inline-block; margin-left:20px;"> Stakhanov </h4>
+		</div>
 
 		<hr style="width:100%">
 

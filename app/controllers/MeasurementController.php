@@ -127,7 +127,7 @@ class MeasurementController extends BaseController {
 
 			// query asking for all events
 			if($resolution == null and $attributes == 'all') {
-				$attrs = $result->getAllAttributes;
+				$attrs = $result->attributes;
 				foreach($attrs as $attr){
 					$entry[$attr->name()] = $attr->value;
 				}

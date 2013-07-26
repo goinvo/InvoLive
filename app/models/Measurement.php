@@ -23,10 +23,12 @@ class Measurement extends Eloquent
 			->where('source_id', $source_id)
 			->where('timestamp',$timestamp->format('Y-m-d H:i:s'))
 			->get();
-
+		// check if entries match in event type, source, user and timestamp
 		if(count($old_entries) != 0){
 			foreach($old_entries as $measurement){
+				// check whether attribtues match
 				if($measurement->attributeIs($attributes)){
+					// edit value if positive match
 					$measurement->value = $value;
 					return array('success' => True, 'measurement' => $measurement);
 				}
@@ -87,8 +89,17 @@ class Measurement extends Eloquent
 		$grouping->apply($query);
 
 		return $query;
-
 	}
+
+	// overrides default delete function
+	// deletes all object attributes as well
+	public function delete()
+    {
+        // delete all related attributes
+       	$this->attributes()->delete();
+        // parent call
+        return parent::delete();
+    }
 
 	public function addAttribute($attribute, $value){
 		// check valid attribute
@@ -105,26 +116,30 @@ class Measurement extends Eloquent
 
 	public function attributeIs($attributes, $value = null){
 		$match = true;
+		// if param is array then match all entries is array
 		if(gettype($attributes) == 'array'){
 			foreach(array_keys($attributes) as $attr){
-				if($this->getSingleAttribute($attr) != $attributes[$attr]) $match = false;
+				if($this->attribute($attr) != $attributes[$attr]) $match = false;
 			}
+		// if param is a signle value then match only specified attribute
 		} else {
-			if($this->getSingleAttribute($attributes) != $value) $match = false;
+			if($this->attribute($attributes) != $value) $match = false;
 		}
 		return $match;
 	}
 
 
-	public function getSingleAttribute($attribute){
+	public function attribute($attribute){
+		// get attribute id
 		$attr_id = Attribute::getId($attribute);
 		if($attr_id == null) return null;
 		
+		// return value
 		return MeasurementAttribute::where('attribute_id', $attr_id)
 		->where('measurement_id', $this->id)->first()->value;
 	}
 
-	public function getAllAttributes(){
+	public function attributes(){
 		return $this->hasMany('MeasurementAttribute');
 	}
 
