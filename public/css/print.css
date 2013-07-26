@@ -12,3 +12,8 @@
    Chrome, IE8+
 ============================================*/
 /* Global variables */
+/* line 25, ../scss/partials/_base.scss */
+body, html {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}

@@ -1,23 +1,28 @@
 var live = live || {};
 
 live.queries = function () {
-    var url = "http://live.dev/api/";
+    var url = "http://live.goinvo.com/api/";
     var $user, $eventtype, $time, $grouping;
-    var compression = {
-        lastday : 'hour',
-        lastmonth : 'day',
-        alltime : 'day'
+    var resolution = {
+        "lastday" : 'hour',
+        "lastmonth" : 'day',
+        "lastyear" : 'day',
+        "alltime" : 'day'
     }
 
     var populateSelector = function($selector, url, template){
     	$.getJSON(url, function(data){
     		var content = data.message;
     		$selector.html(Mustache.render($(template).html(), content));
-            $selector.chosen();
+            $selector.chosen()
     	})
     },
-
     query = function(){
+
+        // set current event
+        currentEvent = events[$eventtype.val()];
+
+        startPreloader();
 
         var users = $user.val() ||
         $user.find('option').map(function(){
@@ -33,15 +38,19 @@ live.queries = function () {
                     user : user,
                     eventtype : $eventtype.val(),
                     time : $time.val(),
-                    compression : compression[$time.val()]
+                    resolution : resolution[$time.val()]
                 }, function(data){
+
                     var data = data.message;
+                    if(data.length === 0) return;
+                    
+                    // $.each(data, function() {log(this);log(this.value)});
                     // str to date
                     $.each(data, function(){
-                        this.timestamp = moment(this.timestamp).toDate();
+                        this.timestamp = moment(this.timestamp).subtract('hours', 4).toDate();
                     });
                     data.user = user,
-                    data.color = colors[i];
+                    data.color = colors[i%(colors.length-1)];
                     data.pic = $('#selector-user option[value="' + user + '"]').data('avatar');
                     data.eventtype = $eventtype.val();
                     result.push(data);
@@ -59,9 +68,7 @@ live.queries = function () {
                 $('#results').slideUp();
                 $('#nodata').fadeIn();
             } else {
-                live.visualizations.initializeChart(result, $time.val());
-                live.visualizations.initializeDchart(result);
-                live.visualizations.initializeList(result);
+                live.visualizations.draw(result);
                 $('#nodata').hide();
                 $('#results').slideDown();
             }
@@ -80,11 +87,19 @@ live.queries = function () {
     	$time.chosen({disable_search_threshold: 10});
     	$grouping.chosen({disable_search_threshold: 10});
     	
-    	populateSelector($eventtype, url+'eventtype', '#event-template');
+    	//populateSelector($eventtype, url+'eventtype', '#event-template');
+        // populate eventtype 
+        var eventtypes = [];
+        for( key in events ){
+            eventtypes.push({ name : events[key].value, value : key });
+        }
+        $eventtype.html(Mustache.render($('#event-template').html(), eventtypes));
+        $eventtype.chosen()
+
     	populateSelector($user, url+'user', '#user-template');
 
         setTimeout(function(){
-            live.queries.query()
+            live.queries.query();
         },500);
 
 

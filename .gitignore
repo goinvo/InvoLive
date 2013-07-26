@@ -3,3 +3,4 @@ app/config/develop
 vendor
 *.gz
 public/.sass-cache
+data.json

@@ -13,7 +13,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $table = 'users';
 
 	// list of fields that could contain username
-	public static $usernameFields = array('name', 'dropboxId');
+	public static $usernameFields = array('name', 'dropboxId', 'email');
 
 	/**
 	 * The attributes excluded from the model's JSON form.

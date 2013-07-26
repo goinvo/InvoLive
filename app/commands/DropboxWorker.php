@@ -108,11 +108,9 @@ class DropboxWorker extends Command {
 			$this->convertDropboxEvents[$entry['event']],
 			'dropbox',
 			$entry['quantity'],
-			$entry['timestamp']
+			$entry['timestamp'],
+			array('filename' => $entry['file'])
 		);
-		if($stored['success']) {
-			$stored['measurement']->addAttribute('filename', $entry['file']);
-		}
 
 		return $stored;
 	}

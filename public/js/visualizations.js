@@ -2,165 +2,182 @@ var live = live || {};
 
 live.visualizations = function () {
 
-	var $chart, $dchart, $list;
+	var $chart, $dchart, $list, $legend, $timelegend;
+	var rscale, xscale;
 
-    var initializeChart = function (data){
+	var drawLegends = function (data){
+		$legend.html('');
+		$timelegend.html('');
 
-    	d3.selectAll('svg').remove();
+		var legendEntries = 4;
+		$('<div class="labl"> </div>').appendTo($legend).text(data[0].eventtype);
+		for(var i=0; i<=legendEntries; i++){
+			// get current domain
+			var valueDomain = i*((rscale.domain()[1] - rscale.domain()[0])/legendEntries);
+			var valueRange = rscale(valueDomain);
 
-    	var margin = {top: 20, right: 80, bottom: 30, left: 80},
-	    width = $chart.width() - margin.left - margin.right,
-	    height = 300 - margin.top - margin.bottom;
+			// append div and assign slice
+			$entry = $('<div class="entry"> </div>').appendTo($legend);
+			var icon = d3.select($entry.get(0)).append('svg').attr('height',$legend.height())
+			.attr('width',rscale.range()[1]*2 + 2);
 
-	    var svg = d3.select($chart.get(0)).append('svg')
-	    .attr('id', 'chart')
-	    .attr("width", width + margin.left + margin.right)
-	    .attr("height", height + margin.top + margin.bottom)
-	  	.append("g")
+			icon.append('circle').attr('r', valueRange)
+			.attr('cx', icon.attr('width')/2)
+			.attr('cy', icon.attr('height')/2)
+			.style('fill', 'steelblue').style('opacity', 0.3);
+
+			$entry.append('<div class="labl">' + Math.round(rscale.invert(valueRange)/5)*5 + '</div>')
+		}
+
+		var margin = {top: 0, right: 0, bottom: 0, left: 10};
+	    width = $timelegend.width()- margin.left - margin.right,
+	    height = $timelegend.height() - margin.top - margin.bottom;
+
+		var svg = d3.select($timelegend.get(0)).append('svg')
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom)
+		.append("g")
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	    var x = d3.time.scale()
-    	.range([0, width]);
-
-		var r = d3.scale.linear()
-		    .range([4, 20]);
-
-		var yd = d3.scale.ordinal()
-			.rangePoints([height - 20, 0]);
-
-		var xAxis = d3.svg.axis()
-			.ticks(5)
-		    .scale(x)
+	    var xAxis = d3.svg.axis()
+			.ticks(5).tickPadding(10)
+		    .scale(xscale)
 		    .orient("bottom");
 
-		var yAxis = d3.svg.axis()
-			.ticks(10)
-		    .scale(yd)
-		    .orient("left");
+		svg.append("g")
+		.attr("class", "axis")
+		.call(xAxis);
 
-		var line = d3.svg.line()
-	    // .interpolate("monotone")
-	    .x(function(d) { return x(d.timestamp); })
-	    .y(function(d) { return y(d.value); });
+	},
 
-		x.domain([
+	staffplanExpansion = function(){
+		// if($(this).data('open') === false) {
+		// 	$dropdown = $('<div class="subsection" style="display:none"></div>').appendTo($(this));
+		// 	$dropdown.slideDown();
+		// 	$(this).data('open', true);
+		// } else {
+		// 	$(this).find('.subsection').slideUp();
+		// 	$(this).data('open', false);
+		// }
+		// $dropdown = $('<div class="subsection" style="display:none"></div>').appendTo($(this));
+		// $dropdown.slideDown();
+	}
+
+	drawStripSvg = function(data, $container){
+		var margin = {top: 0, right: 0, bottom: 0, left: 20},
+	    width = $container.width()- margin.left - margin.right,
+	    height = $container.height() - margin.top - margin.bottom;
+
+		var svg = d3.select($container.get(0)).append('svg')
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom)
+		.append("g")
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	    xscale.range([0, $container.width()]);
+
+		var user = svg.append("g").classed("user",true);
+	    user.selectAll('circle')
+    	.data(data)
+		.enter().append('circle')
+    	.attr('r', function(d){
+    		return rscale(d.value);
+    	})
+    	.attr('cx', function(d){
+    		return xscale(d.timestamp);
+    	})
+    	.attr('cy', $container.height()/2)
+    	.style('fill', data.color)
+    	.style('fill-opacity', 0.3)
+    	.style('stroke', data.color)
+    	.style('stroke-opacity',0.45);
+
+
+
+	},
+
+	drawStripInfo = function(data, $container){
+		$container.find('.strip-icon');
+		var value = d3.sum(data, function(d){ return d.value });
+		$container.find('.strip-value').text(value);
+	},
+
+	drawStrip = function(data){
+		$rendered = $(Mustache.render($('#strip-template').html(), data)).appendTo($chart);
+		drawStripInfo(data, $rendered.find('.strip-info'));
+		drawStripSvg(data, $rendered.find('.strip-content'));
+
+		$rendered.data(data);
+		$rendered.click(currentEvent.click);
+	},
+
+	draw = function(data){
+		$chart.html('');
+		xscale = d3.time.scale()
+    	.domain([
 		    d3.min(data, function(c) { var min = d3.min(c, function(d) { return d.timestamp; }); return min;}),
 		    d3.max(data, function(c) { var max = moment().toDate(); return max; })
 		]);
 
-		yd.domain(data.map(function(d){
-			return d.user
-		}))
-
-		r.domain([
+		rscale = d3.scale.linear()
+		.range([4, 20])
+		.domain([
 		    0,
 		    d3.max(data, function(c) { return d3.max(c, function(d) { return d.value; }); })
 		]);
 
-		svg.append("g")
-		.attr("class", "axis")
-		.attr("transform", "translate(0," + height + ")")
-		.call(xAxis);
-
-		svg.append("g")
-		.attr("class", "axis y")
-		.call(yAxis);
-
-		var users = svg.selectAll(".user")
-	    .data(data)
-	    .enter().append("g")
-	    .classed("user",true);
-
-	    users.each(function(){
-	    	var data = d3.select(this).datum();
-
-	    	d3.select(this).selectAll('circle')
-	    	.data(data)
-	    	.enter().append('circle')
-	    	.attr('r', function(d){
-	    		return r(d.value);
-	    	})
-	    	.attr('cx', function(d){
-	    		return x(d.timestamp);
-	    	})
-	    	.attr('cy', function(d){
-	    		return yd(d.user);
-	    	})
-	    	.style('fill', data.color)
-	    	.style('opacity', 0.5);
-
-	    });
-
-	    // users.append("path")
-     //  .attr("class", "line")
-     //  .attr("d", function(d) { return line(d); })
-     //  .style("stroke", function(d){return d.color});
 
 
+		$.each(data, function(i, user){
+			drawStrip(user);
+		})
+
+		drawLegends(data);
+		stopPreloader();
+
+	},
+
+    initializeLineChart = function(data){
+   		var datasets = [];
+   		var labels = [];
+
+   		for(var i=0; i<50; i++){
+   			labels.push('a');
+   		}
+
+
+   		$.each(data, function(i, userdata){
+   			data = [];
+   			$.each(userdata, function(){
+   				data.push(this.value);
+   			})
+   			datasets.push({
+   				strokeColor : this.color,
+   				fillColor : setOpacity(this.color, 0),
+   				data : data
+   			});
+   		});
+
+   		var data = {
+   			labels : labels,
+   			datasets : datasets
+   		}
+   		var ctx = $("#linechart").get(0).getContext("2d");
+   		var myLinechart = new Chart(ctx).Line(data, {pointDot : false});
     },
 
-    initializeDchart = function(data){
-    	var doughnutData = [];
-    	// accumulate data
-    	$.each(data, function(i){
-    		doughnutData.push({
-    			color : this.color,
-    			value : d3.sum(this, function(d){ return d.value })
-    		});
-    	})
 
-		var myDoughnut = new Chart(document.getElementById("dchart").getContext("2d")).Doughnut(doughnutData);
-	
-    }
-
-  //     initializeDchart = function(data){
-  //   	var doughnutData = [];
-  //   	var users = [];
-  //   	// accumulate data
-  //   	$.each(data, function(i){
-  //   		users.push(this.user);
-  //   		doughnutData.push({
-  //   			"fillColor" : this.color,
-  //   			value : d3.sum(this, function(d){ return d.value })
-  //   		});
-  //   	})
-  //   	log(users);
-  //   	log(doughnutData)
-
-		// var myDoughnut = new Chart(document.getElementById("dchart").getContext("2d")).Pie(doughnutData);
-	
-  //   }
-
-    initializeList = function(data){
-    	$list.html(Mustache.render($('#table-template').html(), data[0]));
-    	$listBody = $list.find('tbody');
-
-    	$.each(data, function(i){
-    		this.lastEvent = (this.length === 0) ? '--' : moment(this[this.length-1].timestamp).fromNow();
-    		this.total = d3.sum(this, function(d){ return d.value });
-    		$rendered = $(Mustache.render($('#row-template').html(), this)).appendTo($listBody);
-    	});
-
-    	var options = {
-		    valueNames: [ 'user', 'actions' ]
-		};
-    	var list = new List('user-list-container', options);
-    	list.sort('actions');
-
-    }
-
-
-
-    var initialize = function () {
+    initialize = function () {
     	$chart = $('#chart-container');
     	$list = $('#user-list-container');
+    	$legend = $('#chart-legend');
+    	$timelegend = $('#chart-timelegend');
 
     };
 
     return {
         initialize: initialize,
-        initializeChart : initializeChart,
-    	initializeDchart : initializeDchart,
-    	initializeList : initializeList
+        draw : draw,
+        staffplanExpansion : staffplanExpansion
     }
 }();

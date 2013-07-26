@@ -8,10 +8,18 @@ html {
 	margin-bottom: 1px;
 }
 
+html, body{
+		// background-color: #eee;
+}
+
 body {
 	@include reset-box-model;
 }
 
 .group {
 	@include pie-clearfix;
+}
+
+.container, .span12{
+	width: 1200px;
 }

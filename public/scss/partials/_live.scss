@@ -6,10 +6,6 @@
 	margin-bottom: 40px;
 }
 
-#visualizations{
-	margin-top: 20px;
-}
-
 #button-query{
 	margin-top: -4px;
 }
@@ -21,4 +17,16 @@
 			opacity: 0;
 		}
 	}
+}
+
+#results{
+	position: relative;
+}
+
+#results-preloader{
+	position: absolute;
+	width:100%;
+	top: 0;
+	left: 0;
+	text-align: center;
 }

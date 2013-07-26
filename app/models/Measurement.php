@@ -3,7 +3,7 @@ class Measurement extends Eloquent
 {
 	public $timestamps = false;
 
-	public static function createMeasurement($user, $eventtype, $source, $value, $timestamp){
+	public static function createMeasurement($user, $eventtype, $source, $value, $timestamp, $attributes){
 
 		// check for valid user
 		$user_id = User::getId($user);
@@ -17,14 +17,22 @@ class Measurement extends Eloquent
 		$source_id = Source::getId($source);
 		if($source_id == null) return array('success' => False, 'message' => 'Source '.$source.' not found.');
 		
-		// check for duplicates
-		$dup_query = Measurement::where('user_id', $user_id)
+		// check for old entries and overwrite them if needed
+		$old_entries = Measurement::where('user_id', $user_id)
 			->where('eventtype_id', $event_id)
 			->where('source_id', $source_id)
-			->where('value', $value)
-			->where('timestamp',$timestamp->format('Y-m-d H:i:s'));
-		if( $dup_query->first() != null){
-			return array('success' => False, 'message' => 'Duplicate.');
+			->where('timestamp',$timestamp->format('Y-m-d H:i:s'))
+			->get();
+		// check if entries match in event type, source, user and timestamp
+		if(count($old_entries) != 0){
+			foreach($old_entries as $measurement){
+				// check whether attribtues match
+				if($measurement->attributeIs($attributes)){
+					// edit value if positive match
+					$measurement->value = $value;
+					return array('success' => True, 'measurement' => $measurement);
+				}
+			}
 		}
 
 		// create new measurement and save
@@ -37,24 +45,61 @@ class Measurement extends Eloquent
 
 		$measurement->save();
 
+		// add new attributes
+		foreach(array_keys($attributes) as $attr){
+			$measurement->addAttribute($attr, $attributes[$attr]);
+		}
+
 		return array('success' => True, 'measurement' => $measurement);
 	}
 
-	public static function aggregateMethod($query, $method){
-		return $query->select(DB::raw('user_id, eventtype_id, source_id, '.$method.'(value) as value, timestamp'));
-	}
-
-	public static function getMeasurement($user = null, $event = null, $source = null){
+	public static function getMeasurement($user = null, $event = null, $source = null, $time = null, $resolution = null){
 		
+
 		$query = Measurement::query();
 
-		if($event != null && $event != 'all') $query->where('eventtype_id', Eventtype::getId($event));
+		// handles grouping by day/month... grouping by users... etc
+		$grouping = new GroupQuery;
+
+		$query->where('eventtype_id', Eventtype::getId($event));
 		if($user != null) $query->where('user_id', User::getId($user));
 		if($source != null) $query->where('source_id', Source::getId($source));
 
-		return $query;
+		// limits time scope of query if needed
+		if($time != null) {
+			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time), TimeQuery::stringToDate('now'));
+		}
 
+		// does daily aggregation if needed
+		if($resolution != null) {
+			$grouping->byTime($resolution);
+			// do not forget to also group by user if grouping by time
+			$grouping->byUser();
+
+			// each event needs to be aggregated in some way
+			// some use averages (eg. Temperature) some use sum (eg. Files created)
+			// these lines figure out what type of aggregation to use
+			if( Eventtype::getId($event) != null ) {
+				$aggregationType = Eventtype::find(Eventtype::getId($event))->first()->aggregation;
+				GroupQuery::using($query, $aggregationType);
+			}
+		}
+
+		// add grouping string to query
+		$grouping->apply($query);
+
+		return $query;
 	}
+
+	// overrides default delete function
+	// deletes all object attributes as well
+	public function delete()
+    {
+        // delete all related attributes
+       	$this->attributes()->delete();
+        // parent call
+        return parent::delete();
+    }
 
 	public function addAttribute($attribute, $value){
 		// check valid attribute
@@ -69,24 +114,43 @@ class Measurement extends Eloquent
 		$newAttribute->save();
 	}
 
-	// public function getAttribute($attribute){
+	public function attributeIs($attributes, $value = null){
+		$match = true;
+		// if param is array then match all entries is array
+		if(gettype($attributes) == 'array'){
+			foreach(array_keys($attributes) as $attr){
+				if($this->attribute($attr) != $attributes[$attr]) $match = false;
+			}
+		// if param is a signle value then match only specified attribute
+		} else {
+			if($this->attribute($attributes) != $value) $match = false;
+		}
+		return $match;
+	}
 
-	// }
 
-	public function getSingleAttribute($attribute){
+	public function attribute($attribute){
+		// get attribute id
 		$attr_id = Attribute::getId($attribute);
 		if($attr_id == null) return null;
 		
-		return MeasurementAttribute::where('attribute_id', $attr_id)->where('measurement_id', $this->id)->first();
+		// return value
+		return MeasurementAttribute::where('attribute_id', $attr_id)
+		->where('measurement_id', $this->id)->first()->value;
 	}
 
-	public function getAllAttributes(){
+	public function attributes(){
 		return $this->hasMany('MeasurementAttribute');
 	}
 
 	public function user()
 	{
 	 	return $this->belongsTo('User');
+	}
+
+	public function source()
+	{
+	 	return $this->belongsTo('Source');
 	}
 
 	public function eventtype()
