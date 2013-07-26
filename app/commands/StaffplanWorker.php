@@ -18,7 +18,7 @@ class StaffplanWorker extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description.';
+	protected $description = 'Updates data from Staffplan service.';
 
 	private $users;
 	private $projects; 
@@ -145,7 +145,7 @@ class StaffplanWorker extends Command {
 	public function fire()
 	{
 
-		$this->deleteStaffplanEntries();
+		//$this->deleteStaffplanEntries();
 		$data = $this->getStaffplanData();
 		$this->users = $this->filterUsers($data['users']);
 		$this->projects = $data['projects'];

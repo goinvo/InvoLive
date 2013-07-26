@@ -18,7 +18,7 @@ class DropboxWorker extends Command {
 	 *
 	 * @var string
 	 */
-	protected $description = 'Command description.';
+	protected $description = 'Updates data from Dropbox service.';
 
 
 	private $convertDropboxEvents = array('added' => 'Files created', 'deleted' => 'Files deleted', 'renamed' => 'Files renamed', 'edited' => 'Files edited', 'moved' => 'Files moved');
