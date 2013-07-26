@@ -4,6 +4,19 @@
 */
 var colors = d3.scale.category10().range();
 var $preloader, preloader;
+var currentEvent;
+
+var events = {
+	"Dropbox Actions" : {
+		value : 'Dropbox actions',
+		click : null
+	},
+	"Actual work hours" : {
+		value : 'Work hours',
+		click : live.visualizations.staffplanExpansion
+	}
+}
+
 
 /*
 *	Helper functions
@@ -15,29 +28,43 @@ function initPreloader(){
 	var width = $preloader.width();
 
 	preloader = new Sonic({
+
 	width: 200,
-	height: 200,
-	stepsPerFrame: 2,
-	trailLength: 1,
-	pointDistance: .008,
-	fps: 30,
+		height: 200,
 
+		stepsPerFrame: 1.5,
+		trailLength: 1,
+		pointDistance: .125,
 
-		fillColor: '#1f77b4',
+		strokeColor: '#425f8e',
 
+		fps: 5,
+
+		setup: function() {
+			this._.lineWidth = 10;
+		},
 		step: function(point, index) {
-			
-			this._.beginPath();
-			this._.moveTo(point.x, point.y);
-			this._.arc(point.x, point.y, index * 7, 0, Math.PI*2, false);
-			this._.closePath();
-			this._.fill();
+			var cx = 100,
+				cy = 100,
+				_ = this._,
+				angle = (Math.PI/180) * (point.progress * 360),
+				innerRadius = 15;
+
+			_.beginPath();
+			_.moveTo(point.x, point.y);
+			_.lineTo(
+				(Math.cos(angle) * innerRadius) + cx,
+				(Math.sin(angle) * innerRadius) + cy
+			);
+			_.closePath();
+			_.stroke();
 
 		},
-
 		path: [
-			['arc', 100, 100, 80, 0, 360]
+			['arc', 100, 100, 70, 0, 360]
 		]
+
+
 	});
 
 	$preloader.append(preloader.canvas);
@@ -52,8 +79,10 @@ function startPreloader(duration){
 
 function stopPreloader(){
 	preloader.stop();
-	$preloader.fadeOut();
-	$('#results-content').animate({opacity : 1}, 200);
+	$preloader.fadeOut(100);
+	setTimeout(function(){
+		$('#results-content').animate({opacity : 1}, 200);
+	}, 300);
 }
 
 function log(msg){

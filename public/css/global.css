@@ -12,6 +12,12 @@
    Chrome, IE8+
 ============================================*/
 /* Global variables */
+/* line 25, ../scss/partials/_base.scss */
+body, html {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+
 /*
 	File Overview:	Basic structural styles.
 	Author:			Michael Bester
@@ -22,14 +28,14 @@ html {
   margin-bottom: 1px;
 }
 
-/* line 11, ../scss/partials/_structure.scss */
+/* line 15, ../scss/partials/_structure.scss */
 body {
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-/* line 15, ../scss/partials/_structure.scss */
+/* line 19, ../scss/partials/_structure.scss */
 .group {
   *zoom: 1;
 }
@@ -38,6 +44,11 @@ body {
   content: "";
   display: table;
   clear: both;
+}
+
+/* line 23, ../scss/partials/_structure.scss */
+.container, .span12 {
+  width: 1200px;
 }
 
 /* line 1, ../scss/partials/_live.scss */
@@ -78,20 +89,20 @@ body {
   text-align: center;
 }
 
-/* line 2, ../scss/partials/_visualizations.scss */
-#chart .axis path {
+/* line 4, ../scss/partials/_visualizations.scss */
+#chart-timelegend .axis path {
   fill: none;
 }
-/* line 6, ../scss/partials/_visualizations.scss */
-#chart .axis.y .tick line {
+/* line 8, ../scss/partials/_visualizations.scss */
+#chart-timelegend .axis.y .tick line {
   display: none;
 }
-/* line 11, ../scss/partials/_visualizations.scss */
-#chart .axis line {
+/* line 13, ../scss/partials/_visualizations.scss */
+#chart-timelegend .axis line {
   stroke: black;
 }
-/* line 15, ../scss/partials/_visualizations.scss */
-#chart .line {
+/* line 17, ../scss/partials/_visualizations.scss */
+#chart-timelegend .line {
   fill: none;
   stroke-width: 2px;
   stroke-dasharray: 5, 5;
@@ -99,53 +110,87 @@ body {
   stroke-linecap: round;
 }
 
-/* line 25, ../scss/partials/_visualizations.scss */
+/* line 26, ../scss/partials/_visualizations.scss */
 #chart-legend {
   position: relative;
-  margin: 15px 0px 15px 0px auto;
+  text-align: center;
+  background-color: #fcfcfc;
+  border-top: 1px solid #eee;
 }
-/* line 29, ../scss/partials/_visualizations.scss */
+/* line 32, ../scss/partials/_visualizations.scss */
 #chart-legend svg {
-  margin-right: 5px;
+  margin-right: 10px;
 }
-/* line 33, ../scss/partials/_visualizations.scss */
+/* line 36, ../scss/partials/_visualizations.scss */
 #chart-legend .labl, #chart-legend .entry {
   display: inline-block;
   vertical-align: top;
   height: 50px;
   line-height: 50px;
-  margin-right: 30px;
+  margin-right: 35px;
 }
 
-/* line 47, ../scss/partials/_visualizations.scss */
-#dchart {
-  margin-top: 50px;
-}
-
-/* line 51, ../scss/partials/_visualizations.scss */
-#user-list-container {
-  margin-top: 20px;
-}
-/* line 54, ../scss/partials/_visualizations.scss */
-#user-list-container td {
-  vertical-align: middle;
-}
-/* line 58, ../scss/partials/_visualizations.scss */
-#user-list-container .sort {
+/* line 49, ../scss/partials/_visualizations.scss */
+.strip {
+  border-bottom: 1px solid #f3f3f3;
   cursor: pointer;
 }
-/* line 64, ../scss/partials/_visualizations.scss */
-#user-list-container #user-list tr {
-  margin-top: 5px;
+/* line 53, ../scss/partials/_visualizations.scss */
+.strip:hover {
+  background-color: #fcfcfc;
 }
-/* line 68, ../scss/partials/_visualizations.scss */
-#user-list-container #user-list img {
-  width: 60px;
+/* line 57, ../scss/partials/_visualizations.scss */
+.strip .separator {
+  height: 100%;
+  width: 1px;
+  background: #f3f3f3;
+  vertical-align: top;
+}
+/* line 65, ../scss/partials/_visualizations.scss */
+.strip .strip-info,
+.strip .strip-content {
+  display: inline-block;
   height: 60px;
-  border-radius: 10px;
+  vertical-align: top;
+}
+/* line 69, ../scss/partials/_visualizations.scss */
+.strip .strip-info div,
+.strip .strip-content div {
+  display: inline-block;
 }
 /* line 74, ../scss/partials/_visualizations.scss */
-#user-list-container #user-list .pic {
-  width: 90px;
-  border-radius: 5px;
+.strip .strip-info {
+  width: 250px;
+  font-size: 16px;
+}
+/* line 79, ../scss/partials/_visualizations.scss */
+.strip .strip-info .strip-name,
+.strip .strip-info .strip-value {
+  margin-top: 20px;
+}
+/* line 83, ../scss/partials/_visualizations.scss */
+.strip .strip-info .strip-name {
+  margin-left: 10px;
+  width: 80px;
+}
+/* line 88, ../scss/partials/_visualizations.scss */
+.strip .strip-info .strip-value {
+  width: 40px;
+  text-align: center;
+}
+/* line 94, ../scss/partials/_visualizations.scss */
+.strip .strip-content {
+  width: 930px;
+}
+/* line 98, ../scss/partials/_visualizations.scss */
+.strip img {
+  margin-top: 5px;
+  margin-left: 2px;
+  width: 40px;
+  height: 40px;
+  border-radius: 3px;
+}
+/* line 106, ../scss/partials/_visualizations.scss */
+.strip .subsection {
+  height: 50px;
 }

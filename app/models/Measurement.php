@@ -69,9 +69,10 @@ class Measurement extends Eloquent
 			// each event needs to be aggregated in some way
 			// some use averages (eg. Temperature) some use sum (eg. Files created)
 			// these lines figure out what type of aggregation to use
-			if( Eventtype::getId($event) == null ) continue;
-			$aggregationType = Eventtype::find(Eventtype::getId($event))->first()->aggregation;
-			GroupQuery::using($query, $aggregationType);
+			if( Eventtype::getId($event) != null ) {
+				$aggregationType = Eventtype::find(Eventtype::getId($event))->first()->aggregation;
+				GroupQuery::using($query, $aggregationType);
+			}
 		}
 
 		// add grouping string to query

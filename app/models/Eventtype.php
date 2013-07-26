@@ -5,7 +5,7 @@ class Eventtype extends Eloquent
 
     // identify groups of events
     public static $groups = array(
-        'dropbox activity' => 
+        'dropbox actions' => 
         array(
             'Files created',
             'Files edited',

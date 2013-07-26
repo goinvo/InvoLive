@@ -6,6 +6,7 @@ live.queries = function () {
     var resolution = {
         "lastday" : 'hour',
         "lastmonth" : 'day',
+        "lastyear" : 'day',
         "alltime" : 'day'
     }
 
@@ -16,8 +17,10 @@ live.queries = function () {
             $selector.chosen()
     	})
     },
-
     query = function(){
+
+        // set current event
+        currentEvent = events[$eventtype.val()];
 
         startPreloader();
 
@@ -64,9 +67,7 @@ live.queries = function () {
                 $('#results').slideUp();
                 $('#nodata').fadeIn();
             } else {
-                live.visualizations.initializeChart(result, $time.val());
-                live.visualizations.initializeDchart(result);
-                live.visualizations.initializeList(result);
+                live.visualizations.draw(result);
                 $('#nodata').hide();
                 $('#results').slideDown();
             }
@@ -85,11 +86,19 @@ live.queries = function () {
     	$time.chosen({disable_search_threshold: 10});
     	$grouping.chosen({disable_search_threshold: 10});
     	
-    	populateSelector($eventtype, url+'eventtype', '#event-template');
+    	//populateSelector($eventtype, url+'eventtype', '#event-template');
+        // populate eventtype 
+        var eventtypes = [];
+        for( key in events ){
+            eventtypes.push({ name : events[key].value, value : key });
+        }
+        $eventtype.html(Mustache.render($('#event-template').html(), eventtypes));
+        $eventtype.chosen()
+
     	populateSelector($user, url+'user', '#user-template');
 
         setTimeout(function(){
-            live.queries.query()
+            live.queries.query();
         },500);
 
 

@@ -7,6 +7,7 @@
 	<link href="css/lib/bootstrap/bootstrap.css" rel="stylesheet">
 	<link href="css/lib/chosen/chosen.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/global.css">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet'>
 
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -31,12 +32,14 @@
 		});
 	</script>
 
+	<title> Invo Live </title>
+
 </head>
 <body>
 
 	<div class="container">
 
-		<h1 style="margin-top:20px">Invo Live v.0.1</h1>
+		<h1 style="margin-top:20px">Invo Live v0.2</h1>
 
 		<hr style="width:100%">
 
@@ -56,6 +59,7 @@
 				<select class="selector-single" id="selector-time" style="width:140px;" >
 					<option value="lastday">Last day</option>
 					<option selected="selected" value="lastmonth">Last Month</option>
+					<option value="lastyear">Last Year</option>
 					<option value="alltime">All time</option>
 				</select>
 			</div>
@@ -64,41 +68,30 @@
 				<h4>  &zwnj;</h4>
 				<button id="button-query" class="btn btn-success  pull-right" type="button">
 					Query
-				</button></li>
+				</button>
 			</div>
 		</div>
 
-		<hr>
 
 		<h1 id="nodata" style="display:none"> No data collect yet. Try again later.</h1>
 
 		<div id="results">
 
-			<div id="results-preloader"></div>
+			<div id="results-preloader"> </div>
 
+				<div id="results-content">
 
-			<div id="results-content">
-<!-- 
-				<h1> At a glance </h1> -->
-					<div id="chart-legend" class="nomargin">
-						<div class="labl"> </div>
-					</div>
+				<div id="chart-legend"> </div>
 
-				<hr>
+				<hr style="margin: 0px 0px 5px 0px">
 
-				<div class="row" id="visualizations">
-					<div id="chart-container" class="nomargin"></div>
+				<div id="visualizations">
+					<div id="chart-container" class="nomargin span12"></div>
 				</div>
 
-				<hr>
-
-				<h1> Stats </h1>
-				<div class="row">
-					<div id="user-list-container" class="span8"> 
-					</div>
-					<div class="span4 nomargin" style="text-align:center"> 
-						<canvas id="dchart" width=250 height=250 class="pull-right"></canvas>
-					</div>
+				<div class="strip">
+					<div class="strip-info"> </div>
+					<div id="chart-timelegend" class="strip-content"> </div>
 				</div>
 
 			</div>

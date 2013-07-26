@@ -1,25 +1,4 @@
 
-<script type="text/html" id="row-template">
-	<tr>
-		<td class="pic">  <img src="{{pic}}" style="box-shadow: 0 0 8px 2px {{color}}" </td>
-		<td class="user">{{user}}</td>
-		<td class="actions">{{total}}</td>
-		<td class="lastevent">{{lastEvent}}</td>
-	</tr>
-</script>
-
-<script type="text/html" id="table-template">
-	<table class="table table-striped" > 
-		<thead>
-			<th> </th>
-			<th class="sort" data-sort="user" > User </th>
-			<th class="sort" data-sort="actions"> {{eventtype}} </th>
-			<th> Last update </th>
-		</thead>
-		<tbody id="user-list" class="list">
-		</tbody >
-	</table>
-</script>
 
 <script type="text/html" id="user-template">
 	{{#.}}
@@ -29,6 +8,21 @@
 
 <script type="text/html" id="event-template">
 	{{#.}}
-		<option value="{{name}}">{{name}}</option>
+		<option value="{{value}}">{{name}}</option>
 	{{/.}}
+</script>
+
+<script type="text/html" id="strip-template">
+	<div class="strip" data-open="false">
+		<div>
+			<div class="strip-info"> 
+				<img class="strip-icon" src="{{pic}}" />
+				<div class="strip-name"> {{user}} </div>
+				<div class="separator"> </div>
+				<div class="strip-value"> </div>
+				<div class="separator"> </div>
+			</div>
+			<div class="strip-content"> </div>
+		</div>
+	</div>
 </script>
