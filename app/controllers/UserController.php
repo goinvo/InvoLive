@@ -69,7 +69,6 @@ class UserController extends BaseController {
 				/*
 				*	Fitbit OAuth authorization subroutines
 				*/
-
 				
 				$key = Config::get('live.fitbit-key');
 			    $secret = Config::get('live.fitbit-secret');
@@ -106,6 +105,10 @@ class UserController extends BaseController {
 					$user = User::find($liveid);
 					$user->withingsToken = $withings->getOAuthToken();
 					$user->withingsSecret = $withings->getOAuthSecret();
+					
+					// withings callback returns withings id under param 'userid'
+					$user->withingsId = $liveid = Input::get('userid');
+					
 					$user->save();
 					$success = true;
 				}

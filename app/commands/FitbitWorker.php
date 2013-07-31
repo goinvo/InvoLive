@@ -20,6 +20,9 @@ class FitbitWorker extends Command {
 	 */
 	protected $description = 'Updates data from Fitbit service.';
 
+	// fitbit API object
+	private $fitbit;
+
 	/**
 	 * Create a new command instance.
 	 *
@@ -30,6 +33,29 @@ class FitbitWorker extends Command {
 		parent::__construct();
 	}
 
+	public function getUserSteps($user){
+		// set user
+		$this->fitbit->setUser($user->fitbitId);
+		// get steps
+		$response = $this->fitbit->getTimeSeries('steps', 'today', 'max');
+		
+		foreach($response as $steps){
+			$date = DateTime::createFromFormat('Y-m-d', $steps->dateTime)->setTime(0,0);
+			$this->storeSteps($user->name, $steps->value, $date);
+		}
+
+	}
+
+	public function storeSteps($user, $steps, $timestamp){
+		$stored = Measurement::createMeasurement(
+			$user,
+			'steps',
+			'fitbit',
+			$steps,
+			$timestamp
+		);
+	}
+
 	/**
 	 * Execute the console command.
 	 *
@@ -37,14 +63,27 @@ class FitbitWorker extends Command {
 	 */
 	public function fire()
 	{
-		//
+		// prepare fitbit client
 		$key = Config::get('live.fitbit-key');
 		$secret = Config::get('live.fitbit-secret');
 
-		$fitbit = new FitBitPHP($key, $key);
-		$fitbit->setOAuthDetails($key, $secret);
+		$this->fitbit = new FitBitPHP($key, $secret, 0, null, 'json');
 
-		
+		// fitbitworker is a fitbit account that will log on
+		// the fitbit service and ask info about each user in the system
+
+		// Note. In order to successfully pull data from fitbit you should either
+		// A. be friends with fitbitworker (ivan@goinvo.com for now) fitbit.com
+		// B. allow everyone to access you activities
+
+		$fitbitWorker = User::find(User::getId('liveworker'));
+		$this->fitbit->setOAuthDetails($fitbitWorker->fitbitToken, $fitbitWorker->fitbitSecret);
+
+		$fitbitUsers = User::whereRaw('fitbitId IS NOT NULL')->get();
+
+		foreach($fitbitUsers as $fitbitUser){
+			$this->getUserSteps($fitbitUser);
+		}
 
 	}
 
