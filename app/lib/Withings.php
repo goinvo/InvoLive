@@ -23,12 +23,9 @@ class WithingsPHP
     protected $oauth;
     protected $oauthToken, $oauthSecret;
 
-    protected $responseFormat;
-
     protected $userId = '-';
 
     protected $metric = 0;
-    protected $userAgent = 'FitbitPHP 0.72';
     protected $debug;
 
     protected $clientDebug;
@@ -39,9 +36,8 @@ class WithingsPHP
      * @param string $consumer_secret Application secret
      * @param int $debug Debug mode (0/1) enables OAuth internal debug
      * @param string $user_agent User-agent to use in API calls
-     * @param string $response_format Response format (json or xml) to use in API calls
      */
-    public function __construct($consumer_key, $consumer_secret, $debug = 1, $user_agent = null, $response_format = 'xml')
+    public function __construct($consumer_key, $consumer_secret, $debug = 1, $user_agent = null)
     {
         $this->initUrls();
 
@@ -53,10 +49,6 @@ class WithingsPHP
         if ($debug)
             $this->oauth->enableDebug();
 
-        if (isset($user_agent))
-            $this->userAgent = $user_agent;
-
-        $this->responseFormat = $response_format;
     }
 
 
@@ -243,7 +235,7 @@ class WithingsPHP
      * @param string $userId UserId of public profile, if none using set with setUser or '-' by default
      * @return mixed SimpleXMLElement or the value encoded in json as an object
      */
-    public function getProfile()
+    public function getActivities($date)
     {
 
         // $this->oauth->setNonce('HmorW');
@@ -260,7 +252,7 @@ class WithingsPHP
 
         try {
             $this->oauth->fetch('http://wbsapi.withings.net/v2/measure', 
-                array('action'=>'getactivity', 'date' => '2013-07-29', 'userid'=> 2160884),OAUTH_HTTP_METHOD_GET);
+                array('action'=>'getactivity', 'date' => $date, 'userid'=> $this->userId),OAUTH_HTTP_METHOD_GET);
         } catch (Exception $E) {
             echo 'ex';
         }
@@ -270,7 +262,7 @@ class WithingsPHP
         if (!strcmp($responseInfo['http_code'], '200')) {
             $response = $this->parseResponse($response);
             if ($response)
-                echo $response;
+                return $response;
             else
                 echo 'fail';
         } else {
@@ -284,7 +276,6 @@ class WithingsPHP
     private function getHeaders()
     {
         $headers = array();
-        $headers['User-Agent'] = $this->userAgent;
 
         if ($this->metric == 1) {
             $headers['Accept-Language'] = 'en_US';

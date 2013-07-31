@@ -25,6 +25,9 @@
 
 	<script>
 		$(document).ready(function(){
+
+			$('#codename').delay(500).animate({'margin-left': 25, 'opacity' : 1}, 250);
+
 			live.queries.initialize();
 			live.visualizations.initialize();
 			initPreloader();
@@ -40,8 +43,8 @@
 	<div class="container">
 
 		<div> 
-			<h1 style="margin-top:20px; display:inline-block">Invo Live v0.2</h1>
-			<h4 style="display:inline-block; margin-left:20px;"> Stakhanov </h4>
+			<h1 style="margin-top:20px; display:inline-block">Invo Live v0.3</h1>
+			<h4 id="codename" style="display:inline-block; margin-left:-50px; opacity: 0"> Bolt </h4>
 		</div>
 
 		<hr style="width:100%">
@@ -80,7 +83,7 @@
 
 		<div id="results">
 
-			<div id="results-preloader"> </div>
+			<div id="results-preloader" style="margin-top:100px;"> </div>
 
 				<div id="results-content">
 

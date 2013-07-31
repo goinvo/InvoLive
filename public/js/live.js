@@ -14,6 +14,10 @@ var events = {
 	"Actual work hours" : {
 		value : 'Work hours',
 		click : live.visualizations.staffplanExpansion
+	},
+	"Steps" : {
+		value : 'Steps',
+		click : null
 	}
 }
 
