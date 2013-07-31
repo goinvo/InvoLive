@@ -24,6 +24,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	protected $fillable = array('name');
 
+	public $timestamps = false;
+
 	/*
 	* get user id from username
 	*/

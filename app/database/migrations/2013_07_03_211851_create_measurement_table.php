@@ -19,7 +19,6 @@ class CreateMeasurementTable extends Migration {
 			$table->integer('user_id');
 			$table->float('value');
 			$table->dateTime('timestamp');
-
 		});
 
 		Schema::create('eventtypes', function($table)
@@ -41,7 +40,12 @@ class CreateMeasurementTable extends Migration {
 			$table->string('name')->unique();
 			$table->string('dropboxId')->unique();
 			$table->string('email')->unique();
-			$table->timestamps();
+			$table->string('withingsId')->unique();
+			$table->string('fitbitId')->unique();
+			$table->string('withingsToken')->unique();
+			$table->string('withingsSecret')->unique();
+			$table->string('fitbitToken')->unique();
+			$table->string('fitbitSecret')->unique();
 		});
 
 	}
