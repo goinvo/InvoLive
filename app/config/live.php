@@ -2,6 +2,10 @@
 
 return array(
 
-	'url' => ''
+	'dropbox-url' => '',
+	'fitbit-consumerkey' => '',
+	'fitbit-consumersecret' => '',
+	'withings-key' => '',
+	'withings-secret' => ''
 
 );

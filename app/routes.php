@@ -28,3 +28,14 @@ Route::get('/', function()
 {
     return View::make('viz');
 });
+
+
+Route::get('hello', function()
+{
+    return View::make('hello');
+});
+
+Route::get('hello2', function()
+{
+    return View::make('hello2');
+});
