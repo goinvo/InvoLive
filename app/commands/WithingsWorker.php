@@ -32,6 +32,9 @@ class WithingsWorker extends Command {
 		parent::__construct();
 	}
 
+	/*
+	*	Stores steps data
+	*/
 	public function storeSteps($user, $steps, $timestamp){
 		$stored = Measurement::createMeasurement(
 			$user,
@@ -42,33 +45,53 @@ class WithingsWorker extends Command {
 		);
 	}
 
+	/*
+	*	Gets user activities
+	*
+	*	@param {User object} $user - User to get data for.
+	*	@param {Integer} - Amount of past days to fetch.
+	*/
 	public function getActivities($user, $days){
+		$this->info('Retrieving data for '.$user->name.'.');
+
 		$this->withings->setUser($user->withingsId);
 		$this->withings->setOAuthDetails($user->withingsToken, $user->withingsSecret);
 		
 		for($i=0; $i < $days; $i++){
-			// fetch data for past days
+			// fetch data for the past $i days
+
+			// calculate day
 			// setTime(0,0) is used so that each timestamp does not differ in time
 			// which creates duplicates
 			$date = \Carbon\Carbon::now()->subDays($i)->setTime(0,0);
+
+			// get activities
 			$response = $this->withings->getActivities($date->toDateString());
 			$activities = json_decode($response, true);
 
 			if($activities['status'] == 0) {
-				//success
+				/*
+				*	Success
+				*/
 
 				// save steps 
 				if(isset($activities['body']['steps'])){
 					$this->storeSteps($user->name, $activities['body']['steps'], $date);
 				}
 			} else if( $activities['status'] == 601){
+				/*
+				*	Too many requests
+				*/
+
 				$this->info('Withings API request cap reached. Cooling off for ~1 minute...');
+
 				sleep(80); // cool off
 				$i--; // continue from where we left
 			} else {
 
 			}
 		}
+		$this->info('OK.');
 	}
 
 	/**
@@ -78,6 +101,10 @@ class WithingsWorker extends Command {
 	 */
 	public function fire()
 	{
+		$timestamp = \Carbon\Carbon::now()->toW3CString();
+		$this->info(' ');
+		$this->info($timestamp);
+		$this->info('Withings worker initialized. ');
 
 		// validate days value
 		// max of 60 days as Withing limits the # of queries
@@ -91,13 +118,15 @@ class WithingsWorker extends Command {
 		    return;
 		}
 
+		// initialize Withings client
 		$key = Config::get('live.withings-key');
 		$secret = Config::get('live.withings-secret');
-
 		$this->withings = new  WithingsPHP($key, $secret);
 
+		// get all users that have Withings accounts
 		$withingsUsers = User::whereRaw('withingsId IS NOT NULL')->get();
 
+		// get activities for each user
 		foreach($withingsUsers as $user){
 			$this->getActivities($user, $this->option('days'));
 		}

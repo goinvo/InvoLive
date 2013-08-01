@@ -2,41 +2,6 @@
 
 class MeasurementController extends BaseController {
 
-	private function validationFailure($msg){
-		return Response::json(array(
-	        'message'=> $msg),400
-		);
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-
-		$data =  Input::all();
-		$validator = Validator::make($data, 
-			array('eventtype' => 'required', 'user' => 'required', 'source' => 'required', 'value' => 'required|numeric'));
-		if ($validator->fails())
-		{
-		    return $this->validationFailure('Input validation failed');
-		}
-
-		$result = Measurement::createMeasurement(Input::get('user'), Input::get('eventtype'), Input::get('source'), Input::get('value'), Input::get('value'));
-		
-		if($result['success']) {
-			return Response::json(array(
-		        'message'=>'Measurement saved'),200
-			);
-		} else {
-			return Response::json(array(
-		        'message'=>$result['message']),400
-			);
-		}
-	}
-
 	/**
 	 * Display the specified resource.
 	 *

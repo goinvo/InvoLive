@@ -33,7 +33,14 @@ class FitbitWorker extends Command {
 		parent::__construct();
 	}
 
+	/*
+	*	Gets and stores steps data
+	*
+	*	@param {User object} $user - 
+	*/
 	public function getUserSteps($user){
+		$this->info('Retrieving data for '.$user->name.'.');
+
 		// set user
 		$this->fitbit->setUser($user->fitbitId);
 		// get steps
@@ -43,9 +50,12 @@ class FitbitWorker extends Command {
 			$date = DateTime::createFromFormat('Y-m-d', $steps->dateTime)->setTime(0,0);
 			$this->storeSteps($user->name, $steps->value, $date);
 		}
-
+		$this->info('OK.');
 	}
 
+	/*
+	*	Stores steps data
+	*/
 	public function storeSteps($user, $steps, $timestamp){
 		$stored = Measurement::createMeasurement(
 			$user,
@@ -63,6 +73,12 @@ class FitbitWorker extends Command {
 	 */
 	public function fire()
 	{
+
+		$timestamp = \Carbon\Carbon::now()->toW3CString();
+		$this->info(' ');
+		$this->info($timestamp);
+		$this->info('Fitbit worker initialized. ');
+
 		// prepare fitbit client
 		$key = Config::get('live.fitbit-key');
 		$secret = Config::get('live.fitbit-secret');
