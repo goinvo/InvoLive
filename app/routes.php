@@ -28,3 +28,7 @@ Route::get('/', function()
 {
     return View::make('viz');
 });
+
+Route::get('user/authorize', 'UserController@authorize');
+//Route::get('user/savetoken', 'UserController@savetoken');
+//function(){return View::make('hello');});

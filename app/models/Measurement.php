@@ -3,7 +3,7 @@ class Measurement extends Eloquent
 {
 	public $timestamps = false;
 
-	public static function createMeasurement($user, $eventtype, $source, $value, $timestamp, $attributes){
+	public static function createMeasurement($user, $eventtype, $source, $value, $timestamp, $attributes = null){
 
 		// check for valid user
 		$user_id = User::getId($user);
@@ -16,7 +16,7 @@ class Measurement extends Eloquent
 		// check for valid source
 		$source_id = Source::getId($source);
 		if($source_id == null) return array('success' => False, 'message' => 'Source '.$source.' not found.');
-		
+
 		// check for old entries and overwrite them if needed
 		$old_entries = Measurement::where('user_id', $user_id)
 			->where('eventtype_id', $event_id)
@@ -46,8 +46,10 @@ class Measurement extends Eloquent
 		$measurement->save();
 
 		// add new attributes
-		foreach(array_keys($attributes) as $attr){
-			$measurement->addAttribute($attr, $attributes[$attr]);
+		if ($attributes != null) {
+			foreach(array_keys($attributes) as $attr){
+				$measurement->addAttribute($attr, $attributes[$attr]);
+			}
 		}
 
 		return array('success' => True, 'measurement' => $measurement);
