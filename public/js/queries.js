@@ -17,6 +17,23 @@ live.queries = function () {
             $selector.chosen()
     	})
     },
+
+    getUserData = function(query, user){
+        var filter = [];
+        $.each(query, function(j, data){
+            if(data.user == user){
+                filter.push(data);
+            }
+        });
+        return filter;
+    },
+
+    ondataload = function(data){
+        stopPreloader();
+        live.visualizations.initialize();
+        live.visualizations.draw(data);
+    },
+
     query = function(){
 
         // set current event
@@ -29,50 +46,63 @@ live.queries = function () {
            return $(this).val();
         }).get();
 
-        var jxhr = [];
+        // var jxhr = [];
         var result = [];
 
-        $.each(users, function (i, user) {
-            jxhr.push(
-                $.getJSON(url+'measurement', {
-                    user : user,
-                    eventtype : $eventtype.val(),
-                    time : $time.val(),
-                    resolution : resolution[$time.val()]
-                }, function(data){
+        $.getJSON(url+'measurement', {
+            user : users,
+            eventtype : events[$eventtype.val()].value,
+            time : $time.val(),
+            resolution : resolution[$time.val()]
+        }, function(data){
+            var data = data.message;
 
-                    var data = data.message;
-                    if(data.length === 0) return;
-                    
-                    // $.each(data, function() {log(this);log(this.value)});
-                    // str to date
-                    $.each(data, function(){
-                        this.timestamp = moment(this.timestamp).subtract('hours', 4).toDate();
-                    });
-                    data.user = user,
-                    data.color = colors[i%(colors.length-1)];
-                    data.pic = $('#selector-user option[value="' + user + '"]').data('avatar');
-                    data.eventtype = $eventtype.val();
-                    result.push(data);
-                })
-            );
+            stopPreloader();
+            
+            var result = [];
+            $.each(users, function(i, user){
+                var userobj = getUserData(data, user);
+                userobj.user = user;
+                userobj.pic = $('#selector-user option[value="' + user + '"]').data('avatar');
+                result.push(userobj);
+            });
+            ondataload(result);
+            // $.each(users, function(i, user){
+            //     var userobj = {
+            //         user : user,
+            //         color : colors[i%(colors.length-1)],
+            //         pic : $('#selector-user option[value="' + user + '"]').data('avatar'),
+            //         eventtype : $eventtype.val(),
+            //         values : [] 
+            //     };
+            //     $.each(data, function(j, measurement){
+            //         $.each(measurement.data, function(){
+            //             this.timestamp = moment(this.timestamp).subtract('hours', 4).toDate();
+            //         });
+            //         if(measurement.user = user){
+            //              userobj.values = userobj.values.concat(measurement.data);
+            //         }
+            //     });
+            //     result.push(userobj);
+            // });
+
         });
 
-        $.when.apply($, jxhr).done(function() {
-            var nodata = true;
-            $.each(result, function(){
-                if(this.length != 0) nodata = false;
-            })
+        // $.when.apply($, jxhr).done(function() {
+        //     var nodata = true;
+        //     $.each(result, function(){
+        //         if(this.length != 0) nodata = false;
+        //     })
 
-            if(nodata) {
-                $('#results').slideUp();
-                $('#nodata').fadeIn();
-            } else {
-                live.visualizations.draw(result);
-                $('#nodata').hide();
-                $('#results').slideDown();
-            }
-        });
+        //     if(nodata) {
+        //         $('#results').slideUp();
+        //         $('#nodata').fadeIn();
+        //     } else {
+        //         live.visualizations.draw(result);
+        //         $('#nodata').hide();
+        //         $('#results').slideDown();
+        //     }
+        // });
     },
 
 

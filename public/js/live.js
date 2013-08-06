@@ -8,16 +8,19 @@ var currentEvent;
 
 var events = {
 	"Dropbox Actions" : {
-		value : 'Dropbox actions',
-		click : null
+		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted'],
+		click : null,
+		score : live.scores.dropbox
 	},
 	"Actual work hours" : {
 		value : 'Work hours',
-		click : live.visualizations.staffplanExpansion
+		click : live.visualizations.staffplanExpansion,
+		score : live.scores.workHours
 	},
 	"Steps" : {
 		value : 'Steps',
-		click : null
+		click : null,
+		score : live.scores.steps
 	}
 }
 

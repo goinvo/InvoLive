@@ -21,6 +21,7 @@
 
 	<script src="js/queries.js"></script>
 	<script src="js/visualizations.js"></script>
+	<script src="js/scores.js"></script>
 	<script src="js/live.js"></script>
 
 	<script>
@@ -78,6 +79,8 @@
 			</div>
 		</div>
 
+		<hr>
+
 
 		<h1 id="nodata" style="display:none"> No data collect yet. Try again later.</h1>
 
@@ -85,9 +88,23 @@
 
 			<div id="results-preloader" style="margin-top:100px;"> </div>
 
-				<div id="results-content">
+			<div id="results-content">
 
-				<div id="chart-legend"> </div>
+
+
+			</div>
+
+
+		</div>
+	</div>
+
+	<?php
+	include_once "includes/templates.php";
+	?>
+
+				
+
+<!-- 				<div id="chart-legend"> </div>
 
 				<hr style="margin: 0px 0px 5px 0px">
 
@@ -98,22 +115,7 @@
 				<div class="strip">
 					<div class="strip-info"> </div>
 					<div id="chart-timelegend" class="strip-content"> </div>
-				</div>
-
-			</div>
-
-
-		</div>
-	</div>
-
-
-
-
-	<?php
-	include_once "includes/templates.php";
-	?>
-
-
+				</div> -->
 
 </body>
 </html>

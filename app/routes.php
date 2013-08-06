@@ -13,9 +13,7 @@
 
 Route::group(array('prefix' => 'api'), function()
 {
-    //group(array('prefix' => 'api'), function()
     Route::get('measurement', 'MeasurementController@get');
-    Route::post('measurement', 'MeasurementController@store');
     Route::get('eventtype', 'EventtypeController@get');
     Route::post('eventtype', 'EventtypeController@store');
     Route::get('source', 'SourceController@get');

@@ -15,3 +15,4 @@ Artisan::add(new DropboxWorker);
 Artisan::add(new StaffplanWorker);
 Artisan::add(new FitbitWorker);
 Artisan::add(new WithingsWorker);
+Artisan::add(new BodymediaWorker);

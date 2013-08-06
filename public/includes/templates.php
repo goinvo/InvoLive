@@ -26,3 +26,11 @@
 		</div>
 	</div>
 </script>
+
+<script type="text/html" id="entry-template">
+	<div class="user span3"> 
+		<div> <canvas class="span3 user-stats"> </canvas> </div>
+		<div> <img class="strip-icon" src="{{pic}}" /> </div>
+		<div> {{user}} </div> 
+	</div>
+</script>
