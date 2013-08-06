@@ -113,6 +113,20 @@ class UserController extends BaseController {
 					$success = true;
 				}
 
+			} else if( $service == 'bodymedia'){
+
+				/*
+				*	Bodymedia OAuth authorization subroutines
+				*/
+
+				$key = Config::get('live.bodymedia-key');
+				$secret = Config::get('live.bodymedia-secret');
+
+				$bm = new BodymediaPHP($key, $secret);
+				$bm->initSession('http://live.dev/user/authorize?&service=withings&liveid='.$liveid);
+
+				echo $key;
+
 			} else {
 
 			}

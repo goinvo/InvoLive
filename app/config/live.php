@@ -6,6 +6,8 @@ return array(
 	'fitbit-consumerkey' => '',
 	'fitbit-consumersecret' => '',
 	'withings-key' => '',
-	'withings-secret' => ''
+	'withings-secret' => '',
+	'bodymedia-key' => '',
+	'bodymedia-secret' => ''
 
 );
