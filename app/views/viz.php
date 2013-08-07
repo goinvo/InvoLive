@@ -41,7 +41,7 @@
 </head>
 <body>
 
-	<div class="container">
+	<div class="container" style="margin-bottom:20px;">
 
 		<div> 
 			<h1 style="margin-top:20px; display:inline-block">Invo Live v0.3</h1>

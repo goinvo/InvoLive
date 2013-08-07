@@ -51,61 +51,31 @@ live.queries = function () {
 
         $.getJSON(url+'measurement', {
             user : users,
-            eventtype : events[$eventtype.val()].value,
+            eventtype : events["All"].value,
             time : $time.val(),
             resolution : resolution[$time.val()]
         }, function(data){
             var data = data.message;
-
             stopPreloader();
             
+            // parse dates
+            $.each(data, function(){
+                $.each(this.data,function(){
+                    this.timestamp = moment(this.timestamp).subtract('hours', 4).toDate();
+                })
+            })
+
             var result = [];
             $.each(users, function(i, user){
                 var userobj = getUserData(data, user);
                 userobj.user = user;
                 userobj.pic = $('#selector-user option[value="' + user + '"]').data('avatar');
                 result.push(userobj);
+
             });
             ondataload(result);
-            // $.each(users, function(i, user){
-            //     var userobj = {
-            //         user : user,
-            //         color : colors[i%(colors.length-1)],
-            //         pic : $('#selector-user option[value="' + user + '"]').data('avatar'),
-            //         eventtype : $eventtype.val(),
-            //         values : [] 
-            //     };
-            //     $.each(data, function(j, measurement){
-            //         $.each(measurement.data, function(){
-            //             this.timestamp = moment(this.timestamp).subtract('hours', 4).toDate();
-            //         });
-            //         if(measurement.user = user){
-            //              userobj.values = userobj.values.concat(measurement.data);
-            //         }
-            //     });
-            //     result.push(userobj);
-            // });
-
         });
-
-        // $.when.apply($, jxhr).done(function() {
-        //     var nodata = true;
-        //     $.each(result, function(){
-        //         if(this.length != 0) nodata = false;
-        //     })
-
-        //     if(nodata) {
-        //         $('#results').slideUp();
-        //         $('#nodata').fadeIn();
-        //     } else {
-        //         live.visualizations.draw(result);
-        //         $('#nodata').hide();
-        //         $('#results').slideDown();
-        //     }
-        // });
     },
-
-
 
     initialize = function (div) {
 
@@ -121,7 +91,7 @@ live.queries = function () {
         // populate eventtype 
         var eventtypes = [];
         for( key in events ){
-            eventtypes.push({ name : events[key].value, value : key });
+            eventtypes.push({ name : key, value : key });
         }
         $eventtype.html(Mustache.render($('#event-template').html(), eventtypes));
         $eventtype.chosen()

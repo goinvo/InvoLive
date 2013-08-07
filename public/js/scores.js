@@ -3,18 +3,33 @@ var live = live || {};
 live.scores = function () {
 	var d;
 
-	var dropbox = function(data) {
-		return Math.min(100, d3.sum(function(d){ return d.value }));
+	var getEventData = function(event, data){
+		eventData = [];
+		$.each(data, function(){
+			if($.inArray(this.eventtype, event.value) >= 0) eventData = eventData.concat(this.data);
+		})
+		if (eventData.length === 0 ) return null;
+		return eventData;
+	},
+
+	dropbox = function(data) {
+		var eventData = getEventData(events['Dropbox Actions'], data);
+		if(eventData === null) return 0;
+		return Math.min(100, d3.sum(eventData, function(d){ return d.value }));
 	},
 
 	workHours = function(data){
-		return Math.floor(d3.sum(function(d){ return d.value })*100/40);
+		var eventData = getEventData(events['Work Hours'], data);
+		if(eventData === null) return 0;
+		return Math.min(100, d3.sum(eventData, function(d){ return d.value })*100/200);
 	},
 
 	steps = function(data){
-		return Math.floor(d3.sum(function(d){ return d.value })*100/3000);
+		log('called');
+		var eventData = getEventData(events['Steps'], data);
+		if(eventData === null) return 0;
+		return Math.min(100,d3.sum(function(d){ return d.value })*100/3000);
 	},
-
 
     initialize = function () {
 

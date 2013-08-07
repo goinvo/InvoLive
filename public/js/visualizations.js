@@ -3,21 +3,182 @@ var live = live || {};
 live.visualizations = function () {
 
 	var $chart, $dchart, $list, $legend, $timelegend;
-	var rscale, xscale;
+	var xscale;
 
 	draw = function(data){
+		xscale = d3.time.scale()
+    	.domain([
+		    timeranges["lastmonth"].minDate,
+		    moment().toDate()
+		]);
+
+
 		$.each(data, function(){
 			drawUser(this);
 		})
+
+		// $('.user').first().trigger('click');
 	},
 
 	drawUser = function(data){
 		if($('.user').size() % 4 === 0) {
-			$container.append('<div class="row-results row-fluid"> </div>');
+			$container.append($('#row-template').html());
 		}
-		log(data);
-		$userDiv = $('.row-results').last().append(Mustache.render($('#entry-template').html(), data));
+		$('.row-results').last().append(Mustache.render($('#entry-template').html(), data));
+
+		$user = $('.user').last();
+		$user.data(data);
+
+		drawUserStats($user, data);
+
+		$user.click(userClick);
+
+
+	},
+
+	drawUserStats = function($user, data){
+		var scores, labels, datapoints = [];
+		$stats = $user.find('canvas');
+
+		scores = getScores(data);
+		$.each(scores, function(){
+			datapoints.push(this.score);
+		})
+
+
+		var radarChartData = {
+			labels : ['P', 'He', 'Ha'],
+			datasets : [
+				{
+					fillColor : "rgba(66,95,142,0.15)",
+					strokeColor : "rgba(66,95,142,0.4)",
+					pointColor : "rgba(66,95,142,0.4)",
+					pointStrokeColor : "#fff",
+					data : datapoints
+				}
+				
+			]
+		}
+
+		var myRadar = new Chart($stats.get(0).getContext("2d")).Radar(radarChartData,
+			{scaleShowLabels : false, 
+			pointLabelFontSize : 10,
+			scaleOverride : true,
+			scaleStartValue : 0,
+			scaleSteps : 10,
+			scaleStepWidth : 10
+			});
+
 	}
+
+	userClick = function(){
+		var $row = $(this).parent(),
+			$details,
+			data = $(this).data(),
+			user = data.user;
+
+		$('.user').removeClass('active');
+		$(this).addClass('active');
+
+		if($('.user-details').length > 0){
+
+			if($('.user-details').parent().find('row-results').get(0) === $row.get(0)) {
+				$details = $('.user-details');
+			} else {
+				$('.user-details').slideUp(function(){
+					$(this).remove();
+				});
+			}
+		}
+		$details = $details || $(Mustache.render($('#userdetails-template').html(), data)).appendTo($row.parent());
+		
+		// new strip
+
+		drawUserDetails($details, data);
+
+		setTimeout(function(){
+			$details.slideDown();
+		}, 400);
+	}
+
+	drawUserDetails = function($container, data){
+		var details = ["Dropbox Actions", "Work Hours", "Steps"];
+		$.each(details, function(){
+			drawStrip($container, events[this], data);
+		})
+	}
+
+	drawStrip = function($container, event, data){
+		eventData = [];
+		$.each(data, function(){
+			if($.inArray(this.eventtype, event.value) >= 0) eventData = eventData.concat(this.data);
+		})
+
+		if(eventData.length === 0) return;
+
+		// strip
+		$rendered = $(Mustache.render($('#strip-template').html(), event)).appendTo($container);
+
+		var value = d3.sum(eventData, function(d){ return d.value });
+		$rendered.find('.strip-value').text(value);
+
+		drawStripSvg(eventData, event, $rendered.find('.strip-content'));
+	},
+
+	getScores = function(data){
+		var userMetrics = [];
+		for(key in metrics){
+			var metric = metrics[key];
+			log(metric)
+			// temporary
+			if(metric.value !== undefined) {
+				userMetrics.push({ name : metric.name, score : metric.value })
+			} else {
+				score = 0;
+				weights = 0;
+				$.each(metric.submetrics, function(){
+					weights += this.weight;
+					score += events[this.name].score(data)*this.weight;
+				});
+				userMetrics.push({ name : metric.name, score : score/weights });
+			}
+		}
+		return userMetrics;
+	},
+
+	drawStripSvg = function(data, event, $container){
+
+		var margin = {top: 0, right: 0, bottom: 0, left: 20},
+	    width = $container.width()- margin.left - margin.right,
+	    height = $container.height() - margin.top - margin.bottom;
+
+		var svg = d3.select($container.get(0)).append('svg')
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom)
+		.append("g")
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	    xscale.range([0, $container.width()]);
+
+	   	var rscale = d3.scale.linear().range([4,20])
+	    .domain(d3.extent(data, function(d) { return d.value }));
+
+		var user = svg.append("g").classed("user",true);
+	    user.selectAll('circle')
+    	.data(data)
+		.enter().append('circle')
+    	.attr('r', function(d){
+    		return rscale(d.value);
+    	})
+    	.attr('cx', function(d){
+    		return xscale(d.timestamp);
+    	})
+    	.attr('cy', $container.height()/2)
+    	.style('fill', event.color)
+    	.style('fill-opacity', 0.3)
+    	.style('stroke', event.color)
+    	.style('stroke-opacity',0.45);
+	},
 
 	// drawLegends = function (data){
 	// 	$legend.html('');
@@ -63,79 +224,23 @@ live.visualizations = function () {
 	// 	.call(xAxis);
 	// },
 
-	// staffplanExpansion = function(){
-	// 	// if($(this).data('open') === false) {
-	// 	// 	$dropdown = $('<div class="subsection" style="display:none"></div>').appendTo($(this));
-	// 	// 	$dropdown.slideDown();
-	// 	// 	$(this).data('open', true);
-	// 	// } else {
-	// 	// 	$(this).find('.subsection').slideUp();
-	// 	// 	$(this).data('open', false);
-	// 	// }
-	// 	// $dropdown = $('<div class="subsection" style="display:none"></div>').appendTo($(this));
-	// 	// $dropdown.slideDown();
-	// }
 
-	// drawStripSvg = function(data, $container){
-	// 	var margin = {top: 0, right: 0, bottom: 0, left: 20},
-	//     width = $container.width()- margin.left - margin.right,
-	//     height = $container.height() - margin.top - margin.bottom;
 
-	// 	var svg = d3.select($container.get(0)).append('svg')
-	// 	.attr('width', width + margin.left + margin.right)
-	// 	.attr('height', height + margin.top + margin.bottom)
-	// 	.append("g")
-	//     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	//     xscale.range([0, $container.width()]);
-
-	// 	var user = svg.append("g").classed("user",true);
-	//     user.selectAll('circle')
- //    	.data(data)
-	// 	.enter().append('circle')
- //    	.attr('r', function(d){
- //    		return rscale(d.value);
- //    	})
- //    	.attr('cx', function(d){
- //    		return xscale(d.timestamp);
- //    	})
- //    	.attr('cy', $container.height()/2)
- //    	.style('fill', data.color)
- //    	.style('fill-opacity', 0.3)
- //    	.style('stroke', data.color)
- //    	.style('stroke-opacity',0.45);
-
-	// },
-
-	// drawStripInfo = function(data, $container){
-	// 	$container.find('.strip-icon');
-	// 	var value = d3.sum(data, function(d){ return d.value });
-	// 	$container.find('.strip-value').text(value);
-	// },
-
-	// drawStrip = function(data){
-	// 	$rendered = $(Mustache.render($('#strip-template').html(), data)).appendTo($chart);
-	// 	drawStripInfo(data, $rendered.find('.strip-info'));
-	// 	drawStripSvg(data, $rendered.find('.strip-content'));
-
-	// 	$rendered.data(data);
-	// 	$rendered.click(currentEvent.click);
-	// },
 
 	// draw = function(data){
 	// 	$chart.html('');
-	// 	xscale = d3.time.scale()
- //    	.domain([
-	// 	    d3.min(data, function(c) { var min = d3.min(c, function(d) { return d.timestamp; }); return min;}),
-	// 	    d3.max(data, function(c) { var max = moment().toDate(); return max; })
-	// 	]);
+		// xscale = d3.time.scale()
+  //   	.domain([
+		//     d3.min(data, function(c) { var min = d3.min(c, function(d) { return d.timestamp; }); return min;}),
+		//     d3.max(data, function(c) { var max = moment().toDate(); return max; })
+		// ]);
 
-	// 	rscale = d3.scale.linear()
-	// 	.range([4, 20])
-	// 	.domain([
-	// 	    0,
-	// 	    d3.max(data, function(c) { return d3.max(c, function(d) { return d.value; }); })
-	// 	]);
+		// rscale = d3.scale.linear()
+		// .range([4, 20])
+		// .domain([
+		//     0,
+		//     d3.max(data, function(c) { return d3.max(c, function(d) { return d.value; }); })
+		// ]);
 
 	// 	$.each(data, function(i, user){
 	// 		drawStrip(user);

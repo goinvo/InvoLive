@@ -16,8 +16,8 @@
 	<div class="strip" data-open="false">
 		<div>
 			<div class="strip-info"> 
-				<img class="strip-icon" src="{{pic}}" />
-				<div class="strip-name"> {{user}} </div>
+				<img class="strip-icon" src="img/{{icon}}" />
+				<div class="strip-name"> {{name}} </div>
 				<div class="separator"> </div>
 				<div class="strip-value"> </div>
 				<div class="separator"> </div>
@@ -29,8 +29,20 @@
 
 <script type="text/html" id="entry-template">
 	<div class="user span3"> 
-		<div> <canvas class="span3 user-stats"> </canvas> </div>
-		<div> <img class="strip-icon" src="{{pic}}" /> </div>
-		<div> {{user}} </div> 
+		<div class="user-stats"> <canvas class="span3" height=250 width=250> </canvas> </div>
+		<div class="user-icon"> <img src="{{pic}}" /> </div>
+		<div class="user-name"> {{user}} </div> 
+	</div>
+</script>
+
+<script type="text/html" id="row-template">
+	<div class="row-wrap"> 
+		<div class="row-results row-fluid"> </div>
+	</div>
+</script>
+
+<script type="text/html" id="userdetails-template">
+	<div class="user-details row-fluid">
+			<h1> {{user}} </h1>
 	</div>
 </script>

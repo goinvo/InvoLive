@@ -7,23 +7,80 @@ var $preloader, preloader;
 var currentEvent;
 
 var events = {
+	"All" : {
+		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted', "Actual work hours", "Steps"]
+	},
 	"Dropbox Actions" : {
+		name : 'Dropbox Actions',
 		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted'],
 		click : null,
-		score : live.scores.dropbox
+		score : live.scores.dropbox,
+		color : colors[0],
+		icon : 'dropbox.gif'
 	},
-	"Actual work hours" : {
-		value : 'Work hours',
+	"Work Hours" : {
+		name : 'Work Hours',
+		value : ['Actual work hours'],
 		click : live.visualizations.staffplanExpansion,
-		score : live.scores.workHours
+		score : live.scores.workHours,
+		color : colors[1],
+		icon : 'briefcase-128.png'
 	},
 	"Steps" : {
-		value : 'Steps',
+		name : 'Steps',
+		value : ['Steps'],
 		click : null,
-		score : live.scores.steps
+		score : live.scores.steps,
+		color : colors[2],
+		icon : 'footprints.png'
 	}
 }
 
+var metrics = {
+	"productivity" : {
+		name : 'Productivity',
+		submetrics  : [
+		{
+			name : "Dropbox Actions",
+			weight : 10
+		},
+		{
+			name : "Work Hours",
+			weight : 100
+		}
+		]
+	},
+	"happiness" : {
+		name : 'Happiness',
+		value : 50
+	},
+	"health" : {
+		name : 'Health',
+		submetrics : [{
+			name : "Steps",
+			weight : 10
+		}]
+	}
+}
+
+var timeranges = {
+	"lastday" : {
+		resolution : 'hour',
+		minDate : moment().subtract('day', 1)
+	},
+	"lastmonth" : {
+		resolution : 'day',
+		minDate : moment().subtract('months', 1)
+	},
+    "lastyear" : {
+    	resolution : 'day',
+    	minDate : moment().subtract('years', 1)
+    },
+    "alltime" : {
+    	resolution : 'day',
+    	minDate : moment().subtract('years', 3)
+    }
+}
 
 /*
 *	Helper functions
@@ -75,7 +132,6 @@ function initPreloader(){
 	});
 
 	$preloader.append(preloader.canvas);
-	
 }
 
 function startPreloader(duration){
