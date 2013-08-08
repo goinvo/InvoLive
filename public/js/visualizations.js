@@ -17,7 +17,6 @@ live.visualizations = function () {
 			drawUser(this);
 		})
 
-		// $('.user').first().trigger('click');
 	},
 
 	drawUser = function(data){
@@ -37,42 +36,58 @@ live.visualizations = function () {
 	},
 
 	drawUserStats = function($user, data){
-		var scores, labels, datapoints = [];
 		$stats = $user.find('canvas');
 
-		scores = getScores(data);
-		$.each(scores, function(){
-			datapoints.push(this.score);
-		})
+		function drawLabels(metrics, context){
+			$.each(metrics, function(){
+				var metric = this;
+				var imageObj = new Image();
+				imageObj.src = 'img/' + metric.icon;
 
+				imageObj.onload = function() {
+					context.drawImage(imageObj, metric.labelx, metric.labely, 16, 16);
+				};
+			});
+		}
+
+		var scores = getScores(data);
 
 		var radarChartData = {
-			labels : ['P', 'He', 'Ha'],
+			labels : $.map(scores, function(val, i) { return '   ' }),
 			datasets : [
 				{
-					fillColor : "rgba(66,95,142,0.15)",
-					strokeColor : "rgba(66,95,142,0.4)",
-					pointColor : "rgba(66,95,142,0.4)",
+					fillColor : setOpacity(data.color,0.15),
+					strokeColor : setOpacity(data.color,0.4),
+					pointColor : setOpacity(data.color,0.4),
 					pointStrokeColor : "#fff",
-					data : datapoints
+					data : $.map(scores, function(val, i) { return val.score })
 				}
 				
 			]
 		}
 
-		var myRadar = new Chart($stats.get(0).getContext("2d")).Radar(radarChartData,
-			{scaleShowLabels : false, 
-			pointLabelFontSize : 10,
-			scaleOverride : true,
-			scaleStartValue : 0,
-			scaleSteps : 10,
-			scaleStepWidth : 10
-			});
+		var cvs = $stats.get(0).getContext("2d");
+
+		var radar = new Chart(cvs).Radar(radarChartData,
+			{
+				scaleShowLabels : false, 
+				pointLabelFontSize : 10,
+				scaleOverride : true,
+				scaleStartValue : 0,
+				scaleSteps : 5,
+				scaleStepWidth : 20,
+				animationSteps : 5,
+				onAnimationComplete : function(){
+					drawLabels(scores, cvs);
+				}
+		});
+
 
 	}
 
 	userClick = function(){
 		var $row = $(this).parent(),
+			$user = $(this),
 			$details,
 			data = $(this).data(),
 			user = data.user;
@@ -82,8 +97,9 @@ live.visualizations = function () {
 
 		if($('.user-details').length > 0){
 
-			if($('.user-details').parent().find('row-results').get(0) === $row.get(0)) {
-				$details = $('.user-details');
+			if($('.user-details').data('user') === user) {
+				$('.user-details').slideUp(function(){$(this).remove()});
+				return;
 			} else {
 				$('.user-details').slideUp(function(){
 					$(this).remove();
@@ -91,22 +107,48 @@ live.visualizations = function () {
 			}
 		}
 		$details = $details || $(Mustache.render($('#userdetails-template').html(), data)).appendTo($row.parent());
-		
+		$details.data('user', user);
 		// new strip
 
 		drawUserDetails($details, data);
 
 		setTimeout(function(){
-			$details.slideDown();
-		}, 400);
+			$details.slideDown(300, function() { $.scrollTo($user.offset().top - 10, 300); });
+		}, 200);
 	}
 
 	drawUserDetails = function($container, data){
 		var details = ["Dropbox Actions", "Work Hours", "Steps"];
 		$.each(details, function(){
 			drawStrip($container, events[this], data);
-		})
+		});
+		drawLegends($container);
 	}
+
+	drawLegends = function($container){
+		$rendered = $(Mustache.render($('#strip-template').html(), event)).appendTo($container);
+		$strip = $rendered.find('.strip-content');
+
+		var margin = {top: 0, right: 0, bottom: 0, left: 10};
+	    width = $strip.width()- margin.left - margin.right,
+	    height = $strip.height() - margin.top - margin.bottom;
+
+		var svg = d3.select($strip.get(0)).append('svg')
+		.classed('timelegend', true)
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom)
+		.append("g")
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	    var xAxis = d3.svg.axis()
+			.ticks(5).tickPadding(10)
+		    .scale(xscale)
+		    .orient("bottom");
+
+		svg.append("g")
+		.attr("class", "axis")
+		.call(xAxis);
+	},
 
 	drawStrip = function($container, event, data){
 		eventData = [];
@@ -129,10 +171,9 @@ live.visualizations = function () {
 		var userMetrics = [];
 		for(key in metrics){
 			var metric = metrics[key];
-			log(metric)
 			// temporary
 			if(metric.value !== undefined) {
-				userMetrics.push({ name : metric.name, score : metric.value })
+				userMetrics.push($.extend(metric, {score : metric.value }))
 			} else {
 				score = 0;
 				weights = 0;
@@ -140,7 +181,7 @@ live.visualizations = function () {
 					weights += this.weight;
 					score += events[this.name].score(data)*this.weight;
 				});
-				userMetrics.push({ name : metric.name, score : score/weights });
+				userMetrics.push($.extend(metric, {score : score/weights }));
 			}
 		}
 		return userMetrics;
@@ -149,21 +190,23 @@ live.visualizations = function () {
 	drawStripSvg = function(data, event, $container){
 
 		var margin = {top: 0, right: 0, bottom: 0, left: 20},
-	    width = $container.width()- margin.left - margin.right,
-	    height = $container.height() - margin.top - margin.bottom;
+	    width = $container.width();
+	    height = $container.height();
 
 		var svg = d3.select($container.get(0)).append('svg')
+		.classed('data', true)
 		.attr('width', width + margin.left + margin.right)
 		.attr('height', height + margin.top + margin.bottom)
 		.append("g")
 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	    xscale.range([0, $container.width()]);
+	    xscale.range([margin.right, $container.width()]);
 
 	   	var rscale = d3.scale.linear().range([4,20])
 	    .domain(d3.extent(data, function(d) { return d.value }));
 
 		var user = svg.append("g").classed("user",true);
+	    
 	    user.selectAll('circle')
     	.data(data)
 		.enter().append('circle')
@@ -175,9 +218,16 @@ live.visualizations = function () {
     	})
     	.attr('cy', $container.height()/2)
     	.style('fill', event.color)
-    	.style('fill-opacity', 0.3)
     	.style('stroke', event.color)
-    	.style('stroke-opacity',0.45);
+    	.each(function(d,i){
+    		$(this).tooltip({
+    			container : 'body',
+    			title : Mustache.render(
+    				$('#usertooltip-template').html(), { event : event.name, value : d.value }
+    			),
+    			html : true
+    		});
+    	})
 	},
 
 	// drawLegends = function (data){
@@ -282,12 +332,8 @@ live.visualizations = function () {
 
 
     initialize = function () {
-    	// $chart = $('#chart-container');
-    	// $list = $('#user-list-container');
-    	// $legend = $('#chart-legend');
-    	// $timelegend = $('#chart-timelegend');
     	$container = $('#results-content');
-
+    	$container.fadeIn(1000);
     };
 
     return {

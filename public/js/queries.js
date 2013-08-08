@@ -3,20 +3,7 @@ var live = live || {};
 live.queries = function () {
     var url = "http://live.dev/api/";
     var $user, $eventtype, $time, $grouping;
-    var resolution = {
-        "lastday" : 'hour',
-        "lastmonth" : 'day',
-        "lastyear" : 'day',
-        "alltime" : 'day'
-    }
-
-    var populateSelector = function($selector, url, template){
-    	$.getJSON(url, function(data){
-    		var content = data.message;
-    		$selector.html(Mustache.render($(template).html(), content));
-            $selector.chosen()
-    	})
-    },
+    var users = [];
 
     getUserData = function(query, user){
         var filter = [];
@@ -37,23 +24,19 @@ live.queries = function () {
     query = function(){
 
         // set current event
-        currentEvent = events[$eventtype.val()];
+        currentEvent = events.all;
+        currentTimerange = timeranges.lastmonth;
 
         startPreloader();
-
-        var users = $user.val() ||
-        $user.find('option').map(function(){
-           return $(this).val();
-        }).get();
 
         // var jxhr = [];
         var result = [];
 
         $.getJSON(url+'measurement', {
-            user : users,
-            eventtype : events["All"].value,
-            time : $time.val(),
-            resolution : resolution[$time.val()]
+            user : $.map(users, function(user, i) { return user.name }),
+            eventtype : currentEvent.value,
+            time : currentTimerange.value,
+            resolution : currentTimerange.resolution
         }, function(data){
             var data = data.message;
             stopPreloader();
@@ -67,9 +50,11 @@ live.queries = function () {
 
             var result = [];
             $.each(users, function(i, user){
-                var userobj = getUserData(data, user);
-                userobj.user = user;
-                userobj.pic = $('#selector-user option[value="' + user + '"]').data('avatar');
+                if(user.name === 'liveworker') return;
+                var userobj = getUserData(data, user.name);
+                userobj.user = user.name;
+                userobj.pic = user.avatar;
+                userobj.color = colors[i%20];
                 result.push(userobj);
 
             });
@@ -83,24 +68,14 @@ live.queries = function () {
     	$eventtype = $('#selector-event');
     	$time = $('#selector-time');
     	$grouping = $('#selector-grouping');
-
-    	$time.chosen({disable_search_threshold: 10});
-    	$grouping.chosen({disable_search_threshold: 10});
     	
     	//populateSelector($eventtype, url+'eventtype', '#event-template');
         // populate eventtype 
-        var eventtypes = [];
-        for( key in events ){
-            eventtypes.push({ name : key, value : key });
-        }
-        $eventtype.html(Mustache.render($('#event-template').html(), eventtypes));
-        $eventtype.chosen()
 
-    	populateSelector($user, url+'user', '#user-template');
-
-        setTimeout(function(){
+        $.getJSON(url+'user', function(data){
+            users = data.message;
             live.queries.query();
-        },500);
+        });
 
 
         $('#button-query').click(query);

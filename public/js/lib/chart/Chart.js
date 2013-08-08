@@ -490,7 +490,7 @@ window.Chart = function(context){
 
 	var Radar = function (data,config,ctx) {
 		var maxSize, scaleHop, calculatedScale, labelHeight, scaleHeight, valueBounds, labelTemplateString;	
-			
+		var labels = [];
 		//If no labels are defined set to an empty array, so referencing length for looping doesn't blow up.
 		if (!data.labels) data.labels = [];
 		
@@ -564,8 +564,6 @@ window.Chart = function(context){
 				
 			}
 			ctx.restore();
-			
-			
 		}
 		function drawScale(){
 			var rotationDegree = (2*Math.PI)/data.datasets[0].data.length;
@@ -623,7 +621,9 @@ window.Chart = function(context){
 				}
 
 			}
-			for (var k=0; k<data.labels.length; k++){				
+
+			for (var k=0; k<data.labels.length; k++){
+
 			ctx.font = config.pointLabelFontStyle + " " + config.pointLabelFontSize+"px " + config.pointLabelFontFamily;
 			ctx.fillStyle = config.pointLabelFontColor;
 				var opposite = Math.sin(rotationDegree*k) * (maxSize + config.pointLabelFontSize);
@@ -640,8 +640,9 @@ window.Chart = function(context){
 				}
 				
 				ctx.textBaseline = "middle";
-				
+			
 				ctx.fillText(data.labels[k],opposite,-adjacent);
+
 				
 			}
 			ctx.restore();

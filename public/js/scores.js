@@ -25,10 +25,9 @@ live.scores = function () {
 	},
 
 	steps = function(data){
-		log('called');
 		var eventData = getEventData(events['Steps'], data);
-		if(eventData === null) return 0;
-		return Math.min(100,d3.sum(function(d){ return d.value })*100/3000);
+		if(eventData === null) return 50;
+		return Math.max(Math.min(100,d3.sum(eventData, function(d){ return d.value })*100/200000), 50);
 	},
 
     initialize = function () {
