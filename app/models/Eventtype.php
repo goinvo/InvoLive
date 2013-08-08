@@ -3,17 +3,6 @@ class Eventtype extends Eloquent
 {
 	public $timestamps = false;
 
-    // identify groups of events
-    public static $groups = array(
-        'dropbox actions' => 
-        array(
-            'Files created',
-            'Files edited',
-            'Files moved',
-            'Files deleted'
-    ));
-
-
 	public static function getId($name)
     {
     	$result = Eventtype::where('name', $name)->first();

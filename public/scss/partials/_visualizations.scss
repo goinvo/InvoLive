@@ -1,6 +1,6 @@
 $color-light-gray: #f3f3f3;
 
-#chart-timelegend{
+.timelegend{
 	.axis path{
   		fill: none;
 	}
@@ -11,7 +11,7 @@ $color-light-gray: #f3f3f3;
 
 
 	.axis line{
-		stroke: black;
+		stroke: #cfcfcf;
 	}
 
 	.line{
@@ -23,41 +23,50 @@ $color-light-gray: #f3f3f3;
 	}
 }
 
-#chart-legend{
-	position: relative;
-	text-align: center;
-	background-color: #fcfcfc;
-	border-top: 1px solid #eee;
-
-	svg{
-		margin-right:10px;
-	}
-
-	.labl, .entry{
-		display: inline-block;
-		vertical-align: top;
-		height: 50px;
-		line-height: 50px;
-		margin-right: 35px;
-	}
-
-	.entry{
-		// @include box-sizing(border-box);
+.data{
+	circle{
+		cursor: pointer;
+		fill-opacity: 0.3;
+		stroke-opacity: 0.45;
+		&:hover{
+			fill-opacity: 0.8;
+		}
 	}
 }
 
+// #chart-legend{
+// 	position: relative;
+// 	text-align: center;
+// 	background-color: #fcfcfc;
+// 	border-top: 1px solid #eee;
+
+// 	svg{
+// 		margin-right:10px;
+// 	}
+
+// 	.labl, .entry{
+// 		display: inline-block;
+// 		vertical-align: top;
+// 		height: 50px;
+// 		line-height: 50px;
+// 		margin-right: 35px;
+// 	}
+
+// 	.entry{
+// 		// @include box-sizing(border-box);
+// 	}
+// }
+
 .strip{
 	border-bottom: 1px solid $color-light-gray;
-	cursor: pointer;
 
-	&:hover{
-		background-color: #fcfcfc;
+	&:last-child{
+		border-bottom: 0;
 	}
 
 	.separator{
 		height: 100%;
 		width: 1px;
-		background: $color-light-gray;
 		vertical-align: top;
 	}
 
@@ -72,7 +81,7 @@ $color-light-gray: #f3f3f3;
 	}
 
 	.strip-info{
-		width: 250px;
+
 		font-size: 16px;
 
 		.strip-name,
@@ -82,7 +91,7 @@ $color-light-gray: #f3f3f3;
 
 		.strip-name{
 			margin-left: 10px;
-			width: 80px;
+			width: 160px;
 		}
 
 		.strip-value{
@@ -92,14 +101,14 @@ $color-light-gray: #f3f3f3;
 	}
 
 	.strip-content{
-		width: 930px;
+		width: 880px;
 	}
 
 	img{
 		margin-top: 5px;
 		margin-left: 2px;
-		width:40px;
-		height: 40px;
+		width:30px;
+		height: 30px;
 		border-radius: 3px;
 	}
 

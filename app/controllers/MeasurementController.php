@@ -8,8 +8,8 @@ class MeasurementController extends BaseController {
 	 * @return Response
 	 */
 	public function get(){
-		$event = Input::get('eventtype');
-		$user = Input::get('user');
+		$events = Input::get('eventtype');
+		$users = Input::get('user');
 		$source = Input::get('source');
 		$time = Input::get('time');
 		$resolution = Input::get('resolution');
@@ -18,26 +18,19 @@ class MeasurementController extends BaseController {
 		// query results
 		$payload = array();
 
-
-		// There are two scenarios
-		// 1 Specific event type 
-		// 2 Group of events
-		//
 		// Results for groups of events are built by issuing multiple
 		// queries for each event.
 		// This is done because each query should always be about
 		// a single event because a single event may have attributes, filters
 		// or aggreation methods only valid for itself and not other events.
 
-		// Group of events
-		$event = strtolower($event);
-		if(array_key_exists($event, Eventtype::$groups)){
-			foreach (Eventtype::$groups[$event] as $event) {
-				$payload = array_merge($payload, $this->getEventMeasurements($user, $event, $source, $time, $resolution, $attributes));
+		if(gettype($events) != 'array') $events = array($events);
+		if(gettype($users) != 'array') $users = array($users);
+
+		foreach($users as $user){
+			foreach ($events as $event) {
+				array_push($payload, $this->getEventMeasurements($user, $event, $source, $time, $resolution, $attributes));
 			}
-		// Specific event
-		} else {
-			$payload = array_merge($payload, $this->getEventMeasurements($user, $event, $source, $time, $resolution, $attributes));
 		}
 
 		return Response::json(array(
@@ -67,22 +60,29 @@ class MeasurementController extends BaseController {
 
 		// prepare payload array
 		$payload = array();
+		$values = array();
 
+		// high level info on payload
+		if($source != null)
+			$payload['source'] = $source;
+		if($user != null)
+			$payload['user'] = $user;
+
+		$payload['eventtype'] = $event;
+
+		// payload datapoints
 		foreach($results as $result){
 			// save query results
 			$entry = array(
 				'value'=>$result->value,
-				'timestamp'=> $result->timestamp,
-				'eventtype'=>$result->eventtype->name
+				'timestamp'=> $result->timestamp
 			);
 			
 			// do not list the source name if user already specified it
-			if($source == null){
+			if($source == null)
 				$entry['source'] = $result->source->name;
-			}
-			if($user == null){
+			if($user == null)
 				$entry['user'] = $result->user->name;
-			}
 
 			// show attributes to the specific entry
 			// eg. Dropbox file creation event has a filename attribute
@@ -105,9 +105,10 @@ class MeasurementController extends BaseController {
 			} else {
 
 			}
-			array_push($payload,  $entry);
+			array_push($values,  $entry);
 		}
 		// return query results
+		$payload['data'] = $values; 
 		return $payload;
 	}
 

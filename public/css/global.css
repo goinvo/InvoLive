@@ -11,8 +11,7 @@
 /* Configure for target Browser Set
    Chrome, IE8+
 ============================================*/
-/* Global variables */
-/* line 25, ../scss/partials/_base.scss */
+/* line 19, ../scss/partials/_base.scss */
 body, html {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -35,7 +34,7 @@ body {
   border: 0;
 }
 
-/* line 19, ../scss/partials/_structure.scss */
+/* line 20, ../scss/partials/_structure.scss */
 .group {
   *zoom: 1;
 }
@@ -46,7 +45,7 @@ body {
   clear: both;
 }
 
-/* line 23, ../scss/partials/_structure.scss */
+/* line 24, ../scss/partials/_structure.scss */
 .container, .span12 {
   width: 1200px;
 }
@@ -89,20 +88,63 @@ body {
   text-align: center;
 }
 
+/* line 34, ../scss/partials/_live.scss */
+.row-wrap {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+/* line 39, ../scss/partials/_live.scss */
+.user {
+  cursor: pointer;
+  border-radius: 10px;
+}
+/* line 44, ../scss/partials/_live.scss */
+.user:hover, .user.active {
+  background: whitesmoke;
+}
+/* line 49, ../scss/partials/_live.scss */
+.user div {
+  text-align: center;
+}
+/* line 53, ../scss/partials/_live.scss */
+.user .user-stats {
+  width: 200px;
+  margin: 0 auto;
+}
+/* line 60, ../scss/partials/_live.scss */
+.user .user-icon img {
+  border-radius: 5px;
+  text-align: center;
+  margin-top: -30px;
+  width: 80px;
+}
+/* line 68, ../scss/partials/_live.scss */
+.user .user-name {
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+/* line 74, ../scss/partials/_live.scss */
+.user-details {
+  display: none;
+  margin-top: 20px;
+}
+
 /* line 4, ../scss/partials/_visualizations.scss */
-#chart-timelegend .axis path {
+.timelegend .axis path {
   fill: none;
 }
 /* line 8, ../scss/partials/_visualizations.scss */
-#chart-timelegend .axis.y .tick line {
+.timelegend .axis.y .tick line {
   display: none;
 }
 /* line 13, ../scss/partials/_visualizations.scss */
-#chart-timelegend .axis line {
-  stroke: black;
+.timelegend .axis line {
+  stroke: #cfcfcf;
 }
 /* line 17, ../scss/partials/_visualizations.scss */
-#chart-timelegend .line {
+.timelegend .line {
   fill: none;
   stroke-width: 2px;
   stroke-dasharray: 5, 5;
@@ -110,87 +152,75 @@ body {
   stroke-linecap: round;
 }
 
-/* line 26, ../scss/partials/_visualizations.scss */
-#chart-legend {
-  position: relative;
-  text-align: center;
-  background-color: #fcfcfc;
-  border-top: 1px solid #eee;
+/* line 27, ../scss/partials/_visualizations.scss */
+.data circle {
+  cursor: pointer;
+  fill-opacity: 0.3;
+  stroke-opacity: 0.45;
 }
-/* line 32, ../scss/partials/_visualizations.scss */
-#chart-legend svg {
-  margin-right: 10px;
-}
-/* line 36, ../scss/partials/_visualizations.scss */
-#chart-legend .labl, #chart-legend .entry {
-  display: inline-block;
-  vertical-align: top;
-  height: 50px;
-  line-height: 50px;
-  margin-right: 35px;
+/* line 31, ../scss/partials/_visualizations.scss */
+.data circle:hover {
+  fill-opacity: 0.8;
 }
 
-/* line 49, ../scss/partials/_visualizations.scss */
+/* line 60, ../scss/partials/_visualizations.scss */
 .strip {
   border-bottom: 1px solid #f3f3f3;
-  cursor: pointer;
 }
-/* line 53, ../scss/partials/_visualizations.scss */
-.strip:hover {
-  background-color: #fcfcfc;
+/* line 63, ../scss/partials/_visualizations.scss */
+.strip:last-child {
+  border-bottom: 0;
 }
-/* line 57, ../scss/partials/_visualizations.scss */
+/* line 67, ../scss/partials/_visualizations.scss */
 .strip .separator {
   height: 100%;
   width: 1px;
-  background: #f3f3f3;
   vertical-align: top;
 }
-/* line 65, ../scss/partials/_visualizations.scss */
+/* line 74, ../scss/partials/_visualizations.scss */
 .strip .strip-info,
 .strip .strip-content {
   display: inline-block;
   height: 60px;
   vertical-align: top;
 }
-/* line 69, ../scss/partials/_visualizations.scss */
+/* line 78, ../scss/partials/_visualizations.scss */
 .strip .strip-info div,
 .strip .strip-content div {
   display: inline-block;
 }
-/* line 74, ../scss/partials/_visualizations.scss */
+/* line 83, ../scss/partials/_visualizations.scss */
 .strip .strip-info {
-  width: 250px;
   font-size: 16px;
 }
-/* line 79, ../scss/partials/_visualizations.scss */
+/* line 88, ../scss/partials/_visualizations.scss */
 .strip .strip-info .strip-name,
 .strip .strip-info .strip-value {
   margin-top: 20px;
 }
-/* line 83, ../scss/partials/_visualizations.scss */
+/* line 92, ../scss/partials/_visualizations.scss */
 .strip .strip-info .strip-name {
   margin-left: 10px;
-  width: 80px;
+  width: 160px;
 }
-/* line 88, ../scss/partials/_visualizations.scss */
+/* line 97, ../scss/partials/_visualizations.scss */
 .strip .strip-info .strip-value {
   width: 80px;
   text-align: center;
 }
-/* line 94, ../scss/partials/_visualizations.scss */
+/* line 103, ../scss/partials/_visualizations.scss */
 .strip .strip-content {
-  width: 930px;
+  width: 880px;
 }
-/* line 98, ../scss/partials/_visualizations.scss */
+/* line 107, ../scss/partials/_visualizations.scss */
 .strip img {
   margin-top: 5px;
   margin-left: 2px;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 3px;
 }
-/* line 106, ../scss/partials/_visualizations.scss */
+/* line 115, ../scss/partials/_visualizations.scss */
 .strip .subsection {
   height: 50px;
 }
