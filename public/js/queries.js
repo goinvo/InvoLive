@@ -1,7 +1,7 @@
 var live = live || {};
 
 live.queries = function () {
-    var url = "http://live.dev/api/";
+    var url = "http://live.goinvo.com/api/";
     var $user, $eventtype, $time, $grouping;
     var users = [];
 
@@ -54,7 +54,7 @@ live.queries = function () {
                 var userobj = getUserData(data, user.name);
                 userobj.user = user.name;
                 userobj.pic = user.avatar;
-                userobj.color = colors[i%20];
+                userobj.color = colors[i%10];
                 result.push(userobj);
 
             });

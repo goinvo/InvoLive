@@ -1,33 +1,40 @@
 var live = live || {};
 
 live.scores = function () {
-	var d;
 
 	var getEventData = function(event, data){
 		eventData = [];
 		$.each(data, function(){
 			if($.inArray(this.eventtype, event.value) >= 0) eventData = eventData.concat(this.data);
 		})
-		if (eventData.length === 0 ) return null;
 		return eventData;
 	},
 
 	dropbox = function(data) {
+		//scale
+		var scoreScale = d3.scale.linear().clamp(true).range([30,100])
+		.domain([0, 100]);
+
 		var eventData = getEventData(events['Dropbox Actions'], data);
-		if(eventData === null) return 0;
-		return Math.min(100, d3.sum(eventData, function(d){ return d.value }));
+		return scoreScale(d3.sum(eventData, function(d){ return d.value }));
 	},
 
 	workHours = function(data){
+		//not linear (scales difference from ideal value of 40*4 = 160)
+		var scoreScale = d3.scale.linear().clamp(true).range([100,30])
+		.domain([0, 80]);
+
 		var eventData = getEventData(events['Work Hours'], data);
-		if(eventData === null) return 0;
-		return Math.min(100, d3.sum(eventData, function(d){ return d.value })*100/200);
+		return scoreScale( Math.abs(160 - d3.sum(eventData, function(d){ return d.value })));
 	},
 
 	steps = function(data){
+		//scale
+		var scoreScale = d3.scale.linear().clamp(true).range([30,100])
+		.domain([0, 250000]);
+
 		var eventData = getEventData(events['Steps'], data);
-		if(eventData === null) return 50;
-		return Math.max(Math.min(100,d3.sum(eventData, function(d){ return d.value })*100/200000), 50);
+		return scoreScale(d3.sum(eventData, function(d){ return d.value }));
 	},
 
     initialize = function () {
