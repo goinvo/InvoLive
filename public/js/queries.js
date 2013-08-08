@@ -54,7 +54,7 @@ live.queries = function () {
                 var userobj = getUserData(data, user.name);
                 userobj.user = user.name;
                 userobj.pic = user.avatar;
-                userobj.color = colors[i%20];
+                userobj.color = colors[i%10];
                 result.push(userobj);
 
             });
