@@ -38,11 +38,13 @@ class BodymediaPHP
      */
     public function __construct($consumer_key, $consumer_secret, $debug = 1)
     {
-        $this->initUrls();
+       
 
         $this->consumer_key = $consumer_key;
         $this->consumer_secret = $consumer_secret;
         $this->oauth = new OAuth($consumer_key, $consumer_secret, OAUTH_SIG_METHOD_HMACSHA1);
+
+        $this->initUrls();
 
         $this->debug = $debug;
         if ($debug)
@@ -107,17 +109,27 @@ class BodymediaPHP
 
         if ($_SESSION['withings_Session'] == 0) {
 
-            $request_token_info = $this->oauth->getRequestToken($this->requestTokenUrl, $callbackUrl);
+            // fetch is used instead of getRequestToken (this is for the api_key additional parameter)
+            $this->oauth->fetch($this->requestTokenUrl, 
+                array('api_key' => $this->consumer_key),OAUTH_HTTP_METHOD_GET);
+
+            $response = $this->oauth->getLastResponse();
+            $request_token_info = array();
+            parse_str($response, $request_token_info);
 
             $_SESSION['withings_Secret'] = $request_token_info['oauth_token_secret'];
             $_SESSION['withings_Session'] = 1;
 
-            header('Location: ' . $this->authUrl . '?oauth_token=' . $request_token_info['oauth_token']);
+
+            header('Location: ' . $this->authUrl . '?api_key='. $this->consumer_key .'&oauth_token=' . $request_token_info['oauth_token']);
+
             exit;
 
         } else if ($_SESSION['withings_Session'] == 1) {
 
+
             $this->oauth->setToken($_GET['oauth_token'], $_SESSION['withings_Secret']);
+            
             $access_token_info = $this->oauth->getAccessToken($this->accessTokenUrl);
 
             $_SESSION['withings_Session'] = 2;

@@ -125,8 +125,6 @@ class UserController extends BaseController {
 				$bm = new BodymediaPHP($key, $secret);
 				$bm->initSession('http://live.dev/user/authorize?&service=withings&liveid='.$liveid);
 
-				echo $key;
-
 			} else {
 
 			}
