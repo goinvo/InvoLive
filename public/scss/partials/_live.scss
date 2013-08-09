@@ -30,3 +30,48 @@
 	left: 0;
 	text-align: center;
 }
+
+.row-wrap{
+	margin-bottom: 30px;
+	border-bottom: 1px solid #f3f3f3;
+}
+
+.user{
+	
+	cursor: pointer;
+	border-radius: 10px;
+
+	&:hover, &.active{
+		background: $light-gray;
+		//@include transition(background 0.15s ease-in);
+	}
+
+	div{
+		text-align: center;
+	}
+
+	.user-stats{
+		width: 200px;
+		margin: 0 auto;
+
+	}
+
+	.user-icon{
+		img{
+			border-radius: 5px;
+			text-align: center;
+			margin-top: -30px;
+			width: 80px;
+		}
+	}
+
+	.user-name{
+		margin-top: 25px;
+		margin-bottom: 15px;
+	}
+}
+
+.user-details{
+	display: none;
+	margin-top: 20px;
+}

@@ -4,23 +4,99 @@
 */
 var colors = d3.scale.category10().range();
 var $preloader, preloader;
-var currentEvent;
+var currentEvent, currentTimerange;
 
 var events = {
-	"Dropbox Actions" : {
-		value : 'Dropbox actions',
-		click : null
+	"all" : {
+		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted', "Actual work hours", "Steps"]
 	},
-	"Actual work hours" : {
-		value : 'Work hours',
-		click : live.visualizations.staffplanExpansion
+	"Dropbox Actions" : {
+		name : 'Dropbox Actions',
+		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted'],
+		click : null,
+		score : live.scores.dropbox,
+		color : colors[0],
+		icon : 'dropbox.gif'
+	},
+	"Work Hours" : {
+		name : 'Work Hours',
+		value : ['Actual work hours'],
+		click : live.visualizations.staffplanExpansion,
+		score : live.scores.workHours,
+		color : colors[1],
+		icon : 'briefcase-128.png'
 	},
 	"Steps" : {
-		value : 'Steps',
-		click : null
+		name : 'Steps',
+		value : ['Steps'],
+		click : null,
+		score : live.scores.steps,
+		color : colors[2],
+		icon : 'footprints.png'
 	}
 }
 
+var metrics = {
+	"productivity" : {
+		name : 'Productivity',
+		short : 'P',
+		labelx : 92,
+		labely : 0,
+		icon : 'briefcase-128g.png',
+		submetrics  : [
+		{
+			name : "Dropbox Actions",
+			weight : 10
+		},
+		{
+			name : "Work Hours",
+			weight : 100
+		}
+		]
+	},
+	"happiness" : {
+		name : 'Happiness',
+		short : 'H',
+		labelx : 180,
+		labely : 145,
+		icon : 'happiness.png',
+		value : 50
+	},
+	"health" : {
+		name : 'Health',
+		short : 'S',
+		labelx : 0,
+		labely : 145,
+		icon : 'health.png',
+		submetrics : [{
+			name : "Steps",
+			weight : 10
+		}]
+	}
+}
+
+var timeranges = {
+	"lastday" : {
+		value : 'lastday',
+		resolution : 'hour',
+		minDate : moment().subtract('day', 1)
+	},
+	"lastmonth" : {
+		value : 'lastmonth',
+		resolution : 'day',
+		minDate : moment().subtract('months', 1)
+	},
+    "lastyear" : {
+    	value : 'lastyear',
+    	resolution : 'day',
+    	minDate : moment().subtract('years', 1)
+    },
+    "alltime" : {
+    	value : 'alltime',
+    	resolution : 'day',
+    	minDate : moment().subtract('years', 3)
+    }
+}
 
 /*
 *	Helper functions
@@ -72,7 +148,6 @@ function initPreloader(){
 	});
 
 	$preloader.append(preloader.canvas);
-	
 }
 
 function startPreloader(duration){

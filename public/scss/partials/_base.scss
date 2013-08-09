@@ -16,13 +16,10 @@ $experimental-support-for-opera:		false;
 $experimental-support-for-mozilla:		false;
 $experimental-support-for-khtml:		false;
 
-/* Global variables */
-$base-font-size: 16px;
-$base-line-height: 24px;
-$base-font-color: rgb(42, 42, 42);
-$page-background-color: rgb(242,242,242);
-
 body, html{
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 }
+
+$light-gray: #f5f5f5;
+$light-blue: #f4faff;
