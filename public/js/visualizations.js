@@ -23,22 +23,31 @@ live.visualizations = function () {
 	},
 
 	drawSummary = function(data){
+
 		var summary = getScores(data[0]),
 			userScores = [];
-		$.each(data, function(){ userScores.push(getScores(this)) });
+		$.each(data, function(i, d){ 
+			userScores.push(getScores(d))
+		} );
+
+
 		$.each(summary,function(i, d){
 			this.score = d3.sum(userScores, function(d) { return d[i].score; })/data.length;
 		});
 
+
+		// studio score
 		var finalScore = d3.sum(summary, function(d){ return d.score})/summary.length;
 		var $score = $summary.find('.score').first();
 		$score.animate({countNum : finalScore, opacity : 1}, 
-			{ 	duration : 1500,
+			{ 	duration : 2500,
+				easing : "easeOutCubic",
 				step : function() {
 					$score.text(Math.floor(this.countNum));
 				}}
 		);
 
+		// studio chart
 		var radarChartData = {
 			labels : $.map(summary, function(val, i) { return val.name }),
 			datasets : [
@@ -47,15 +56,14 @@ live.visualizations = function () {
 					strokeColor : setOpacity(colors[0],0.5),
 					pointColor : setOpacity(colors[0],0.5),
 					pointStrokeColor : "#fff",
-					animationSteps : 100,
+					
 					data : $.map(summary, function(val, i) { return val.score })
 				}
-				
 			]
 		}
 
 		var $canvas = $summary.find('canvas').first();
-		$canvas.attr('width', $canvas.parent().width()).attr('height',$canvas.parent().width());
+		$canvas.attr('width', $canvas.parent().width() ).attr('height',$canvas.parent().width());
 		var cvs = $canvas.get(0).getContext("2d");
 		
 
@@ -67,7 +75,9 @@ live.visualizations = function () {
 				scaleStartValue : 0,
 				scaleSteps : 5,
 				scaleStepWidth : 20,
-				scaleFontSize : 24
+				scaleFontSize : 24,
+				pointLabelFontSize : 12,
+				animationSteps : 250
 		});
 	},
 
@@ -220,18 +230,14 @@ live.visualizations = function () {
 		var userMetrics = [];
 		for(key in metrics){
 			var metric = metrics[key];
-			// temporary
-			if(metric.value !== undefined) {
-				userMetrics.push($.extend(metric, {score : metric.value }))
-			} else {
-				score = 0;
-				weights = 0;
-				$.each(metric.submetrics, function(){
-					weights += this.weight;
-					score += events[this.name].score(data)*this.weight;
-				});
-				userMetrics.push($.extend(metric, {score : score/weights }));
-			}
+
+			score = 0;
+			weights = 0;
+			$.each(metric.submetrics, function(){
+				weights += this.weight;
+				score += events[this.name].score(data)*this.weight;
+			});
+			userMetrics.push($.extend({score : score/weights }, metric));
 		}
 		return userMetrics;
 	},

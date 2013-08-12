@@ -502,7 +502,7 @@ window.Chart = function(context){
 
 		//Check and set the scale
 		if (!config.scaleOverride){
-			
+
 			calculatedScale = calculateScale(scaleHeight,valueBounds.maxSteps,valueBounds.minSteps,valueBounds.maxValue,valueBounds.minValue,labelTemplateString);
 		}
 		else {
@@ -582,7 +582,6 @@ window.Chart = function(context){
 					ctx.stroke();
 				}
 			}
-
 			for (var i=0; i<calculatedScale.steps; i++){
 				ctx.beginPath();
 				
@@ -598,7 +597,7 @@ window.Chart = function(context){
 					ctx.stroke();			
 							
 				}
-				
+
 				if (config.scaleShowLabels){				
 					ctx.textAlign = 'center';
 					ctx.font = config.scaleFontStyle + " " + config.scaleFontSize+"px " + config.scaleFontFamily; 

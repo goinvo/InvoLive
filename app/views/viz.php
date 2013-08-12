@@ -17,6 +17,7 @@
     <script src="js/lib/list/list.js" type="text/javascript"></script>
     <script src="js/lib/sonic/sonic.js" type="text/javascript"></script>
     <script src="js/lib/scrollto/jquery.scrollTo.js" type="text/javascript"></script>
+    <script src="js/lib/easing/jquery.easing.1.3.js" type="text/javascript"></script>
     <script src="js/queries.js"></script>
     <script src="js/visualizations.js"></script>
     <script src="js/scores.js"></script>
