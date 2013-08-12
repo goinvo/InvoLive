@@ -47,7 +47,7 @@ body {
 
 /* line 24, ../scss/partials/_structure.scss */
 .container, .span12 {
-  width: 1200px;
+  width: 940px;
 }
 
 /* line 1, ../scss/partials/_live.scss */
@@ -56,30 +56,51 @@ body {
 }
 
 /* line 5, ../scss/partials/_live.scss */
-#queries {
-  margin-bottom: 40px;
-}
-
-/* line 9, ../scss/partials/_live.scss */
-#button-query {
-  margin-top: -4px;
-}
-
-/* line 14, ../scss/partials/_live.scss */
-.span-grouping.disabled {
-  opacity: 0.15;
-}
-/* line 16, ../scss/partials/_live.scss */
-.span-grouping.disabled h4 {
-  opacity: 0;
-}
-
-/* line 22, ../scss/partials/_live.scss */
 #results {
   position: relative;
 }
 
-/* line 26, ../scss/partials/_live.scss */
+/* line 9, ../scss/partials/_live.scss */
+#results-content {
+  opacity: 0;
+}
+
+/* line 14, ../scss/partials/_live.scss */
+#results-summary canvas, #results-summary div {
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* line 20, ../scss/partials/_live.scss */
+#summary-score {
+  text-align: center;
+  position: relative;
+}
+/* line 24, ../scss/partials/_live.scss */
+#summary-score .score {
+  margin-top: 20px;
+  font-size: 300px;
+  line-height: 300px;
+}
+/* line 30, ../scss/partials/_live.scss */
+#summary-score .legend {
+  position: absolute;
+  bottom: 0;
+  right: 30px;
+  width: 150px;
+  height: 150px;
+}
+/* line 37, ../scss/partials/_live.scss */
+#summary-score .legend .text {
+  position: absolute;
+  text-align: right;
+  top: 50%;
+  width: 80px;
+  font-size: 32px;
+  line-height: 32px;
+}
+
+/* line 49, ../scss/partials/_live.scss */
 #results-preloader {
   position: absolute;
   width: 100%;
@@ -88,44 +109,45 @@ body {
   text-align: center;
 }
 
-/* line 34, ../scss/partials/_live.scss */
+/* line 57, ../scss/partials/_live.scss */
 .row-wrap {
   margin-bottom: 30px;
   border-bottom: 1px solid #f3f3f3;
+  clear: both;
 }
 
-/* line 39, ../scss/partials/_live.scss */
+/* line 63, ../scss/partials/_live.scss */
 .user {
   cursor: pointer;
   border-radius: 10px;
 }
-/* line 44, ../scss/partials/_live.scss */
+/* line 68, ../scss/partials/_live.scss */
 .user:hover, .user.active {
   background: whitesmoke;
 }
-/* line 49, ../scss/partials/_live.scss */
+/* line 73, ../scss/partials/_live.scss */
 .user div {
   text-align: center;
 }
-/* line 53, ../scss/partials/_live.scss */
+/* line 77, ../scss/partials/_live.scss */
 .user .user-stats {
   width: 200px;
   margin: 0 auto;
 }
-/* line 60, ../scss/partials/_live.scss */
+/* line 84, ../scss/partials/_live.scss */
 .user .user-icon img {
   border-radius: 5px;
   text-align: center;
   margin-top: -30px;
   width: 80px;
 }
-/* line 68, ../scss/partials/_live.scss */
+/* line 92, ../scss/partials/_live.scss */
 .user .user-name {
   margin-top: 25px;
   margin-bottom: 15px;
 }
 
-/* line 74, ../scss/partials/_live.scss */
+/* line 98, ../scss/partials/_live.scss */
 .user-details {
   display: none;
   margin-top: 20px;
@@ -210,7 +232,7 @@ body {
 }
 /* line 103, ../scss/partials/_visualizations.scss */
 .strip .strip-content {
-  width: 880px;
+  width: 620px;
 }
 /* line 107, ../scss/partials/_visualizations.scss */
 .strip img {

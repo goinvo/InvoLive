@@ -153,7 +153,7 @@ function initPreloader(){
 function startPreloader(duration){
 	preloader.play();
 	$preloader.fadeIn(duration);
-	$('#results-content').animate({opacity : 0.05}, 200);
+	$('#results-content').animate({opacity : 0}, 200);
 }
 
 function stopPreloader(){
