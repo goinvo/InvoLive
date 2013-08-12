@@ -12,7 +12,7 @@ live.scores = function () {
 
 	dropbox = function(data) {
 		//scale
-		var scoreScale = d3.scale.linear().clamp(true).range([30,100])
+		var scoreScale = d3.scale.linear().clamp(true).range([60,100])
 		.domain([0, 100]);
 
 		var eventData = getEventData(events['Dropbox Actions'], data);
@@ -21,7 +21,7 @@ live.scores = function () {
 
 	workHours = function(data){
 		//not linear (scales difference from ideal value of 40*4 = 160)
-		var scoreScale = d3.scale.linear().clamp(true).range([100,30])
+		var scoreScale = d3.scale.linear().clamp(true).range([100,60])
 		.domain([0, 80]);
 
 		var eventData = getEventData(events['Work Hours'], data);
@@ -30,7 +30,7 @@ live.scores = function () {
 
 	steps = function(data){
 		//scale
-		var scoreScale = d3.scale.linear().clamp(true).range([30,100])
+		var scoreScale = d3.scale.linear().clamp(true).range([60,100])
 		.domain([0, 250000]);
 
 		var eventData = getEventData(events['Steps'], data);

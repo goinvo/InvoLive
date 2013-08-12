@@ -50,7 +50,7 @@ var metrics = {
 		},
 		{
 			name : "Work Hours",
-			weight : 100
+			weight : 10
 		}
 		]
 	},
@@ -60,7 +60,12 @@ var metrics = {
 		labelx : 180,
 		labely : 145,
 		icon : 'happiness.png',
-		value : 50
+		submetrics  : [
+		{
+			name : "Work Hours",
+			weight : 10
+		}
+		]
 	},
 	"health" : {
 		name : 'Health',
@@ -153,7 +158,7 @@ function initPreloader(){
 function startPreloader(duration){
 	preloader.play();
 	$preloader.fadeIn(duration);
-	$('#results-content').animate({opacity : 0.05}, 200);
+	$('#results-content').animate({opacity : 0}, 200);
 }
 
 function stopPreloader(){

@@ -12,11 +12,73 @@ live.visualizations = function () {
 		    moment().toDate()
 		]);
 
-
+    	// draw user scores 
 		$.each(data, function(){
 			drawUser(this);
 		})
 
+		// draw studio scores
+		drawSummary(data);
+
+	},
+
+	drawSummary = function(data){
+
+		var summary = getScores(data[0]),
+			userScores = [];
+		$.each(data, function(i, d){ 
+			userScores.push(getScores(d))
+		} );
+
+
+		$.each(summary,function(i, d){
+			this.score = d3.sum(userScores, function(d) { return d[i].score; })/data.length;
+		});
+
+
+		// studio score
+		var finalScore = d3.sum(summary, function(d){ return d.score})/summary.length;
+		var $score = $summary.find('.score').first();
+		$score.animate({countNum : finalScore, opacity : 1}, 
+			{ 	duration : 2500,
+				easing : "easeOutCubic",
+				step : function() {
+					$score.text(Math.floor(this.countNum));
+				}}
+		);
+
+		// studio chart
+		var radarChartData = {
+			labels : $.map(summary, function(val, i) { return val.name }),
+			datasets : [
+				{
+					fillColor : setOpacity(colors[0],0.15),
+					strokeColor : setOpacity(colors[0],0.5),
+					pointColor : setOpacity(colors[0],0.5),
+					pointStrokeColor : "#fff",
+					
+					data : $.map(summary, function(val, i) { return val.score })
+				}
+			]
+		}
+
+		var $canvas = $summary.find('canvas').first();
+		$canvas.attr('width', $canvas.parent().width() ).attr('height',$canvas.parent().width());
+		var cvs = $canvas.get(0).getContext("2d");
+		
+
+		var radar = new Chart(cvs).Radar(radarChartData,
+			{
+				scaleShowLabels : false, 
+				pointLabelFontSize : 10,
+				scaleOverride : true,
+				scaleStartValue : 0,
+				scaleSteps : 5,
+				scaleStepWidth : 20,
+				scaleFontSize : 24,
+				pointLabelFontSize : 12,
+				animationSteps : 250
+		});
 	},
 
 	drawUser = function(data){
@@ -31,7 +93,6 @@ live.visualizations = function () {
 		drawUserStats($user, data);
 
 		$user.click(userClick);
-
 
 	},
 
@@ -81,8 +142,6 @@ live.visualizations = function () {
 					drawLabels(scores, cvs);
 				}
 		});
-
-
 	}
 
 	userClick = function(){
@@ -171,18 +230,14 @@ live.visualizations = function () {
 		var userMetrics = [];
 		for(key in metrics){
 			var metric = metrics[key];
-			// temporary
-			if(metric.value !== undefined) {
-				userMetrics.push($.extend(metric, {score : metric.value }))
-			} else {
-				score = 0;
-				weights = 0;
-				$.each(metric.submetrics, function(){
-					weights += this.weight;
-					score += events[this.name].score(data)*this.weight;
-				});
-				userMetrics.push($.extend(metric, {score : score/weights }));
-			}
+
+			score = 0;
+			weights = 0;
+			$.each(metric.submetrics, function(){
+				weights += this.weight;
+				score += events[this.name].score(data)*this.weight;
+			});
+			userMetrics.push($.extend({score : score/weights }, metric));
 		}
 		return userMetrics;
 	},
@@ -190,6 +245,7 @@ live.visualizations = function () {
 	drawStripSvg = function(data, event, $container){
 
 		var margin = {top: 0, right: 0, bottom: 0, left: 20},
+
 	    width = $container.width();
 	    height = $container.height();
 
@@ -230,109 +286,9 @@ live.visualizations = function () {
     	})
 	},
 
-	// drawLegends = function (data){
-	// 	$legend.html('');
-	// 	$timelegend.html('');
-
-	// 	var legendEntries = 4;
-	// 	$('<div class="labl"> </div>').appendTo($legend).text(data[0].eventtype);
-	// 	for(var i=0; i<=legendEntries; i++){
-	// 		// get current domain
-	// 		var valueDomain = i*((rscale.domain()[1] - rscale.domain()[0])/legendEntries);
-	// 		var valueRange = rscale(valueDomain);
-
-	// 		// append div and assign slice
-	// 		$entry = $('<div class="entry"> </div>').appendTo($legend);
-	// 		var icon = d3.select($entry.get(0)).append('svg').attr('height',$legend.height())
-	// 		.attr('width',rscale.range()[1]*2 + 2);
-
-	// 		icon.append('circle').attr('r', valueRange)
-	// 		.attr('cx', icon.attr('width')/2)
-	// 		.attr('cy', icon.attr('height')/2)
-	// 		.style('fill', 'steelblue').style('opacity', 0.3);
-
-	// 		$entry.append('<div class="labl">' + Math.round(rscale.invert(valueRange)/5)*5 + '</div>')
-	// 	}
-
-	// 	var margin = {top: 0, right: 0, bottom: 0, left: 10};
-	//     width = $timelegend.width()- margin.left - margin.right,
-	//     height = $timelegend.height() - margin.top - margin.bottom;
-
-	// 	var svg = d3.select($timelegend.get(0)).append('svg')
-	// 	.attr('width', width + margin.left + margin.right)
-	// 	.attr('height', height + margin.top + margin.bottom)
-	// 	.append("g")
-	//     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	//     var xAxis = d3.svg.axis()
-	// 		.ticks(5).tickPadding(10)
-	// 	    .scale(xscale)
-	// 	    .orient("bottom");
-
-	// 	svg.append("g")
-	// 	.attr("class", "axis")
-	// 	.call(xAxis);
-	// },
-
-
-
-
-	// draw = function(data){
-	// 	$chart.html('');
-		// xscale = d3.time.scale()
-  //   	.domain([
-		//     d3.min(data, function(c) { var min = d3.min(c, function(d) { return d.timestamp; }); return min;}),
-		//     d3.max(data, function(c) { var max = moment().toDate(); return max; })
-		// ]);
-
-		// rscale = d3.scale.linear()
-		// .range([4, 20])
-		// .domain([
-		//     0,
-		//     d3.max(data, function(c) { return d3.max(c, function(d) { return d.value; }); })
-		// ]);
-
-	// 	$.each(data, function(i, user){
-	// 		drawStrip(user);
-	// 	})
-
-	// 	drawLegends(data);
-	// 	stopPreloader();
-
-	// },
-
- //    initializeLineChart = function(data){
- //   		var datasets = [];
- //   		var labels = [];
-
- //   		for(var i=0; i<50; i++){
- //   			labels.push('a');
- //   		}
-
-
- //   		$.each(data, function(i, userdata){
- //   			data = [];
- //   			$.each(userdata, function(){
- //   				data.push(this.value);
- //   			})
- //   			datasets.push({
- //   				strokeColor : this.color,
- //   				fillColor : setOpacity(this.color, 0),
- //   				data : data
- //   			});
- //   		});
-
- //   		var data = {
- //   			labels : labels,
- //   			datasets : datasets
- //   		}
- //   		var ctx = $("#linechart").get(0).getContext("2d");
- //   		var myLinechart = new Chart(ctx).Line(data, {pointDot : false});
- //    },
-
-
     initialize = function () {
     	$container = $('#results-content');
+    	$summary = $('#results-summary');
     	$container.fadeIn(1000);
     };
 

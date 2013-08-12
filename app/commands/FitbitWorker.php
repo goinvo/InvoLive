@@ -45,7 +45,9 @@ class FitbitWorker extends Command {
 		$this->fitbit->setUser($user->fitbitId);
 		// get steps
 		$response = $this->fitbit->getTimeSeries('steps', 'today', 'max');
-		
+			
+		var_dump($response);
+
 		foreach($response as $steps){
 			$date = DateTime::createFromFormat('Y-m-d', $steps->dateTime)->setTime(0,0);
 			$this->storeSteps($user->name, $steps->value, $date);
@@ -77,6 +79,19 @@ class FitbitWorker extends Command {
 		$timestamp = \Carbon\Carbon::now()->toW3CString();
 		$this->info(' ');
 		$this->info($timestamp);
+
+				// validate days value
+		// max of 60 days as Withing limits the # of queries
+		$validator = Validator::make(
+		    array('days' => $this->option('days')),
+		    array('days' => 'required|in:1d,7d,30d,1w,1m,3m,6m,1y,max')
+		);
+		if ($validator->fails())
+		{
+		    $this->info('Invalid timeframe. Valid ranges: 1d, 7d, 30d, 1w, 1m, 3m, 6m, 1y, max');
+		    return;
+		}
+
 		$this->info('Fitbit worker initialized. ');
 
 		// prepare fitbit client
@@ -123,7 +138,7 @@ class FitbitWorker extends Command {
 	protected function getOptions()
 	{
 		return array(
-			array('example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null),
+			array('days', null, InputOption::VALUE_OPTIONAL, 'Amount of past days to fetch. (1d, 7d, 30d, 1w, 1m, 3m, 6m, 1y, max)', '7d'),
 		);
 	}
 
