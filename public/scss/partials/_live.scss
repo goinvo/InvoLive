@@ -2,25 +2,48 @@
 	margin-left: 0px;
 }
 
-#queries{
-	margin-bottom: 40px;
+#results{
+	position: relative;
 }
 
-#button-query{
-	margin-top: -4px;
+#results-content{
+	opacity: 0;
 }
 
-.span-grouping{
-	&.disabled{
-		opacity: 0.15;
-		h4{
-			opacity: 0;
-		}
+#results-summary{
+	canvas, div{
+		display: inline-block;
+		vertical-align: top;
 	}
 }
 
-#results{
+#summary-score{
+	text-align: center;
 	position: relative;
+
+	.score{
+		margin-top: 20px;
+		font-size: 300px;
+		line-height: 300px;
+	}
+
+	.legend{
+		position: absolute;
+		bottom: 0;
+		right: 30px;
+		width: 150px;
+		height: 150px;
+
+		.text{
+			position: absolute;
+			text-align: right;
+			top: 50%;
+			width: 80px;
+			font-size: 32px;
+			line-height: 32px;
+		}
+	}
+
 }
 
 #results-preloader{
@@ -34,6 +57,7 @@
 .row-wrap{
 	margin-bottom: 30px;
 	border-bottom: 1px solid #f3f3f3;
+	clear: both;
 }
 
 .user{
@@ -75,3 +99,5 @@
 	display: none;
 	margin-top: 20px;
 }
+
+
