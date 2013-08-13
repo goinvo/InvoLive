@@ -52,7 +52,7 @@ $(document).ready(function(){
         later.</h1>
 
         <div id="results">
-            <div id="results-preloader" style="margin-top:250px;"></div>
+            <div id="results-preloader"></div>
             <div id="results-content">
             	<section id="results-summary" class="row-fluid">
 	            	<div class="span6" style="height:400px;">

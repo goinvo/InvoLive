@@ -56,19 +56,18 @@ body {
 }
 
 /* line 5, ../scss/partials/_live.scss */
-#results {
-  position: relative;
-}
-
-/* line 9, ../scss/partials/_live.scss */
 #results-content {
   opacity: 0;
 }
 
-/* line 14, ../scss/partials/_live.scss */
+/* line 10, ../scss/partials/_live.scss */
 #results-summary canvas, #results-summary div {
   display: inline-block;
   vertical-align: top;
+}
+/* line 15, ../scss/partials/_live.scss */
+#results-summary canvas {
+  margin-top: -20px;
 }
 
 /* line 20, ../scss/partials/_live.scss */
@@ -104,7 +103,7 @@ body {
 #results-preloader {
   position: absolute;
   width: 100%;
-  top: 0;
+  top: 40%;
   left: 0;
   text-align: center;
 }
