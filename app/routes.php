@@ -14,12 +14,7 @@
 Route::group(array('prefix' => 'api'), function()
 {
     Route::get('measurement', 'MeasurementController@get');
-    Route::get('eventtype', 'EventtypeController@get');
-    Route::post('eventtype', 'EventtypeController@store');
-    Route::get('source', 'SourceController@get');
     Route::get('user', 'UserController@get');
-    Route::post('user', 'UserController@store');
-    Route::get('user/image', 'UserController@getimage');
 });
 
 Route::get('/', function()

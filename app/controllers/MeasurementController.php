@@ -13,7 +13,6 @@ class MeasurementController extends BaseController {
 		$source = Input::get('source');
 		$start = Input::get('startdate');
 		$end = Input::get('enddate');
-		$time = Input::get('time');
 		$resolution = Input::get('resolution');
 		$attributes = Input::get('attributes');
 

@@ -5,6 +5,9 @@ class TimeQuery {
 	private $startDate = null;
 	private $endDate = null;
 
+	/*
+	*	Converts string to DateTime object
+	*/
 	public static function stringToDate($date){
 
 		if($date == 'now') return \Carbon\Carbon::now();
@@ -21,12 +24,6 @@ class TimeQuery {
 
 		// fall back to current time otherwise
 		return \Carbon\Carbon::now();
-	}
-
-	public static function interval($query, $start, $end=null) {
-		$query->where('timestamp', '>=', $start);
-		if($end != null) $query->where('timestamp', '<=', $end);
-		return $query;
 	}
 
 	public function start($date){
