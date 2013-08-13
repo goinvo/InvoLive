@@ -82,22 +82,26 @@ var metrics = {
 
 var timeranges = {
 	"lastday" : {
-		value : 'lastday',
+		start : 'lastday',
+		end : 'now',
 		resolution : 'hour',
 		minDate : moment().subtract('day', 1)
 	},
 	"lastmonth" : {
-		value : 'lastmonth',
+		start : 'lastmonth',
+		end : 'now',
 		resolution : 'day',
 		minDate : moment().subtract('months', 1)
 	},
     "lastyear" : {
-    	value : 'lastyear',
+    	start : 'lastyear',
+    	end : 'now',
     	resolution : 'day',
     	minDate : moment().subtract('years', 1)
     },
     "alltime" : {
-    	value : 'alltime',
+    	start : 'alltime',
+    	end : 'now',
     	resolution : 'day',
     	minDate : moment().subtract('years', 3)
     }

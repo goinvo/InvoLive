@@ -11,6 +11,8 @@ class MeasurementController extends BaseController {
 		$events = Input::get('eventtype');
 		$users = Input::get('user');
 		$source = Input::get('source');
+		$start = Input::get('startdate');
+		$end = Input::get('enddate');
 		$time = Input::get('time');
 		$resolution = Input::get('resolution');
 		$attributes = Input::get('attributes');
@@ -29,7 +31,7 @@ class MeasurementController extends BaseController {
 
 		foreach($users as $user){
 			foreach ($events as $event) {
-				array_push($payload, $this->getEventMeasurements($user, $event, $source, $time, $resolution, $attributes));
+				array_push($payload, $this->getEventMeasurements($user, $event, $source, $start, $end, $resolution, $attributes));
 			}
 		}
 
@@ -44,7 +46,7 @@ class MeasurementController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function getEventMeasurements($user, $event, $source, $time, $resolution, $attributes)
+	public function getEventMeasurements($user, $event, $source, $start, $end, $resolution, $attributes)
 	{
 
 		// query model
@@ -52,7 +54,8 @@ class MeasurementController extends BaseController {
 			$user,
 			$event, 
 			$source, 
-			$time, 
+			$start, 
+			$end,
 			$resolution
 		);
 		

@@ -35,7 +35,8 @@ live.queries = function () {
         $.getJSON(url+'measurement', {
             user : $.map(users, function(user, i) { return user.name }),
             eventtype : currentEvent.value,
-            time : currentTimerange.value,
+            startdate : currentTimerange.start,
+            enddate : currentTimerange.end,
             resolution : currentTimerange.resolution
         }, function(data){
             var data = data.message;
