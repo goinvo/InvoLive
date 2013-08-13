@@ -2,10 +2,6 @@
 	margin-left: 0px;
 }
 
-#results{
-	position: relative;
-}
-
 #results-content{
 	opacity: 0;
 }
@@ -53,7 +49,7 @@
 #results-preloader{
 	position: absolute;
 	width:100%;
-	top: 0;
+	top: 40%;
 	left: 0;
 	text-align: center;
 }

@@ -39,6 +39,7 @@ live.queries = function () {
             resolution : currentTimerange.resolution
         }, function(data){
             var data = data.message;
+            return;
             stopPreloader();
             
             // parse dates

@@ -77,6 +77,8 @@ live.visualizations = function () {
 				scaleStepWidth : 20,
 				scaleFontSize : 24,
 				pointLabelFontSize : 12,
+				pointDotRadius : 4,
+				pointDotStrokeWidth : 2,
 				animationSteps : 250
 		});
 	},

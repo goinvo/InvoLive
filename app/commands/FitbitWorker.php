@@ -59,6 +59,8 @@ class FitbitWorker extends Command {
 	*	Stores steps data
 	*/
 	public function storeSteps($user, $steps, $timestamp){
+		// do not store 0 steps entries
+		if($steps == 0) return;
 		$stored = Measurement::createMeasurement(
 			$user,
 			'steps',
