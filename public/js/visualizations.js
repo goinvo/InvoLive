@@ -73,8 +73,8 @@ live.visualizations = function () {
 				pointLabelFontSize : 10,
 				scaleOverride : true,
 				scaleStartValue : 0,
-				scaleSteps : 5,
-				scaleStepWidth : 20,
+				scaleSteps : 4,
+				scaleStepWidth : 25,
 				scaleFontSize : 24,
 				pointLabelFontSize : 12,
 				pointDotRadius : 4,
@@ -137,8 +137,8 @@ live.visualizations = function () {
 				pointLabelFontSize : 10,
 				scaleOverride : true,
 				scaleStartValue : 0,
-				scaleSteps : 5,
-				scaleStepWidth : 20,
+				scaleSteps : 4,
+				scaleStepWidth : 25,
 				animationSteps : 5,
 				onAnimationComplete : function(){
 					drawLabels(scores, cvs);
