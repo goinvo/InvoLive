@@ -6,6 +6,9 @@ var colors = d3.scale.category10().range();
 var $preloader, preloader;
 var currentEvent, currentTimerange;
 
+/*
+*	Event types
+*/
 var events = {
 	"all" : {
 		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted', "Actual work hours", "Steps"]
@@ -13,7 +16,6 @@ var events = {
 	"Dropbox Actions" : {
 		name : 'Dropbox Actions',
 		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted'],
-		click : null,
 		score : live.scores.dropbox,
 		color : colors[0],
 		icon : 'dropbox.gif'
@@ -21,7 +23,6 @@ var events = {
 	"Work Hours" : {
 		name : 'Work Hours',
 		value : ['Actual work hours'],
-		click : live.visualizations.staffplanExpansion,
 		score : live.scores.workHours,
 		color : colors[1],
 		icon : 'briefcase-128.png'
@@ -29,17 +30,18 @@ var events = {
 	"Steps" : {
 		name : 'Steps',
 		value : ['Steps'],
-		click : null,
 		score : live.scores.steps,
 		color : colors[2],
 		icon : 'footprints.png'
 	}
 }
 
+/*
+*	Metrics used to evaluate score
+*/
 var metrics = {
 	"productivity" : {
 		name : 'Productivity',
-		short : 'P',
 		labelx : 92,
 		labely : 0,
 		icon : 'briefcase-128g.png',
@@ -56,7 +58,6 @@ var metrics = {
 	},
 	"happiness" : {
 		name : 'Happiness',
-		short : 'H',
 		labelx : 180,
 		labely : 145,
 		icon : 'happiness.png',
@@ -69,7 +70,6 @@ var metrics = {
 	},
 	"health" : {
 		name : 'Health',
-		short : 'S',
 		labelx : 0,
 		labely : 145,
 		icon : 'health.png',
@@ -80,6 +80,9 @@ var metrics = {
 	}
 }
 
+/*
+*	Available time ranges
+*/
 var timeranges = {
 	"lastday" : {
 		start : 'lastday',
@@ -98,19 +101,12 @@ var timeranges = {
     	end : 'now',
     	resolution : 'day',
     	minDate : moment().subtract('years', 1)
-    },
-    "alltime" : {
-    	start : 'alltime',
-    	end : 'now',
-    	resolution : 'day',
-    	minDate : moment().subtract('years', 3)
     }
 }
 
 /*
-*	Helper functions
+*	Preloader functions
 */
-
 function initPreloader(){
 	$preloader = $('#results-preloader');
 	var height = 50;
@@ -176,6 +172,10 @@ function stopPreloader(){
 function log(msg){
 	console.log(msg);
 }
+
+/*
+*	Helper functions
+*/
 
 function date_sort_asc (date1, date2) {
     if (date1.timestamp > date2.timestamp) return 1;

@@ -5,6 +5,9 @@ live.visualizations = function () {
 	var $chart, $dchart, $list, $legend, $timelegend;
 	var xscale;
 
+	/*
+	*	Populates page with visualizations
+	*/
 	draw = function(data){
 		xscale = d3.time.scale()
     	.domain([
@@ -22,6 +25,9 @@ live.visualizations = function () {
 
 	},
 
+	/*
+	*	Displays summary/studio visualization and scores
+	*/
 	drawSummary = function(data){
 
 		var summary = getScores(data[0]),
@@ -83,6 +89,9 @@ live.visualizations = function () {
 		});
 	},
 
+	/*
+	*	Adds visualization for a single user
+	*/
 	drawUser = function(data){
 		if($('.user').size() % 4 === 0) {
 			$container.append($('#row-template').html());
@@ -92,13 +101,13 @@ live.visualizations = function () {
 		$user = $('.user').last();
 		$user.data(data);
 
-		drawUserStats($user, data);
+		drawUserRadar($user, data);
 
-		$user.click(userClick);
+		$user.click(onUserClicked);
 
 	},
 
-	drawUserStats = function($user, data){
+	drawUserRadar = function($user, data){
 		$stats = $user.find('canvas');
 
 		function drawLabels(metrics, context){
@@ -146,7 +155,7 @@ live.visualizations = function () {
 		});
 	}
 
-	userClick = function(){
+	onUserClicked = function(){
 		var $row = $(this).parent(),
 			$user = $(this),
 			$details,
@@ -156,12 +165,15 @@ live.visualizations = function () {
 		$('.user').removeClass('active');
 		$(this).addClass('active');
 
-		if($('.user-details').length > 0){
 
+		if($('.user-details').length > 0){
+			// collapse if details already expanded
 			if($('.user-details').data('user') === user) {
 				$('.user-details').slideUp(function(){$(this).remove()});
 				return;
-			} else {
+			} else
+			// expand details section 
+			{
 				$('.user-details').slideUp(function(){
 					$(this).remove();
 				});
@@ -180,11 +192,101 @@ live.visualizations = function () {
 
 	drawUserDetails = function($container, data){
 		var details = ["Dropbox Actions", "Work Hours", "Steps"];
+
+		// for each event draw a chart
 		$.each(details, function(){
-			drawStrip($container, events[this], data);
+			drawEvent($container, events[this], data);
 		});
 		drawLegends($container);
 	}
+
+	drawEvent = function($container, event, data){
+		// get datapoints
+		// (don't draw anything if no events are available)
+		eventData = [];
+		$.each(data, function(){
+			if($.inArray(this.eventtype, event.value) >= 0) eventData = eventData.concat(this.data);
+		})
+		if(eventData.length === 0) return;
+
+		// add template for event strip
+		$rendered = $(Mustache.render($('#strip-template').html(), event)).appendTo($container);
+
+		// get cumulative # of event
+		var value = d3.sum(eventData, function(d){ return d.value });
+		$rendered.find('.strip-value').text(value);
+
+		// draw event bubbles
+		drawStripSvg(eventData, event, $rendered.find('.strip-content'));
+	},
+
+	/*
+	*	Calculates score based on user data
+	*/
+	getScores = function(data){
+		var userMetrics = [];
+		for(key in metrics){
+			var metric = metrics[key];
+
+			score = 0;
+			weights = 0;
+			$.each(metric.submetrics, function(){
+				weights += this.weight;
+				score += events[this.name].score(data)*this.weight;
+			});
+			userMetrics.push($.extend({score : score/weights }, metric));
+		}
+		return userMetrics;
+	},
+	
+	drawStripSvg = function(data, event, $container){
+
+		// init dimensions
+		var margin = {top: 0, right: 0, bottom: 0, left: 20},
+	    width = $container.width();
+	    height = $container.height();
+
+	    // init svg
+		var svg = d3.select($container.get(0)).append('svg')
+		.classed('data', true)
+		.attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom)
+		.append("g")
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	    xscale.range([margin.right, $container.width()]);
+
+	    // radius scale
+	   	var rscale = d3.scale.linear().range([4,20])
+	    .domain(d3.extent(data, function(d) { return d.value }));
+
+		var user = svg.append("g").classed("user",true);
+	    
+	    // add bubbles
+	    user.selectAll('circle')
+    	.data(data)
+		.enter().append('circle')
+    	.attr('r', function(d){
+    		return rscale(d.value);
+    	})
+    	.attr('cx', function(d){
+    		return xscale(d.timestamp);
+    	})
+    	.attr('cy', $container.height()/2)
+    	.style('fill', event.color)
+    	.style('stroke', event.color)
+    	// add popovers
+    	.each(function(d,i){
+    		$(this).tooltip({
+    			container : 'body',
+    			title : Mustache.render(
+    				$('#usertooltip-template').html(), { event : event.name, value : d.value }
+    			),
+    			html : true
+    		});
+    	})
+	},
+
 
 	drawLegends = function($container){
 		$rendered = $(Mustache.render($('#strip-template').html(), event)).appendTo($container);
@@ -209,83 +311,6 @@ live.visualizations = function () {
 		svg.append("g")
 		.attr("class", "axis")
 		.call(xAxis);
-	},
-
-	drawStrip = function($container, event, data){
-		eventData = [];
-		$.each(data, function(){
-			if($.inArray(this.eventtype, event.value) >= 0) eventData = eventData.concat(this.data);
-		})
-
-		if(eventData.length === 0) return;
-
-		// strip
-		$rendered = $(Mustache.render($('#strip-template').html(), event)).appendTo($container);
-
-		var value = d3.sum(eventData, function(d){ return d.value });
-		$rendered.find('.strip-value').text(value);
-
-		drawStripSvg(eventData, event, $rendered.find('.strip-content'));
-	},
-
-	getScores = function(data){
-		var userMetrics = [];
-		for(key in metrics){
-			var metric = metrics[key];
-
-			score = 0;
-			weights = 0;
-			$.each(metric.submetrics, function(){
-				weights += this.weight;
-				score += events[this.name].score(data)*this.weight;
-			});
-			userMetrics.push($.extend({score : score/weights }, metric));
-		}
-		return userMetrics;
-	},
-
-	drawStripSvg = function(data, event, $container){
-
-		var margin = {top: 0, right: 0, bottom: 0, left: 20},
-
-	    width = $container.width();
-	    height = $container.height();
-
-		var svg = d3.select($container.get(0)).append('svg')
-		.classed('data', true)
-		.attr('width', width + margin.left + margin.right)
-		.attr('height', height + margin.top + margin.bottom)
-		.append("g")
-	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	    xscale.range([margin.right, $container.width()]);
-
-	   	var rscale = d3.scale.linear().range([4,20])
-	    .domain(d3.extent(data, function(d) { return d.value }));
-
-		var user = svg.append("g").classed("user",true);
-	    
-	    user.selectAll('circle')
-    	.data(data)
-		.enter().append('circle')
-    	.attr('r', function(d){
-    		return rscale(d.value);
-    	})
-    	.attr('cx', function(d){
-    		return xscale(d.timestamp);
-    	})
-    	.attr('cy', $container.height()/2)
-    	.style('fill', event.color)
-    	.style('stroke', event.color)
-    	.each(function(d,i){
-    		$(this).tooltip({
-    			container : 'body',
-    			title : Mustache.render(
-    				$('#usertooltip-template').html(), { event : event.name, value : d.value }
-    			),
-    			html : true
-    		});
-    	})
 	},
 
     initialize = function () {

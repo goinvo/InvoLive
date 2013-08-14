@@ -14,6 +14,7 @@
 Route::group(array('prefix' => 'api'), function()
 {
     Route::get('measurement', 'MeasurementController@get');
+    Route::get('score', 'ScoreController@get');
     Route::get('user', 'UserController@get');
 });
 

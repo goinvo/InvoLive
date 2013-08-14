@@ -21,17 +21,17 @@
     <script src="js/queries.js"></script>
     <script src="js/visualizations.js"></script>
     <script src="js/scores.js"></script>
-    <script src="js/live.js"></script>
+    <script src="js/common.js"></script>
     <script>
-$(document).ready(function(){
+    $(document).ready(function(){
 
-            $('#codename').delay(500).animate({'margin-left': 25, 'opacity' : 1}, 1000);
+        $('#codename').delay(500).animate({'margin-left': 25, 'opacity' : 1}, 1000);
 
-            live.queries.initialize();
-            live.visualizations.initialize();
-            initPreloader();
-            startPreloader(0);
-        });
+        live.queries.initialize();
+        live.visualizations.initialize();
+        initPreloader();
+        startPreloader(0);
+    });
     </script>
 
     <title>Invo Live</title>
@@ -39,6 +39,8 @@ $(document).ready(function(){
 
 <body>
     <div class="container" style="margin-bottom:20px;">
+
+        <!-- title -->
         <div>
             <h1 style="margin-top:20px; display:inline-block">Invo Live
             v0.4</h1>
@@ -48,11 +50,10 @@ $(document).ready(function(){
         </div>
         <hr>
 
-        <h1 id="nodata" style="display:none">No data collect yet. Try again
-        later.</h1>
-
+        <!-- scores -->
         <div id="results">
             <div id="results-preloader"></div>
+
             <div id="results-content">
             	<section id="results-summary" class="row-fluid">
 	            	<div class="span6" style="height:400px;">
@@ -68,10 +69,10 @@ $(document).ready(function(){
             	</section>
             	<hr style="width:100%;">
             </div>
-
-            </div>
         </div>
+
     </div>
+
     <?php
     	include_once "includes/templates.php";
     ?>

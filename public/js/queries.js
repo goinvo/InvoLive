@@ -1,29 +1,32 @@
 var live = live || {};
 
 live.queries = function () {
+    // api url
     var url = "http://live.goinvo.com/api/";
-    var $user, $eventtype, $time, $grouping;
+    // user array
     var users = [];
 
-    getUserData = function(query, user){
+    /*
+    *   Filters results for user
+    */
+    getUserData = function(data, user){
         var filter = [];
-        $.each(query, function(j, data){
-            if(data.user == user){
-                filter.push(data);
+        $.each(data, function(j, d){
+            if(d.user == user){
+                filter.push(d);
             }
         });
         return filter;
     },
 
-    ondataload = function(data){
-        stopPreloader();
-        live.visualizations.initialize();
-        live.visualizations.draw(data);
-    },
-
+    /*
+    *   Fetches and processes user data
+    */
     query = function(){
 
         // set current event
+
+        // ask for all events over last month
         currentEvent = events.all;
         currentTimerange = timeranges.lastmonth;
 
@@ -63,25 +66,19 @@ live.queries = function () {
         });
     },
 
+    ondataload = function(data){
+        stopPreloader();
+        // initialize and draw visualizations
+        live.visualizations.initialize();
+        live.visualizations.draw(data);
+    },
+
     initialize = function (div) {
-
-    	$user = $('#selector-user');
-    	$eventtype = $('#selector-event');
-    	$time = $('#selector-time');
-    	$grouping = $('#selector-grouping');
-    	
-    	//populateSelector($eventtype, url+'eventtype', '#event-template');
-        // populate eventtype 
-
+        // get users and query
         $.getJSON(url+'user', function(data){
             users = data.message;
             live.queries.query();
         });
-
-
-        $('#button-query').click(query);
-
-
     };
 
     return {
