@@ -33,8 +33,8 @@ live.queries = function () {
 
         $.getJSON(url+'score', {
             user : $.map(users, function(user, i) { return user.name }),
-            startdate : currentTimerange.startdate,
-            enddate : currentTimerange.enddate
+            startdate : currentTimerange.start,
+            enddate : currentTimerange.end
         }, function(data){
             data = data.message;
             var result = [];

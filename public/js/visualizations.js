@@ -226,7 +226,6 @@ live.visualizations = function () {
 	*	Calculates score based on user data
 	*/
 	getScores = function(data){
-		log(data);
 		function findMetric(data, name){
 			for(var i=0; i<data.scores.length;i++){
 				if(data.scores[i].name == name){
