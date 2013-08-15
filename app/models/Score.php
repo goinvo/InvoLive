@@ -55,16 +55,22 @@ class Score {
 	*/
 
 	private function scoreDropbox($datapoints){
-		var_dump($this->sum($datapoints));
-		return 50;
+		$sum = $this->sum($datapoints);
+		$scale = new Scale(array(0,100), array(60, 100));
+		return $scale->convert($sum);
 	}
 
 	private function scoreWorkhours($datapoints){
-		return 70;
+		$hours = $this->sum($datapoints);
+		$idealHours = 160;
+		$scale = new Scale(array(0,80), array(100, 60));
+		return $scale->convert(abs($idealHours - $hours));
 	}
 
 	private function scoreSteps($datapoints){
-		return 60;
+		$sum = $this->sum($datapoints);
+		$scale = new Scale(array(0,250000), array(60, 100));
+		return $scale->convert($sum);
 	}
 
 	/*
@@ -106,7 +112,7 @@ class Score {
 			case "Steps":
 				return $this->scoreSteps($datapoints);
 			default:
-				return 50;
+				return 0;
 		}
 
 	}
@@ -156,8 +162,16 @@ class Score {
 		return $scores;
 	}
 
+	public function getStudioScores($startdate = 'lastmonth', $enddate = 'now'){
+		$users = array();
+		foreach(User::all() as $user){
+			if($user->name != 'liveworker') array_push($users, $user->name);
+		}
+		return $this->getUserScores($users, $startdate, $enddate, false);
+	}
+
 	public function gd(){
-		return $this->getUserScores(["Reshma", "Juhan"]);
+		return $this->getStudioScores();
 	}
 
 
