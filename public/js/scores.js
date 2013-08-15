@@ -25,7 +25,6 @@ live.scores = function () {
 		.domain([0, 80]);
 
 		var eventData = getEventData(events['Work Hours'], data);
-
 		return scoreScale( Math.abs(160 - d3.sum(eventData, function(d){ return d.value })));
 	},
 

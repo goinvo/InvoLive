@@ -2,7 +2,7 @@ var live = live || {};
 
 live.visualizations = function () {
 
-	var $chart, $dchart, $list, $legend, $timelegend;
+	var $selected;
 	var xscale;
 
 	/*
@@ -22,7 +22,6 @@ live.visualizations = function () {
 
 		// draw studio scores
 		drawSummary(data);
-
 	},
 
 	/*
@@ -103,7 +102,10 @@ live.visualizations = function () {
 
 		drawUserRadar($user, data);
 
-		$user.click(onUserClicked);
+		$user.click(function(){
+			$selected = $(this);
+			live.queries.queryEvents($(this).data('user'), onUserClicked);
+		});
 
 	},
 
@@ -155,15 +157,15 @@ live.visualizations = function () {
 		});
 	}
 
-	onUserClicked = function(){
-		var $row = $(this).parent(),
-			$user = $(this),
+	onUserClicked = function(data){
+
+		var $row = $selected.parent(),
+			$user = $selected,
 			$details,
-			data = $(this).data(),
 			user = data.user;
 
 		$('.user').removeClass('active');
-		$(this).addClass('active');
+		$selected.addClass('active');
 
 
 		if($('.user-details').length > 0){
@@ -224,17 +226,19 @@ live.visualizations = function () {
 	*	Calculates score based on user data
 	*/
 	getScores = function(data){
+		log(data);
+		function findMetric(data, name){
+			for(var i=0; i<data.scores.length;i++){
+				if(data.scores[i].name == name){
+					log(data.scores[i].value)
+					return data.scores[i];
+				}
+			}
+		}
+
 		var userMetrics = [];
 		for(key in metrics){
-			var metric = metrics[key];
-
-			score = 0;
-			weights = 0;
-			$.each(metric.submetrics, function(){
-				weights += this.weight;
-				score += events[this.name].score(data)*this.weight;
-			});
-			userMetrics.push($.extend({score : score/weights }, metric));
+			userMetrics.push($.extend({score : findMetric(data, key).value }, metrics[key]));
 		}
 		return userMetrics;
 	},

@@ -44,39 +44,19 @@ var metrics = {
 		name : 'Productivity',
 		labelx : 92,
 		labely : 0,
-		icon : 'briefcase-128g.png',
-		submetrics  : [
-		{
-			name : "Dropbox Actions",
-			weight : 10
-		},
-		{
-			name : "Work Hours",
-			weight : 10
-		}
-		]
+		icon : 'briefcase-128g.png'
 	},
 	"happiness" : {
 		name : 'Happiness',
 		labelx : 180,
 		labely : 145,
-		icon : 'happiness.png',
-		submetrics  : [
-		{
-			name : "Work Hours",
-			weight : 10
-		}
-		]
+		icon : 'happiness.png'
 	},
 	"health" : {
 		name : 'Health',
 		labelx : 0,
 		labely : 145,
-		icon : 'health.png',
-		submetrics : [{
-			name : "Steps",
-			weight : 10
-		}]
+		icon : 'health.png'
 	}
 }
 
@@ -91,8 +71,8 @@ var timeranges = {
 		minDate : moment().subtract('day', 1)
 	},
 	"lastmonth" : {
-		start : 'lastmonth',
-		end : 'now',
+		start : moment().subtract('month', 1).format('YYYY-M-D'),
+		end : moment().format('YYYY-M-D'),
 		resolution : 'day',
 		minDate : moment().subtract('months', 1)
 	},

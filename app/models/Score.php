@@ -128,13 +128,13 @@ class Score {
 		return $score/$submetrics;
 	}
 
-	public function getUserScores($users, $startdate = 'lastmonth', $enddate = 'now', $combine = false){
+	public function getUserScores($users, $startdate, $enddate, $combine = false){
 		if(gettype($users) != 'array') $users = array($users);
 		
 		$scores = array();
 		$userCount = count($users);
 
-		// average scores
+		// average scores between users (combine option selected)
 		if($combine) {
 			foreach ($this->metrics as $metric) {
 				$metricScore = 0;
@@ -146,7 +146,7 @@ class Score {
 					"value" => $metricScore/$userCount)
 				);
 			}
-		// do not average score
+		// do not average score (combine option not selected)
 		} else {
 			foreach ($users as $user) {
 				$userscore = array();
@@ -156,23 +156,18 @@ class Score {
 							 "value" => $this->scoreMetric($user, $metric, $startdate, $enddate))
 					);
 				}
-				array_push($scores, array("name" => $user, "scores" => $userscore));
+				array_push($scores, array("user" => $user, "scores" => $userscore));
 			}
 		}
 		return $scores;
 	}
 
-	public function getStudioScores($startdate = 'lastmonth', $enddate = 'now'){
+	public function getStudioScores($startdate, $enddate){
 		$users = array();
 		foreach(User::all() as $user){
 			if($user->name != 'liveworker') array_push($users, $user->name);
 		}
-		return $this->getUserScores($users, $startdate, $enddate, false);
+		return $this->getUserScores($users, $startdate, $enddate, true);
 	}
-
-	public function gd(){
-		return $this->getStudioScores();
-	}
-
 
 }

@@ -2,7 +2,7 @@ var live = live || {};
 
 live.queries = function () {
     // api url
-    var url = "http://live.goinvo.com/api/";
+    var url = "http://live.dev/api/";
     // user array
     var users = [];
 
@@ -18,6 +18,65 @@ live.queries = function () {
         });
         return filter;
     },
+
+    getAvatar = function(name){
+        for(var i=0; i<users.length; i++){
+            if(users[i].name == name){
+                return users[i].avatar;
+            }
+        }
+    }
+
+    queryScores = function(callback){
+
+        currentTimerange = timeranges.lastmonth;
+
+        $.getJSON(url+'score', {
+            user : $.map(users, function(user, i) { return user.name }),
+            startdate : currentTimerange.startdate,
+            enddate : currentTimerange.enddate
+        }, function(data){
+            data = data.message;
+            var result = [];
+            $.each(data, function(i, d){
+                if(d.user === 'liveworker') return;
+                d.pic = getAvatar(d.user);
+                d.color = colors[i%10];
+                result.push(d);
+            });
+            callback(result);
+
+        });
+
+    }
+
+    queryEvents = function(user, callback){
+
+        currentEvent = events.all;
+        currentTimerange = timeranges.lastmonth;
+
+
+        $.getJSON(url+'measurement', {
+            user : user,
+            eventtype : currentEvent.value,
+            startdate : currentTimerange.start,
+            enddate : currentTimerange.end,
+            resolution : currentTimerange.resolution
+        }, function(data){
+            var data = data.message;
+            stopPreloader();
+            
+            // parse dates
+            $.each(data, function(){
+                $.each(this.data,function(){
+                    this.timestamp = moment(this.timestamp).subtract('hours', 4).toDate();
+                })
+            })
+
+            callback(data);
+        });
+
+    }
 
     /*
     *   Fetches and processes user data
@@ -53,6 +112,7 @@ live.queries = function () {
             })
 
             var result = [];
+
             $.each(users, function(i, user){
                 if(user.name === 'liveworker') return;
                 var userobj = getUserData(data, user.name);
@@ -60,8 +120,8 @@ live.queries = function () {
                 userobj.pic = user.avatar;
                 userobj.color = colors[i%10];
                 result.push(userobj);
-
             });
+
             ondataload(result);
         });
     },
@@ -77,12 +137,15 @@ live.queries = function () {
         // get users and query
         $.getJSON(url+'user', function(data){
             users = data.message;
-            live.queries.query();
+            // query();
+            queryScores(ondataload);
         });
     };
 
     return {
         initialize: initialize,
-        query : query
+        query : query,
+        queryEvents : queryEvents,
+        getAvatar : getAvatar
     }
 }();
