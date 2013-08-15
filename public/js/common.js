@@ -16,21 +16,18 @@ var events = {
 	"Dropbox Actions" : {
 		name : 'Dropbox Actions',
 		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted'],
-		score : live.scores.dropbox,
 		color : colors[0],
 		icon : 'dropbox.gif'
 	},
 	"Work Hours" : {
 		name : 'Work Hours',
 		value : ['Actual work hours'],
-		score : live.scores.workHours,
 		color : colors[1],
 		icon : 'briefcase-128.png'
 	},
 	"Steps" : {
 		name : 'Steps',
 		value : ['Steps'],
-		score : live.scores.steps,
 		color : colors[2],
 		icon : 'footprints.png'
 	}

@@ -2,7 +2,7 @@ var live = live || {};
 
 live.queries = function () {
     // api url
-    var url = "http://live.dev/api/";
+    var url = "http://live.goinvo.com/api/";
     // user array
     var users = [];
 

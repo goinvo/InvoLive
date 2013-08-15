@@ -162,7 +162,8 @@ live.visualizations = function () {
 		var $row = $selected.parent(),
 			$user = $selected,
 			$details,
-			user = data.user;
+			user = $selected.data('user');
+
 
 		$('.user').removeClass('active');
 		$selected.addClass('active');
@@ -229,7 +230,6 @@ live.visualizations = function () {
 		function findMetric(data, name){
 			for(var i=0; i<data.scores.length;i++){
 				if(data.scores[i].name == name){
-					log(data.scores[i].value)
 					return data.scores[i];
 				}
 			}

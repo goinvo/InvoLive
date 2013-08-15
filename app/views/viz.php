@@ -20,7 +20,6 @@
     <script src="js/lib/easing/jquery.easing.1.3.js" type="text/javascript"></script>
     <script src="js/queries.js"></script>
     <script src="js/visualizations.js"></script>
-    <script src="js/scores.js"></script>
     <script src="js/common.js"></script>
     <script>
     $(document).ready(function(){
