@@ -20,7 +20,7 @@ class BodymediaWorker extends Command {
 	 */
 	protected $description = 'Updates data from Bodymedia service.';
 
-	private $withings;
+	private $bm;
 
 	/**
 	 * Create a new command instance.
@@ -39,7 +39,7 @@ class BodymediaWorker extends Command {
 		$stored = Measurement::createMeasurement(
 			$user,
 			'steps',
-			'fitbit',
+			'bodymedia',
 			$steps,
 			$timestamp
 		);
@@ -51,49 +51,30 @@ class BodymediaWorker extends Command {
 	*	@param {User object} $user - User to get data for.
 	*	@param {Integer} - Amount of past days to fetch.
 	*/
-	public function getActivities($user, $days){
+	public function getSteps($user, $days){
 		$this->info('Retrieving data for '.$user->name.'.');
 
-		$this->withings->setUser($user->withingsId);
-		$this->withings->setOAuthDetails($user->withingsToken, $user->withingsSecret);
+		$this->bm->setOAuthDetails($user->bodymediaToken, $user->bodymediaSecret);
 		
-		for($i=0; $i < $days; $i++){
-			// fetch data for the past $i days
+		$startDate = \Carbon\Carbon::now()->subDays($days);
+		$endDate = \Carbon\Carbon::now();
 
-			// calculate day
-			// setTime(0,0) is used so that each timestamp does not differ in time
-			// which creates duplicates
-			$date = \Carbon\Carbon::now()->subDays($i)->setTime(0,0);
+		// get activities
+		$json = $this->bm->getSteps($startDate, $endDate);
+		$json = json_decode($json, true);
 
-			// get activities
-			$response = $this->withings->getActivities($date->toDateString());
-
-			echo $date->toDateString();
-
-			$activities = json_decode($response, true);
-
-			if($activities['status'] == 0) {
-				/*
-				*	Success
-				*/
-
-				// save steps 
-				if(isset($activities['body']['steps'])){
-					$this->storeSteps($user->name, $activities['body']['steps'], $date);
-				}
-			} else if( $activities['status'] == 601){
-				/*
-				*	Too many requests
-				*/
-
-				$this->info('Withings API request cap reached. Cooling off for ~1 minute...');
-
-				sleep(80); // cool off
-				$i--; // continue from where we left
-			} else {
-
-			}
+		if( !array_key_exists("days",$json) ){
+			$this->info('Error in retrieving steps from Bodymedia query.');
 		}
+		$steps = $json["days"];
+
+		foreach($steps as $step){
+			$timestamp = DateTime::createFromFormat('Ymd',$step["date"]);
+			$value = $step["totalSteps"];
+
+			$this->storeSteps($user->name, $value, $timestamp);
+		}
+
 		$this->info('OK.');
 	}
 
@@ -107,31 +88,31 @@ class BodymediaWorker extends Command {
 		$timestamp = \Carbon\Carbon::now()->toW3CString();
 		$this->info(' ');
 		$this->info($timestamp);
-		$this->info('Withings worker initialized. ');
+		$this->info('Bodymedia worker initialized. ');
 
 		// validate days value
 		// max of 60 days as Withing limits the # of queries
 		$validator = Validator::make(
 		    array('days' => $this->option('days')),
-		    array('days' => 'required|integer|min:1|max:59')
+		    array('days' => 'required|integer|min:1|max:365')
 		);
 		if ($validator->fails())
 		{
-		    $this->info('Invalid amount of days specified. Valid ranges: 1 - 59');
+		    $this->info('Invalid amount of days specified. Valid ranges: 1 - 365');
 		    return;
 		}
 
 		// initialize Withings client
-		$key = Config::get('live.withings-key');
-		$secret = Config::get('live.withings-secret');
-		$this->withings = new  WithingsPHP($key, $secret);
+		$key = Config::get('live.bodymedia-key');
+		$secret = Config::get('live.bodymedia-secret');
+		$this->bm = new  BodymediaPHP($key, $secret);
 
-		// get all users that have Withings accounts
-		$withingsUsers = User::whereRaw('withingsId IS NOT NULL')->get();
+		// get all users that have Bodymedia accounts
+		$bmUsers = User::whereRaw('bodymediaToken IS NOT NULL')->get();
 
 		// get activities for each user
-		foreach($withingsUsers as $user){
-			$this->getActivities($user, $this->option('days'));
+		foreach($bmUsers as $user){
+			$this->getSteps($user, $this->option('days'));
 		}
 	}
 
@@ -155,7 +136,7 @@ class BodymediaWorker extends Command {
 	protected function getOptions()
 	{
 		return array(
-			array('days', 'd', InputOption::VALUE_OPTIONAL, 'Amount of past days to fetch.', 1),
+			array('days', 'd', InputOption::VALUE_OPTIONAL, 'Amount of past days to fetch.', 7),
 		);
 	}
 

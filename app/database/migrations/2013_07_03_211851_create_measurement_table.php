@@ -46,6 +46,8 @@ class CreateMeasurementTable extends Migration {
 			$table->string('withingsSecret')->unique();
 			$table->string('fitbitToken')->unique();
 			$table->string('fitbitSecret')->unique();
+			$table->string('bodymediaToken')->unique();
+			$table->string('bodymediaSecret')->unique();
 		});
 
 	}

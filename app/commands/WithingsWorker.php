@@ -41,7 +41,7 @@ class WithingsWorker extends Command {
 		$stored = Measurement::createMeasurement(
 			$user,
 			'steps',
-			'fitbit',
+			'withings',
 			$steps,
 			$timestamp
 		);
