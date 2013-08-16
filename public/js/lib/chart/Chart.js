@@ -586,8 +586,16 @@ window.Chart = function(context){
 				ctx.beginPath();
 				
 				if(config.scaleShowLine){
+
+					// if(calculatedScale.stepValue*(i+1) === 100) {
+					// 	ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+					// } else {
+					// 	ctx.strokeStyle = config.scaleLineColor;
+					// 	ctx.lineWidth = config.scaleLineWidth;
+					// }
 					ctx.strokeStyle = config.scaleLineColor;
 					ctx.lineWidth = config.scaleLineWidth;
+					
 					ctx.moveTo(0,-scaleHop * (i+1));					
 					for (var j=0; j<data.datasets[0].data.length; j++){
 					    ctx.rotate(rotationDegree);

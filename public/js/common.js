@@ -6,6 +6,9 @@ var colors = d3.scale.category10().range();
 var $preloader, preloader;
 var currentEvent, currentTimerange;
 
+/*
+*	Event types
+*/
 var events = {
 	"all" : {
 		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted', "Actual work hours", "Steps"]
@@ -13,100 +16,74 @@ var events = {
 	"Dropbox Actions" : {
 		name : 'Dropbox Actions',
 		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted'],
-		click : null,
-		score : live.scores.dropbox,
 		color : colors[0],
 		icon : 'dropbox.gif'
 	},
 	"Work Hours" : {
 		name : 'Work Hours',
 		value : ['Actual work hours'],
-		click : live.visualizations.staffplanExpansion,
-		score : live.scores.workHours,
 		color : colors[1],
 		icon : 'briefcase-128.png'
 	},
 	"Steps" : {
 		name : 'Steps',
 		value : ['Steps'],
-		click : null,
-		score : live.scores.steps,
 		color : colors[2],
 		icon : 'footprints.png'
 	}
 }
 
+/*
+*	Metrics used to evaluate score
+*/
 var metrics = {
 	"productivity" : {
 		name : 'Productivity',
-		short : 'P',
 		labelx : 92,
 		labely : 0,
-		icon : 'briefcase-128g.png',
-		submetrics  : [
-		{
-			name : "Dropbox Actions",
-			weight : 10
-		},
-		{
-			name : "Work Hours",
-			weight : 10
-		}
-		]
+		icon : 'briefcase-128g.png'
 	},
 	"happiness" : {
 		name : 'Happiness',
-		short : 'H',
 		labelx : 180,
 		labely : 145,
-		icon : 'happiness.png',
-		submetrics  : [
-		{
-			name : "Work Hours",
-			weight : 10
-		}
-		]
+		icon : 'happiness.png'
 	},
 	"health" : {
 		name : 'Health',
-		short : 'S',
 		labelx : 0,
 		labely : 145,
-		icon : 'health.png',
-		submetrics : [{
-			name : "Steps",
-			weight : 10
-		}]
+		icon : 'health.png'
 	}
 }
 
+/*
+*	Available time ranges
+*/
 var timeranges = {
 	"lastday" : {
-		value : 'lastday',
+		start : 'lastday',
+		end : 'now',
 		resolution : 'hour',
 		minDate : moment().subtract('day', 1)
 	},
 	"lastmonth" : {
-		value : 'lastmonth',
+		start : moment().subtract('month', 1).format('YYYY-M-D'),
+		end : moment().format('YYYY-M-D'),
 		resolution : 'day',
 		minDate : moment().subtract('months', 1)
 	},
     "lastyear" : {
-    	value : 'lastyear',
+    	start : 'lastyear',
+    	end : 'now',
     	resolution : 'day',
     	minDate : moment().subtract('years', 1)
-    },
-    "alltime" : {
-    	value : 'alltime',
-    	resolution : 'day',
-    	minDate : moment().subtract('years', 3)
     }
 }
 
 /*
-*	Helper functions
+*	Preloader functions
 */
-
 function initPreloader(){
 	$preloader = $('#results-preloader');
 	var height = 50;
@@ -121,7 +98,7 @@ function initPreloader(){
 		trailLength: 1,
 		pointDistance: .125,
 
-		strokeColor: '#425f8e',
+		strokeColor: '#333',
 
 		fps: 5,
 
@@ -172,6 +149,10 @@ function stopPreloader(){
 function log(msg){
 	console.log(msg);
 }
+
+/*
+*	Helper functions
+*/
 
 function date_sort_asc (date1, date2) {
     if (date1.timestamp > date2.timestamp) return 1;

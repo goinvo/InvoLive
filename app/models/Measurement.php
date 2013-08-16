@@ -55,7 +55,7 @@ class Measurement extends Eloquent
 		return array('success' => True, 'measurement' => $measurement);
 	}
 
-	public static function getMeasurement($user = null, $event = null, $source = null, $time = null, $resolution = null){
+	public static function getMeasurement($user = null, $event = null, $source = null, $start = null, $end = null, $resolution = null){
 		
 
 		$query = Measurement::query();
@@ -67,10 +67,11 @@ class Measurement extends Eloquent
 		if($user != null) $query->where('user_id', User::getId($user));
 		if($source != null) $query->where('source_id', Source::getId($source));
 
-		// limits time scope of query if needed
-		if($time != null) {
-			$query = TimeQuery::interval($query, TimeQuery::stringToDate($time), TimeQuery::stringToDate('now'));
-		}
+		// sets query time range
+		$timeInterval = new TimeQuery();
+		$timeInterval->start($start == null ? 'yesterday' : $start);
+		$timeInterval->end($end == null ? 'now' : $end);
+		$timeInterval->apply($query);
 
 		// does daily aggregation if needed
 		if($resolution != null) {

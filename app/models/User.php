@@ -43,20 +43,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
     	return null;
     }
 
-    /*
-	* create new user account
-	*/
-    public static function createUser($name){
-    	if(self::getId($name) != null) {
-    		return False;
-    	}
-
-    	$user = new User;
-    	$user->name = $name;
-		$user->save();
-		return True;
-    }
-
     public function getAvatar(){
     	return 'http://www.gravatar.com/avatar/'.md5($this->email);
     }

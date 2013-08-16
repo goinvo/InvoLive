@@ -1,45 +1,65 @@
 var live = live || {};
 
 live.queries = function () {
+    // api url
     var url = "http://live.goinvo.com/api/";
-    var $user, $eventtype, $time, $grouping;
+    // user array
     var users = [];
 
-    getUserData = function(query, user){
-        var filter = [];
-        $.each(query, function(j, data){
-            if(data.user == user){
-                filter.push(data);
+
+    /*
+    *   Gets avatar for specified user
+    */
+    getAvatar = function(name){
+        for(var i=0; i<users.length; i++){
+            if(users[i].name == name){
+                return users[i].avatar;
             }
+        }
+    }
+
+    /*
+    *   Gets score data for a single or multiple users
+    */
+    getScoreData = function(users, callback){
+        currentTimerange = timeranges.lastmonth;
+
+        $.getJSON(url+'score', {
+            user : users,
+            startdate : currentTimerange.start,
+            enddate : currentTimerange.end
+        }, function(data){
+            data = data.message;
+            var result = [];
+            $.each(data, function(i, d){
+                if(d.user === 'liveworker') return;
+                d.pic = getAvatar(d.user);
+                d.color = colors[i%10];
+                result.push(d);
+            });
+            callback(result);
+
         });
-        return filter;
-    },
 
-    ondataload = function(data){
-        stopPreloader();
-        live.visualizations.initialize();
-        live.visualizations.draw(data);
-    },
+    }
 
-    query = function(){
+    /*
+    *   Gets event data for a single or multiple users
+    */
+    getEventData = function(user, callback){
 
-        // set current event
         currentEvent = events.all;
         currentTimerange = timeranges.lastmonth;
 
-        startPreloader();
-
-        // var jxhr = [];
-        var result = [];
 
         $.getJSON(url+'measurement', {
-            user : $.map(users, function(user, i) { return user.name }),
+            user : user,
             eventtype : currentEvent.value,
-            time : currentTimerange.value,
+            startdate : currentTimerange.start,
+            enddate : currentTimerange.end,
             resolution : currentTimerange.resolution
         }, function(data){
             var data = data.message;
-            return;
             stopPreloader();
             
             // parse dates
@@ -49,43 +69,31 @@ live.queries = function () {
                 })
             })
 
-            var result = [];
-            $.each(users, function(i, user){
-                if(user.name === 'liveworker') return;
-                var userobj = getUserData(data, user.name);
-                userobj.user = user.name;
-                userobj.pic = user.avatar;
-                userobj.color = colors[i%10];
-                result.push(userobj);
-
-            });
-            ondataload(result);
+            callback(data);
         });
+
+    }
+
+    ondataload = function(data){
+        stopPreloader();
+        // initialize and draw visualizations
+        live.visualizations.initialize();
+        live.visualizations.draw(data);
     },
 
     initialize = function (div) {
-
-    	$user = $('#selector-user');
-    	$eventtype = $('#selector-event');
-    	$time = $('#selector-time');
-    	$grouping = $('#selector-grouping');
-    	
-    	//populateSelector($eventtype, url+'eventtype', '#event-template');
-        // populate eventtype 
-
+        // get users and query
         $.getJSON(url+'user', function(data){
             users = data.message;
-            live.queries.query();
+            // query();
+            getScoreData($.map(users, function(user, i) { return user.name }), ondataload);
         });
-
-
-        $('#button-query').click(query);
-
-
     };
 
     return {
         initialize: initialize,
-        query : query
+        getEventData : getEventData,
+        getScoreData : getScoreData,
+        getAvatar : getAvatar
     }
 }();

@@ -13,17 +13,6 @@ class Eventtype extends Eloquent
     	}
     }
 
-    public static function createEvent($name){
-        if( Eventtype::getId($name) != null) {
-            return False;
-        } else {
-            $event = new Eventtype;
-            $event->name = $name;
-            $event->save();
-            return True;
-        }
-    }
-
     public function aggregateMethod(){
         return Eventtype::aggregationCodes($this->aggregation);
     }

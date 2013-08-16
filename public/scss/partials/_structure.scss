@@ -14,7 +14,8 @@ html, body{
 
 body {
 	@include reset-box-model;
-	//background-image: url(/img/white_wall_hash.png);
+	background-color: rgb(252,247,234);
+	// background-image: url(/img/white_wall_hash.png);
 }
 
 .group {
