@@ -6,19 +6,10 @@ live.queries = function () {
     // user array
     var users = [];
 
-    /*
-    *   Filters results for user
-    */
-    getUserData = function(data, user){
-        var filter = [];
-        $.each(data, function(j, d){
-            if(d.user == user){
-                filter.push(d);
-            }
-        });
-        return filter;
-    },
 
+    /*
+    *   Gets avatar for specified user
+    */
     getAvatar = function(name){
         for(var i=0; i<users.length; i++){
             if(users[i].name == name){
@@ -27,12 +18,14 @@ live.queries = function () {
         }
     }
 
-    queryScores = function(callback){
-
+    /*
+    *   Gets score data for a single or multiple users
+    */
+    getScoreData = function(users, callback){
         currentTimerange = timeranges.lastmonth;
 
         $.getJSON(url+'score', {
-            user : $.map(users, function(user, i) { return user.name }),
+            user : users,
             startdate : currentTimerange.start,
             enddate : currentTimerange.end
         }, function(data){
@@ -50,7 +43,10 @@ live.queries = function () {
 
     }
 
-    queryEvents = function(user, callback){
+    /*
+    *   Gets event data for a single or multiple users
+    */
+    getEventData = function(user, callback){
 
         currentEvent = events.all;
         currentTimerange = timeranges.lastmonth;
@@ -78,54 +74,6 @@ live.queries = function () {
 
     }
 
-    /*
-    *   Fetches and processes user data
-    */
-    query = function(){
-
-        // set current event
-
-        // ask for all events over last month
-        currentEvent = events.all;
-        currentTimerange = timeranges.lastmonth;
-
-        startPreloader();
-
-        // var jxhr = [];
-        var result = [];
-
-        $.getJSON(url+'measurement', {
-            user : $.map(users, function(user, i) { return user.name }),
-            eventtype : currentEvent.value,
-            startdate : currentTimerange.start,
-            enddate : currentTimerange.end,
-            resolution : currentTimerange.resolution
-        }, function(data){
-            var data = data.message;
-            stopPreloader();
-            
-            // parse dates
-            $.each(data, function(){
-                $.each(this.data,function(){
-                    this.timestamp = moment(this.timestamp).subtract('hours', 4).toDate();
-                })
-            })
-
-            var result = [];
-
-            $.each(users, function(i, user){
-                if(user.name === 'liveworker') return;
-                var userobj = getUserData(data, user.name);
-                userobj.user = user.name;
-                userobj.pic = user.avatar;
-                userobj.color = colors[i%10];
-                result.push(userobj);
-            });
-
-            ondataload(result);
-        });
-    },
-
     ondataload = function(data){
         stopPreloader();
         // initialize and draw visualizations
@@ -138,14 +86,14 @@ live.queries = function () {
         $.getJSON(url+'user', function(data){
             users = data.message;
             // query();
-            queryScores(ondataload);
+            getScoreData($.map(users, function(user, i) { return user.name }), ondataload);
         });
     };
 
     return {
         initialize: initialize,
-        query : query,
-        queryEvents : queryEvents,
+        getEventData : getEventData,
+        getScoreData : getScoreData,
         getAvatar : getAvatar
     }
 }();

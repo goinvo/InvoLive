@@ -23,9 +23,6 @@
     <script src="js/common.js"></script>
     <script>
     $(document).ready(function(){
-
-        $('#codename').delay(500).animate({'margin-left': 25, 'opacity' : 1}, 1000);
-
         live.queries.initialize();
         live.visualizations.initialize();
         initPreloader();
@@ -40,14 +37,11 @@
     <div class="container" style="margin-bottom:20px;">
 
         <!-- title -->
-        <div>
-            <h1 style="margin-top:20px; display:inline-block">Invo Live
-            v0.4</h1>
-
-            <h4 id="codename" style=
-            "display:inline-block; margin-left:-50px; opacity: 0">Picasso</h4>
+        <div style="text-align:center; margin-top: 30px;">
+            <div id="logo">
+                <img src="img/logo.svg" alt="logosvg"/>
+            </div>
         </div>
-        <hr>
 
         <!-- scores -->
         <div id="results">
@@ -66,7 +60,7 @@
 	            		</div>
 	            	</div>
             	</section>
-            	<hr style="width:100%;">
+            	<hr style="width:100%; margin: 5px 0 5px 0">
             </div>
         </div>
 

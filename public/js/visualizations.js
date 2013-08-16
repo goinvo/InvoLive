@@ -52,7 +52,9 @@ live.visualizations = function () {
 				}}
 		);
 
-		// studio chart
+		/*
+		*	Radar chart for studio
+		*/ 
 		var radarChartData = {
 			labels : $.map(summary, function(val, i) { return val.name }),
 			datasets : [
@@ -85,6 +87,8 @@ live.visualizations = function () {
 				pointDotRadius : 4,
 				pointDotStrokeWidth : 2,
 				animationSteps : 250
+				// scaleLineColor : "#aaa",
+				// angleLineColor : "#aaa"
 		});
 	},
 
@@ -104,7 +108,7 @@ live.visualizations = function () {
 
 		$user.click(function(){
 			$selected = $(this);
-			live.queries.queryEvents($(this).data('user'), onUserClicked);
+			live.queries.getEventData($(this).data('user'), onUserClicked);
 		});
 
 	},

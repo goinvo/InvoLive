@@ -1,5 +1,17 @@
-.nomargin{
-	margin-left: 0px;
+#logo{
+
+	img{
+		margin: 0px 8px 0px 3px;
+	}
+
+	&:before,
+	&:after{
+		content: '';
+		border-bottom: solid 1px $gray;
+		display: inline-block;
+		height: 10px;
+		width: 380px;
+	}
 }
 
 #results-content{
@@ -55,8 +67,8 @@
 }
 
 .row-wrap{
-	margin-bottom: 30px;
-	border-bottom: 1px solid #f3f3f3;
+	padding: 15px 0 15px 0;
+	border-bottom: 1px solid $gray;
 	clear: both;
 }
 
@@ -67,7 +79,6 @@
 
 	&:hover, &.active{
 		background: $light-gray;
-		//@include transition(background 0.15s ease-in);
 	}
 
 	div{
@@ -100,4 +111,7 @@
 	margin-top: 20px;
 }
 
+hr{
+	border-top: solid 1px $gray;
+}
 
