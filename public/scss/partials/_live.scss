@@ -7,7 +7,7 @@
 	&:before,
 	&:after{
 		content: '';
-		border-bottom: solid 1px $gray;
+		border-bottom: solid 1px black;
 		display: inline-block;
 		height: 10px;
 		width: 380px;
@@ -58,6 +58,25 @@
 
 }
 
+#invoites{
+
+	div{
+		font-size: 16px;
+		display: inline-block;
+		margin: 0px 9px 0px 9px;
+	}
+
+	&:before,
+	&:after{
+		content: '';
+		border-bottom: solid 1px black;
+		display: inline-block;
+		width: 425px;
+		position: relative;
+		top: -3px;
+	}
+}
+
 #results-preloader{
 	position: absolute;
 	width:100%;
@@ -67,18 +86,27 @@
 }
 
 .row-wrap{
-	padding: 15px 0 15px 0;
-	border-bottom: 1px solid $gray;
+	padding: 25px 0 25px 0;
+	//border-bottom: 1px solid $gray;
 	clear: both;
 }
 
 .user{
 	
 	cursor: pointer;
-	border-radius: 10px;
+	border-radius: 8px;
 
 	&:hover, &.active{
-		background: $light-gray;
+		background: white;
+
+		.user-stats{
+			-webkit-filter: grayscale(0%);
+       		-moz-filter: grayscale(0%);
+         	-o-filter: grayscale(0%);
+        	-ms-filter: grayscale(0%);
+            filter: grayscale(0%); 
+		}
+
 	}
 
 	div{
@@ -88,7 +116,12 @@
 	.user-stats{
 		width: 200px;
 		margin: 0 auto;
-
+		border-radius: 10px;
+		-webkit-filter: grayscale(100%);
+	       -moz-filter: grayscale(100%);
+	         -o-filter: grayscale(100%);
+	        -ms-filter: grayscale(100%);
+	            filter: grayscale(100%);
 	}
 
 	.user-icon{
@@ -96,7 +129,7 @@
 			border-radius: 5px;
 			text-align: center;
 			margin-top: -30px;
-			width: 80px;
+			width: 70px;
 		}
 	}
 

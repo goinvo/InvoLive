@@ -80,15 +80,18 @@ live.visualizations = function () {
 				pointLabelFontSize : 10,
 				scaleOverride : true,
 				scaleStartValue : 0,
-				scaleSteps : 4,
-				scaleStepWidth : 25,
+				scaleSteps : 2,
+				scaleStepWidth : 50,
 				scaleFontSize : 24,
 				pointLabelFontSize : 12,
 				pointDotRadius : 4,
 				pointDotStrokeWidth : 2,
-				animationSteps : 250
-				// scaleLineColor : "#aaa",
-				// angleLineColor : "#aaa"
+				animationSteps : 250,
+				scaleLineWidth : 0.5,
+				angleLineWidth : 0.5,	
+				scaleLineColor : "#666",
+				angleLineColor : "#666"
+
 		});
 	},
 
@@ -152,9 +155,13 @@ live.visualizations = function () {
 				pointLabelFontSize : 10,
 				scaleOverride : true,
 				scaleStartValue : 0,
-				scaleSteps : 4,
-				scaleStepWidth : 25,
+				scaleSteps : 2,
+				scaleStepWidth : 50,
 				animationSteps : 5,
+				scaleLineWidth : 0.5,
+				angleLineWidth : 0.5,	
+				scaleLineColor : "#666",
+				angleLineColor : "#666",
 				onAnimationComplete : function(){
 					drawLabels(scores, cvs);
 				}

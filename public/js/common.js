@@ -98,7 +98,7 @@ function initPreloader(){
 		trailLength: 1,
 		pointDistance: .125,
 
-		strokeColor: '#425f8e',
+		strokeColor: '#333',
 
 		fps: 5,
 

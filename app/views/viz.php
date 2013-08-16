@@ -6,7 +6,7 @@
     <link href="css/lib/bootstrap/bootstrap.css" rel="stylesheet">
     <link href="css/lib/chosen/chosen.css" rel="stylesheet">
     <link href="css/global.css" rel="stylesheet" type="text/css">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel=
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400' rel=
     'stylesheet'>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script charset="utf-8" src="http://d3js.org/d3.v3.min.js"></script>
@@ -60,7 +60,9 @@
 	            		</div>
 	            	</div>
             	</section>
-            	<hr style="width:100%; margin: 5px 0 5px 0">
+            	<div id="invoites">
+                    <div> invoites </div>
+                </div>
             </div>
         </div>
 

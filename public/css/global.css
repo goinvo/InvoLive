@@ -32,6 +32,7 @@ body {
   margin: 0;
   padding: 0;
   border: 0;
+  background-color: #fcf7ea;
 }
 
 /* line 21, ../scss/partials/_structure.scss */
@@ -57,7 +58,7 @@ body {
 /* line 8, ../scss/partials/_live.scss */
 #logo:before, #logo:after {
   content: '';
-  border-bottom: solid 1px #dddddd;
+  border-bottom: solid 1px black;
   display: inline-block;
   height: 10px;
   width: 380px;
@@ -107,7 +108,23 @@ body {
   line-height: 32px;
 }
 
-/* line 61, ../scss/partials/_live.scss */
+/* line 63, ../scss/partials/_live.scss */
+#invoites div {
+  font-size: 16px;
+  display: inline-block;
+  margin: 0px 9px 0px 9px;
+}
+/* line 70, ../scss/partials/_live.scss */
+#invoites:before, #invoites:after {
+  content: '';
+  border-bottom: solid 1px black;
+  display: inline-block;
+  width: 425px;
+  position: relative;
+  top: -3px;
+}
+
+/* line 80, ../scss/partials/_live.scss */
 #results-preloader {
   position: absolute;
   width: 100%;
@@ -116,53 +133,66 @@ body {
   text-align: center;
 }
 
-/* line 69, ../scss/partials/_live.scss */
+/* line 88, ../scss/partials/_live.scss */
 .row-wrap {
-  padding: 15px 0 15px 0;
-  border-bottom: 1px solid #dddddd;
+  padding: 25px 0 25px 0;
   clear: both;
 }
 
-/* line 75, ../scss/partials/_live.scss */
+/* line 94, ../scss/partials/_live.scss */
 .user {
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 8px;
 }
-/* line 80, ../scss/partials/_live.scss */
+/* line 99, ../scss/partials/_live.scss */
 .user:hover, .user.active {
-  background: whitesmoke;
+  background: white;
 }
-/* line 84, ../scss/partials/_live.scss */
+/* line 102, ../scss/partials/_live.scss */
+.user:hover .user-stats, .user.active .user-stats {
+  -webkit-filter: grayscale(0%);
+  -moz-filter: grayscale(0%);
+  -o-filter: grayscale(0%);
+  -ms-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
+/* line 112, ../scss/partials/_live.scss */
 .user div {
   text-align: center;
 }
-/* line 88, ../scss/partials/_live.scss */
+/* line 116, ../scss/partials/_live.scss */
 .user .user-stats {
   width: 200px;
   margin: 0 auto;
+  border-radius: 10px;
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  -ms-filter: grayscale(100%);
+  filter: grayscale(100%);
 }
-/* line 95, ../scss/partials/_live.scss */
+/* line 128, ../scss/partials/_live.scss */
 .user .user-icon img {
   border-radius: 5px;
   text-align: center;
   margin-top: -30px;
-  width: 80px;
+  width: 70px;
 }
-/* line 103, ../scss/partials/_live.scss */
+/* line 136, ../scss/partials/_live.scss */
 .user .user-name {
   margin-top: 25px;
   margin-bottom: 15px;
 }
 
-/* line 109, ../scss/partials/_live.scss */
+/* line 142, ../scss/partials/_live.scss */
 .user-details {
   display: none;
   margin-top: 20px;
 }
 
-/* line 114, ../scss/partials/_live.scss */
+/* line 147, ../scss/partials/_live.scss */
 hr {
-  border-top: solid 1px #dddddd;
+  border-top: solid 1px #bbbbbb;
 }
 
 /* line 4, ../scss/partials/_visualizations.scss */
