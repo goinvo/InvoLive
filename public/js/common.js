@@ -17,7 +17,7 @@ var events = {
 		name : 'Dropbox Actions',
 		value : ['Files created', 'Files deleted', 'Files moved', 'Files deleted'],
 		color : colors[0],
-		icon : 'dropbox.gif'
+		icon : 'dropbox.png'
 	},
 	"Work Hours" : {
 		name : 'Work Hours',
