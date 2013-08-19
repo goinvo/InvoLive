@@ -54,7 +54,7 @@ class BodymediaPHP
 
     private function initUrls()
     {
-        $this->baseApiUrl = 'http://' . $this->apiHost . '/v2/measure';
+        $this->baseApiUrl = 'http://' . $this->apiHost . '/v2/json/';
         $this->authUrl = 'https://' . $this->authHost . '/oauth/authorize';
         $this->requestTokenUrl = 'https://' . $this->authHost . '/oauth/request_token';
         $this->accessTokenUrl = 'https://' . $this->authHost . '/oauth/access_token';
@@ -194,16 +194,6 @@ class BodymediaPHP
         return $this->oauthSecret;
     }
 
-    /**
-     * Set bm userId for future API calls
-     *
-     * @param  $userId 'XXXXX'
-     * @return void
-     */
-    public function setUser($userId)
-    {
-        $this->userId = $userId;
-    }
 
     public function getUser()
     {
@@ -216,13 +206,18 @@ class BodymediaPHP
      * @param {DateString} $date - Day for which data activities data is fetched
      * @return {Object} - Activities for specified day
      */
-    public function getActivities($date)
+    public function getSteps($startdate, $enddate)
     {
+
+        $startdate = date_format($startdate, 'Ymd');
+        $enddate = date_format($enddate, 'Ymd');
+
+        $url = $this->baseApiUrl.'step/day/'.$startdate.'/'.$enddate;
 
         // fetch data using OAuth
         try {
-            $this->oauth->fetch('http://wbsapi.bm.net/v2/measure', 
-                array('action'=>'getactivity', 'date' => $date, 'userid'=> $this->userId),OAUTH_HTTP_METHOD_GET);
+            $this->oauth->fetch($url, 
+                array('api_key' => $this->consumer_key),OAUTH_HTTP_METHOD_GET);
         } catch (Exception $E) {
             echo 'Unable to fetch data';
         }

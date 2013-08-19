@@ -46,8 +46,6 @@ class FitbitWorker extends Command {
 		// get steps
 		$response = $this->fitbit->getTimeSeries('steps', 'today', 'max');
 			
-		var_dump($response);
-
 		foreach($response as $steps){
 			$date = DateTime::createFromFormat('Y-m-d', $steps->dateTime)->setTime(0,0);
 			$this->storeSteps($user->name, $steps->value, $date);

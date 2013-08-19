@@ -127,13 +127,10 @@ class UserController extends BaseController {
 
 				if($bm->sessionStatus() == 2){
 					$user = User::find($liveid);
-					// $user->withingsToken = $withings->getOAuthToken();
-					// $user->withingsSecret = $withings->getOAuthSecret();
+					$user->bodymediaToken = $bm->getOAuthToken();
+					$user->bodymediaSecret = $bm->getOAuthSecret();
 					
-					// withings callback returns withings id under param 'userid'
-					// $user->withingsId = $liveid = Input::get('userid');
-					
-					// $user->save();
+					$user->save();
 					$success = true;
 				}
 
