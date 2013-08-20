@@ -23,7 +23,8 @@ var events = {
 		name : 'Work Hours',
 		value : ['Actual work hours'],
 		color : colors[1],
-		icon : 'briefcase-128.png'
+		icon : 'briefcase-128.png',
+		domainMin : 0
 	},
 	"Steps" : {
 		name : 'Steps',

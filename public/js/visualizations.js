@@ -168,6 +168,10 @@ live.visualizations = function () {
 		});
 	}
 
+	/*
+	*	Triggered when user region is clicked
+	*	Displays all user events
+	*/
 	onUserClicked = function(data){
 
 		var $row = $selected.parent(),
@@ -270,9 +274,14 @@ live.visualizations = function () {
 
 	    xscale.range([margin.right, $container.width()]);
 
-	    // radius scale
+	    // radius scale can be set manually in the event object
 	   	var rscale = d3.scale.linear().range([4,20])
-	    .domain(d3.extent(data, function(d) { return d.value }));
+	    .domain(
+	    	[
+	    		event.domainMin !== undefined ? event.domainMin : d3.min(data, function(d) { return d.value }),
+	    		event.domainMax !== undefined ? event.domainMax : d3.max(data, function(d) { return d.value })
+	    	]
+	    );
 
 		var user = svg.append("g").classed("user",true);
 	    
