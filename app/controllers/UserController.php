@@ -59,89 +59,90 @@ class UserController extends BaseController {
 		if ($validator->fails())
 		{
 			echo 'Request issue';
+			return;
+		}
+
+		$service = Input::get('service');
+		$liveid = Input::get('liveid');
+		$success = false;
+
+		if($service == 'fitbit'){
+
+			/*
+			*	Fitbit OAuth authorization subroutines
+			*/
+			
+			$key = Config::get('live.fitbit-key');
+		    $secret = Config::get('live.fitbit-secret');
+
+		    // get tokens
+		    $fitbit = new FitBitPHP($key, $secret);
+		    $fitbit->initSession('http://'.$_SERVER['SERVER_NAME'].'/user/authorize?&service=fitbit&liveid='.$liveid);
+
+		    // save tokens
+		    if($fitbit->sessionStatus() == 2){
+		    	$user = User::find($liveid);
+				$user->fitbitToken = $fitbit->getOAuthToken();
+				$user->fitbitSecret = $fitbit->getOAuthSecret();
+				$user->save();
+				$success = true;
+			}
+
+			// return View::make('fitbitAuth',  array('liveid' => Input::get('liveid')));
+		} else if( $service == 'withings' ) {
+			
+			/*
+			*	Withings OAuth authorization subroutines
+			*/
+
+			$key = Config::get('live.withings-key');
+			$secret = Config::get('live.withings-secret');
+
+			// get tokens
+			$withings = new WithingsPHP($key, $secret);
+			$withings->initSession('http://'.$_SERVER['SERVER_NAME'].'/user/authorize?&service=withings&liveid='.$liveid);
+
+			// save tokens
+			if($withings->sessionStatus() == 2){
+				$user = User::find($liveid);
+				$user->withingsToken = $withings->getOAuthToken();
+				$user->withingsSecret = $withings->getOAuthSecret();
+				
+				// withings callback returns withings id under param 'userid'
+				$user->withingsId = $liveid = Input::get('userid');
+				
+				$user->save();
+				$success = true;
+			}
+
+		} else if( $service == 'bodymedia'){
+
+			/*
+			*	Bodymedia OAuth authorization subroutines
+			*/
+
+			$key = Config::get('live.bodymedia-key');
+			$secret = Config::get('live.bodymedia-secret');
+
+			$bm = new BodymediaPHP($key, $secret);
+			$bm->initSession('http://'.$_SERVER['SERVER_NAME'].'/user/authorize?&service=bodymedia&liveid='.$liveid);
+
+			if($bm->sessionStatus() == 2){
+				$user = User::find($liveid);
+				$user->bodymediaToken = $bm->getOAuthToken();
+				$user->bodymediaSecret = $bm->getOAuthSecret();
+				
+				$user->save();
+				$success = true;
+			}
+
 		} else {
-			$service = Input::get('service');
-			$liveid = Input::get('liveid');
-			$success = false;
 
-			if($service == 'fitbit'){
+		}
 
-				/*
-				*	Fitbit OAuth authorization subroutines
-				*/
-				
-				$key = Config::get('live.fitbit-key');
-			    $secret = Config::get('live.fitbit-secret');
-
-			    // get tokens
-			    $fitbit = new FitBitPHP($key, $secret);
-			    $fitbit->initSession('http://live.dev/user/authorize?&service=fitbit&liveid='.$liveid);
-
-			    // save tokens
-			    if($fitbit->sessionStatus() == 2){
-			    	$user = User::find($liveid);
-					$user->fitbitToken = $fitbit->getOAuthToken();
-					$user->fitbitSecret = $fitbit->getOAuthSecret();
-					$user->save();
-					$success = true;
-				}
-
-				// return View::make('fitbitAuth',  array('liveid' => Input::get('liveid')));
-			} else if( $service == 'withings' ) {
-				
-				/*
-				*	Withings OAuth authorization subroutines
-				*/
-
-				$key = Config::get('live.withings-key');
-				$secret = Config::get('live.withings-secret');
-
-				// get tokens
-				$withings = new WithingsPHP($key, $secret);
-				$withings->initSession('http://live.dev/user/authorize?&service=withings&liveid='.$liveid);
-
-				// save tokens
-				if($withings->sessionStatus() == 2){
-					$user = User::find($liveid);
-					$user->withingsToken = $withings->getOAuthToken();
-					$user->withingsSecret = $withings->getOAuthSecret();
-					
-					// withings callback returns withings id under param 'userid'
-					$user->withingsId = $liveid = Input::get('userid');
-					
-					$user->save();
-					$success = true;
-				}
-
-			} else if( $service == 'bodymedia'){
-
-				/*
-				*	Bodymedia OAuth authorization subroutines
-				*/
-
-				$key = Config::get('live.bodymedia-key');
-				$secret = Config::get('live.bodymedia-secret');
-
-				$bm = new BodymediaPHP($key, $secret);
-				$bm->initSession('http://live.dev/user/authorize?&service=bodymedia&liveid='.$liveid);
-
-				if($bm->sessionStatus() == 2){
-					$user = User::find($liveid);
-					$user->bodymediaToken = $bm->getOAuthToken();
-					$user->bodymediaSecret = $bm->getOAuthSecret();
-					
-					$user->save();
-					$success = true;
-				}
-
-			} else {
-
-			}
-
-			if ($success) {
-				$msg =  ucfirst($service).' is now authorized for '.$user->name.'.';
-				return View::make('msg', array('msg' => $msg));
-			}
+		if ($success) {
+			$msg =  ucfirst($service).' is now authorized for '.$user->name.'.';
+			return View::make('msg', array('msg' => $msg));
 		}
 	}
 
