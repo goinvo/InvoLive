@@ -30,6 +30,7 @@ class Measurement extends Eloquent
 				if($measurement->attributeIs($attributes)){
 					// edit value if positive match
 					$measurement->value = $value;
+					$measurement->save();
 					return array('success' => True, 'measurement' => $measurement);
 				}
 			}

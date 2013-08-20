@@ -36,6 +36,7 @@ class BodymediaWorker extends Command {
 	*	Stores steps data
 	*/
 	public function storeSteps($user, $steps, $timestamp){
+		if($steps == 0) return;
 		$stored = Measurement::createMeasurement(
 			$user,
 			'steps',

@@ -7,6 +7,7 @@ live.visualizations = function () {
 
 	/*
 	*	Populates page with visualizations
+	*	@param {obj} data - scores for all users
 	*/
 	draw = function(data){
 		xscale = d3.time.scale()
@@ -26,6 +27,7 @@ live.visualizations = function () {
 
 	/*
 	*	Displays summary/studio visualization and scores
+	*	@param {obj} data - scores for all users (will be averaged to calculate studio score)
 	*/
 	drawSummary = function(data){
 
@@ -97,8 +99,10 @@ live.visualizations = function () {
 
 	/*
 	*	Adds visualization for a single user
+	*	@param {obj} data - score for a single user
 	*/
 	drawUser = function(data){
+		// Adds user to current row of creates a new one if needed
 		if($('.user').size() % 4 === 0) {
 			$container.append($('#row-template').html());
 		}
@@ -107,8 +111,10 @@ live.visualizations = function () {
 		$user = $('.user').last();
 		$user.data(data);
 
+		// draw user radar chart
 		drawUserRadar($user, data);
 
+		// hooks up click events
 		$user.click(function(){
 			$selected = $(this);
 			live.queries.getEventData($(this).data('user'), onUserClicked);
@@ -116,9 +122,15 @@ live.visualizations = function () {
 
 	},
 
+	/*
+	*	Uses chartjs to draw a radar chart for the current user
+	* 	@param {jquery obj} $user - user div object
+	*	@param {obj} data - score data to draw
+	*/
 	drawUserRadar = function($user, data){
 		$stats = $user.find('canvas');
 
+		// adds icons to canvas
 		function drawLabels(metrics, context){
 			$.each(metrics, function(){
 				var metric = this;
@@ -131,8 +143,8 @@ live.visualizations = function () {
 			});
 		}
 
+		// data to be plotted
 		var scores = getScores(data);
-
 		var radarChartData = {
 			labels : $.map(scores, function(val, i) { return '   ' }),
 			datasets : [
@@ -147,8 +159,8 @@ live.visualizations = function () {
 			]
 		}
 
+		// canvas object context
 		var cvs = $stats.get(0).getContext("2d");
-
 		var radar = new Chart(cvs).Radar(radarChartData,
 			{
 				scaleShowLabels : false, 
@@ -168,6 +180,11 @@ live.visualizations = function () {
 		});
 	}
 
+	/*
+	*	Triggered when user region is clicked and event data has been fetched from backend
+	*	Displays all user events
+	*	@param {obj} data - Data containing all events for clicked user
+	*/
 	onUserClicked = function(data){
 
 		var $row = $selected.parent(),
@@ -180,6 +197,7 @@ live.visualizations = function () {
 		$selected.addClass('active');
 
 
+		// decides whether to minimize another user detail section
 		if($('.user-details').length > 0){
 			// collapse if details already expanded
 			if($('.user-details').data('user') === user) {
@@ -197,6 +215,7 @@ live.visualizations = function () {
 		$details.data('user', user);
 		// new strip
 
+		// draws detailed info about user (dropbox, steps, work hours...)
 		drawUserDetails($details, data);
 
 		setTimeout(function(){
@@ -204,6 +223,11 @@ live.visualizations = function () {
 		}, 200);
 	}
 
+	/*
+	*	Draws detailed info about a user (eg. Dropbox, work hours...)
+	*	@param {jquery obj} container - container for the viz
+	*	@param {object} data - data for all events to be plotted
+	*/
 	drawUserDetails = function($container, data){
 		var details = ["Dropbox Actions", "Work Hours", "Steps"];
 
@@ -214,6 +238,12 @@ live.visualizations = function () {
 		drawLegends($container);
 	}
 
+	/*
+	*	Draws data for a single event (eg. Files created, Actual work hours..)
+	*	@param {jquery obj} container - container for the viz
+	*	@param {event object} event - object that contains info about the event to be plotted (eg. domain, event name..)
+	*	@param {object} data - data for event to be plotted
+	*/
 	drawEvent = function($container, event, data){
 		// get datapoints
 		// (don't draw anything if no events are available)
@@ -231,11 +261,12 @@ live.visualizations = function () {
 		$rendered.find('.strip-value').text(value);
 
 		// draw event bubbles
-		drawStripSvg(eventData, event, $rendered.find('.strip-content'));
+		drawStripSvg($rendered.find('.strip-content'), event, eventData);
 	},
 
 	/*
-	*	Calculates score based on user data
+	*	Combines scores with metrics metadata (eg. metric icon...)
+	*	@param {obj} data - scores
 	*/
 	getScores = function(data){
 		function findMetric(data, name){
@@ -253,8 +284,13 @@ live.visualizations = function () {
 		return userMetrics;
 	},
 	
-	drawStripSvg = function(data, event, $container){
-
+	/*
+	*	Draws data bubbles using D3
+	*	@param {jquery obj} container - container for the viz
+	*	@param {event object} event - object that contains info about the event to be plotted (eg. domain, event name..)
+	*	@param {object} data - data for event to be plotted
+	*/
+	drawStripSvg = function($container, event, data){
 		// init dimensions
 		var margin = {top: 0, right: 0, bottom: 0, left: 20},
 	    width = $container.width();
@@ -270,9 +306,14 @@ live.visualizations = function () {
 
 	    xscale.range([margin.right, $container.width()]);
 
-	    // radius scale
+	    // radius scale can be set manually in the event object
 	   	var rscale = d3.scale.linear().range([4,20])
-	    .domain(d3.extent(data, function(d) { return d.value }));
+	    .domain(
+	    	[
+	    		event.domainMin !== undefined ? event.domainMin : d3.min(data, function(d) { return d.value }),
+	    		event.domainMax !== undefined ? event.domainMax : d3.max(data, function(d) { return d.value })
+	    	]
+	    );
 
 		var user = svg.append("g").classed("user",true);
 	    
@@ -301,7 +342,10 @@ live.visualizations = function () {
     	})
 	},
 
-
+	/*
+	*	Draws time legend for user details
+	*	@container {jquery obj} - legend container
+	*/
 	drawLegends = function($container){
 		$rendered = $(Mustache.render($('#strip-template').html(), event)).appendTo($container);
 		$strip = $rendered.find('.strip-content');
