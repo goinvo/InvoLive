@@ -20,6 +20,8 @@ live.queries = function () {
 
     /*
     *   Gets score data for a single or multiple users
+    *   @param {array} - users for which scores have to be retrieved
+    *   @param {function} - callback to be called when 
     */
     getScoreData = function(users, callback){
         currentTimerange = timeranges.lastmonth;
@@ -45,6 +47,8 @@ live.queries = function () {
 
     /*
     *   Gets event data for a single or multiple users
+    *   @param {array} - users for which scores have to be retrieved
+    *   @param {function} - callback to be called when 
     */
     getEventData = function(user, callback){
 

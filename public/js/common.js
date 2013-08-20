@@ -24,7 +24,7 @@ var events = {
 		value : ['Actual work hours'],
 		color : colors[1],
 		icon : 'briefcase-128.png',
-		domainMin : 0
+		domainMin : 0	// fixed minimum for d3 scales
 	},
 	"Steps" : {
 		name : 'Steps',
@@ -73,13 +73,7 @@ var timeranges = {
 		end : moment().format('YYYY-M-D'),
 		resolution : 'day',
 		minDate : moment().subtract('months', 1)
-	},
-    "lastyear" : {
-    	start : 'lastyear',
-    	end : 'now',
-    	resolution : 'day',
-    	minDate : moment().subtract('years', 1)
-    }
+	}
 }
 
 /*
