@@ -11,10 +11,11 @@
 /* Configure for target Browser Set
    Chrome, IE8+
 ============================================*/
-/* line 19, ../scss/partials/_base.scss */
+/* line 27, ../scss/partials/_base.scss */
 body, html {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
+  font-size: 16px;
 }
 
 /*
@@ -27,7 +28,7 @@ html {
   margin-bottom: 1px;
 }
 
-/* line 15, ../scss/partials/_structure.scss */
+/* line 11, ../scss/partials/_structure.scss */
 body {
   margin: 0;
   padding: 0;
@@ -35,7 +36,7 @@ body {
   background-color: #fcf7ea;
 }
 
-/* line 21, ../scss/partials/_structure.scss */
+/* line 16, ../scss/partials/_structure.scss */
 .group {
   *zoom: 1;
 }
@@ -46,16 +47,25 @@ body {
   clear: both;
 }
 
-/* line 25, ../scss/partials/_structure.scss */
+/* line 20, ../scss/partials/_structure.scss */
 .container, .span12 {
   width: 940px;
 }
 
-/* line 3, ../scss/partials/_live.scss */
+/*
+	File Overview:	live SCSS
+	Author: Ivan DiLernia <ivan@goinvo.com>
+	Description: Includes styles for various page components
+*/
+/* line 7, ../scss/partials/_live.scss */
+#logo {
+  display: inline-block;
+}
+/* line 11, ../scss/partials/_live.scss */
 #logo img {
   margin: 0px 8px 0px 3px;
 }
-/* line 8, ../scss/partials/_live.scss */
+/* line 16, ../scss/partials/_live.scss */
 #logo:before, #logo:after {
   content: '';
   border-bottom: solid 1px black;
@@ -64,33 +74,45 @@ body {
   width: 380px;
 }
 
-/* line 17, ../scss/partials/_live.scss */
-#results-content {
+/* line 26, ../scss/partials/_live.scss */
+.container {
   opacity: 0;
 }
 
-/* line 22, ../scss/partials/_live.scss */
+/* line 30, ../scss/partials/_live.scss */
+#results-preloader {
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  left: 0;
+  text-align: center;
+}
+
+/*
+*	Studio scores and data summary
+*/
+/* line 43, ../scss/partials/_live.scss */
 #results-summary canvas, #results-summary div {
   display: inline-block;
   vertical-align: top;
 }
-/* line 27, ../scss/partials/_live.scss */
+/* line 48, ../scss/partials/_live.scss */
 #results-summary canvas {
   margin-top: -20px;
 }
 
-/* line 32, ../scss/partials/_live.scss */
+/* line 53, ../scss/partials/_live.scss */
 #summary-score {
   text-align: center;
   position: relative;
 }
-/* line 36, ../scss/partials/_live.scss */
+/* line 57, ../scss/partials/_live.scss */
 #summary-score .score {
   margin-top: 20px;
   font-size: 300px;
   line-height: 300px;
 }
-/* line 42, ../scss/partials/_live.scss */
+/* line 63, ../scss/partials/_live.scss */
 #summary-score .legend {
   position: absolute;
   bottom: 0;
@@ -98,7 +120,7 @@ body {
   width: 150px;
   height: 150px;
 }
-/* line 49, ../scss/partials/_live.scss */
+/* line 70, ../scss/partials/_live.scss */
 #summary-score .legend .text {
   position: absolute;
   text-align: right;
@@ -108,13 +130,15 @@ body {
   line-height: 32px;
 }
 
-/* line 63, ../scss/partials/_live.scss */
+/*
+*	'Invoites' divider
+*/
+/* line 87, ../scss/partials/_live.scss */
 #invoites div {
-  font-size: 16px;
   display: inline-block;
   margin: 0px 9px 0px 9px;
 }
-/* line 70, ../scss/partials/_live.scss */
+/* line 93, ../scss/partials/_live.scss */
 #invoites:before, #invoites:after {
   content: '';
   border-bottom: solid 1px black;
@@ -124,31 +148,149 @@ body {
   top: -3px;
 }
 
-/* line 80, ../scss/partials/_live.scss */
-#results-preloader {
-  position: absolute;
-  width: 100%;
-  top: 40%;
-  left: 0;
-  text-align: center;
-}
-
-/* line 88, ../scss/partials/_live.scss */
+/* line 103, ../scss/partials/_live.scss */
 .row-wrap {
   padding: 25px 0 25px 0;
   clear: both;
 }
 
-/* line 94, ../scss/partials/_live.scss */
+/* line 109, ../scss/partials/_live.scss */
+hr {
+  border-top: solid 1px #bbbbbb;
+}
+
+/*
+*	Footer
+*/
+/* line 117, ../scss/partials/_live.scss */
+.footer {
+  text-align: center;
+}
+/* line 120, ../scss/partials/_live.scss */
+.footer a, .footer span {
+  color: black;
+}
+/* line 124, ../scss/partials/_live.scss */
+.footer a {
+  text-decoration: underline;
+}
+
+/*
+	File Overview:	live SCSS
+	Author: Ivan DiLernia <ivan@goinvo.com>
+	Description: Includes styles for user blocks
+*/
+/*
+*	Strip containing viz
+*/
+/* line 10, ../scss/partials/_eventchart.scss */
+.strip {
+  border-bottom: 1px solid #ddd;
+}
+/* line 13, ../scss/partials/_eventchart.scss */
+.strip:last-child {
+  border-bottom: 0;
+}
+/* line 17, ../scss/partials/_eventchart.scss */
+.strip .separator {
+  height: 100%;
+  width: 1px;
+  vertical-align: top;
+}
+/* line 24, ../scss/partials/_eventchart.scss */
+.strip .strip-info,
+.strip .strip-content {
+  display: inline-block;
+  height: 60px;
+  vertical-align: top;
+}
+/* line 28, ../scss/partials/_eventchart.scss */
+.strip .strip-info div,
+.strip .strip-content div {
+  display: inline-block;
+}
+/* line 36, ../scss/partials/_eventchart.scss */
+.strip .strip-info .strip-name,
+.strip .strip-info .strip-value {
+  margin-top: 20px;
+}
+/* line 40, ../scss/partials/_eventchart.scss */
+.strip .strip-info .strip-name {
+  margin-left: 10px;
+  width: 160px;
+}
+/* line 45, ../scss/partials/_eventchart.scss */
+.strip .strip-info .strip-value {
+  width: 80px;
+  text-align: center;
+}
+/* line 51, ../scss/partials/_eventchart.scss */
+.strip .strip-content {
+  width: 620px;
+}
+/* line 55, ../scss/partials/_eventchart.scss */
+.strip img {
+  margin-top: 5px;
+  margin-left: 2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+}
+/* line 63, ../scss/partials/_eventchart.scss */
+.strip .subsection {
+  height: 50px;
+}
+
+/*
+*	Time legend styles
+*/
+/* line 73, ../scss/partials/_eventchart.scss */
+.timelegend .axis path {
+  fill: none;
+}
+/* line 77, ../scss/partials/_eventchart.scss */
+.timelegend .axis.y .tick line {
+  display: none;
+}
+/* line 82, ../scss/partials/_eventchart.scss */
+.timelegend .axis line {
+  stroke: #ccc;
+}
+/* line 86, ../scss/partials/_eventchart.scss */
+.timelegend .line {
+  fill: none;
+  stroke-width: 2px;
+  stroke-dasharray: 5, 5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* line 96, ../scss/partials/_eventchart.scss */
+.data circle {
+  cursor: pointer;
+  fill-opacity: 0.3;
+  stroke-opacity: 0.45;
+}
+/* line 100, ../scss/partials/_eventchart.scss */
+.data circle:hover {
+  fill-opacity: 0.8;
+}
+
+/*
+	File Overview:	live SCSS
+	Author: Ivan DiLernia <ivan@goinvo.com>
+	Description: Includes styles for user blocks
+*/
+/* line 7, ../scss/partials/_user.scss */
 .user {
   cursor: pointer;
   border-radius: 8px;
 }
-/* line 99, ../scss/partials/_live.scss */
+/* line 12, ../scss/partials/_user.scss */
 .user:hover, .user.active {
   background: white;
 }
-/* line 102, ../scss/partials/_live.scss */
+/* line 15, ../scss/partials/_user.scss */
 .user:hover .user-stats, .user.active .user-stats {
   -webkit-filter: grayscale(0%);
   -moz-filter: grayscale(0%);
@@ -156,11 +298,11 @@ body {
   -ms-filter: grayscale(0%);
   filter: grayscale(0%);
 }
-/* line 112, ../scss/partials/_live.scss */
+/* line 25, ../scss/partials/_user.scss */
 .user div {
   text-align: center;
 }
-/* line 116, ../scss/partials/_live.scss */
+/* line 29, ../scss/partials/_user.scss */
 .user .user-stats {
   width: 200px;
   margin: 0 auto;
@@ -171,120 +313,21 @@ body {
   -ms-filter: grayscale(100%);
   filter: grayscale(100%);
 }
-/* line 128, ../scss/partials/_live.scss */
+/* line 41, ../scss/partials/_user.scss */
 .user .user-icon img {
   border-radius: 5px;
   text-align: center;
   margin-top: -30px;
   width: 70px;
 }
-/* line 136, ../scss/partials/_live.scss */
+/* line 49, ../scss/partials/_user.scss */
 .user .user-name {
   margin-top: 25px;
   margin-bottom: 15px;
 }
 
-/* line 142, ../scss/partials/_live.scss */
+/* line 55, ../scss/partials/_user.scss */
 .user-details {
   display: none;
   margin-top: 20px;
-}
-
-/* line 147, ../scss/partials/_live.scss */
-hr {
-  border-top: solid 1px #bbbbbb;
-}
-
-/* line 4, ../scss/partials/_visualizations.scss */
-.timelegend .axis path {
-  fill: none;
-}
-/* line 8, ../scss/partials/_visualizations.scss */
-.timelegend .axis.y .tick line {
-  display: none;
-}
-/* line 13, ../scss/partials/_visualizations.scss */
-.timelegend .axis line {
-  stroke: #cfcfcf;
-}
-/* line 17, ../scss/partials/_visualizations.scss */
-.timelegend .line {
-  fill: none;
-  stroke-width: 2px;
-  stroke-dasharray: 5, 5;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-
-/* line 27, ../scss/partials/_visualizations.scss */
-.data circle {
-  cursor: pointer;
-  fill-opacity: 0.3;
-  stroke-opacity: 0.45;
-}
-/* line 31, ../scss/partials/_visualizations.scss */
-.data circle:hover {
-  fill-opacity: 0.8;
-}
-
-/* line 60, ../scss/partials/_visualizations.scss */
-.strip {
-  border-bottom: 1px solid #f3f3f3;
-}
-/* line 63, ../scss/partials/_visualizations.scss */
-.strip:last-child {
-  border-bottom: 0;
-}
-/* line 67, ../scss/partials/_visualizations.scss */
-.strip .separator {
-  height: 100%;
-  width: 1px;
-  vertical-align: top;
-}
-/* line 74, ../scss/partials/_visualizations.scss */
-.strip .strip-info,
-.strip .strip-content {
-  display: inline-block;
-  height: 60px;
-  vertical-align: top;
-}
-/* line 78, ../scss/partials/_visualizations.scss */
-.strip .strip-info div,
-.strip .strip-content div {
-  display: inline-block;
-}
-/* line 83, ../scss/partials/_visualizations.scss */
-.strip .strip-info {
-  font-size: 16px;
-}
-/* line 88, ../scss/partials/_visualizations.scss */
-.strip .strip-info .strip-name,
-.strip .strip-info .strip-value {
-  margin-top: 20px;
-}
-/* line 92, ../scss/partials/_visualizations.scss */
-.strip .strip-info .strip-name {
-  margin-left: 10px;
-  width: 160px;
-}
-/* line 97, ../scss/partials/_visualizations.scss */
-.strip .strip-info .strip-value {
-  width: 80px;
-  text-align: center;
-}
-/* line 103, ../scss/partials/_visualizations.scss */
-.strip .strip-content {
-  width: 620px;
-}
-/* line 107, ../scss/partials/_visualizations.scss */
-.strip img {
-  margin-top: 5px;
-  margin-left: 2px;
-  width: 30px;
-  height: 30px;
-  border-radius: 3px;
-}
-/* line 115, ../scss/partials/_visualizations.scss */
-.strip .subsection {
-  height: 50px;
 }

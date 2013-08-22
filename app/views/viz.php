@@ -34,18 +34,21 @@
 </head>
 
 <body>
-    <div class="container" style="margin-bottom:20px;">
-
-        <!-- title -->
-        <div style="text-align:center; margin-top: 30px;">
-            <div id="logo">
-                <img src="img/logo.svg" alt="logosvg"/>
-            </div>
+   
+    <!-- title -->
+    <div style="text-align:center; margin-top: 30px;">
+        <div id="logo">
+            <img src="img/logo.svg" alt="logosvg"/>
         </div>
+    </div>
 
+    <!-- preloader -->
+    <div id="results-preloader"></div>
+
+    <!-- content -->
+    <div class="container" style="margin-bottom:20px;">
         <!-- scores -->
         <div id="results">
-            <div id="results-preloader"></div>
 
             <div id="results-content">
             	<section id="results-summary" class="row-fluid">
@@ -64,6 +67,14 @@
                     <div> invoites </div>
                 </div>
             </div>
+        </div>
+
+        <div class="footer">
+            <span> <a href="http://goinvo.com"> by Involution Studios</a> </span> 
+            <span> - </span>
+            <span> <a href="http://github.com/goinvo/InvoLive"> Code</a> </span> 
+            <span> - </span>
+            <span> <a  href="mailto:live-internal@goinvo.com?subject=Feedback"> Feedback </a> </span>
         </div>
 
     </div>

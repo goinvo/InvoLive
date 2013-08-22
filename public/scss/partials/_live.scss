@@ -1,4 +1,12 @@
+/*
+	File Overview:	live SCSS
+	Author: Ivan DiLernia <ivan@goinvo.com>
+	Description: Includes styles for various page components
+*/
+
 #logo{
+
+	display: inline-block;
 
 	img{
 		margin: 0px 8px 0px 3px;
@@ -12,11 +20,24 @@
 		height: 10px;
 		width: 380px;
 	}
+
 }
 
-#results-content{
+.container{
 	opacity: 0;
 }
+
+#results-preloader{
+	position: absolute;
+	width:100%;
+	top: 40%;
+	left: 0;
+	text-align: center;
+}
+
+/*
+*	Studio scores and data summary
+*/
 
 #results-summary{
 	canvas, div{
@@ -55,13 +76,15 @@
 			line-height: 32px;
 		}
 	}
-
 }
+
+/*
+*	'Invoites' divider
+*/
 
 #invoites{
 
 	div{
-		font-size: 16px;
 		display: inline-block;
 		margin: 0px 9px 0px 9px;
 	}
@@ -77,74 +100,29 @@
 	}
 }
 
-#results-preloader{
-	position: absolute;
-	width:100%;
-	top: 40%;
-	left: 0;
-	text-align: center;
-}
-
 .row-wrap{
 	padding: 25px 0 25px 0;
 	//border-bottom: 1px solid $gray;
 	clear: both;
 }
 
-.user{
-	
-	cursor: pointer;
-	border-radius: 8px;
-
-	&:hover, &.active{
-		background: white;
-
-		.user-stats{
-			-webkit-filter: grayscale(0%);
-       		-moz-filter: grayscale(0%);
-         	-o-filter: grayscale(0%);
-        	-ms-filter: grayscale(0%);
-            filter: grayscale(0%); 
-		}
-
-	}
-
-	div{
-		text-align: center;
-	}
-
-	.user-stats{
-		width: 200px;
-		margin: 0 auto;
-		border-radius: 10px;
-		-webkit-filter: grayscale(100%);
-	       -moz-filter: grayscale(100%);
-	         -o-filter: grayscale(100%);
-	        -ms-filter: grayscale(100%);
-	            filter: grayscale(100%);
-	}
-
-	.user-icon{
-		img{
-			border-radius: 5px;
-			text-align: center;
-			margin-top: -30px;
-			width: 70px;
-		}
-	}
-
-	.user-name{
-		margin-top: 25px;
-		margin-bottom: 15px;
-	}
-}
-
-.user-details{
-	display: none;
-	margin-top: 20px;
-}
-
 hr{
 	border-top: solid 1px $gray;
+}
+
+/*
+*	Footer
+*/
+
+.footer{
+	text-align: center;
+
+	a, span{
+		color: black;
+	}
+
+	a{
+		text-decoration: underline;
+	}
 }
 

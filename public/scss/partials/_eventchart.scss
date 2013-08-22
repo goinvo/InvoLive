@@ -1,0 +1,105 @@
+/*
+	File Overview:	live SCSS
+	Author: Ivan DiLernia <ivan@goinvo.com>
+	Description: Includes styles for user blocks
+*/
+
+/*
+*	Strip containing viz
+*/
+.strip{
+	border-bottom: 1px solid #ddd;
+
+	&:last-child{
+		border-bottom: 0;
+	}
+
+	.separator{
+		height: 100%;
+		width: 1px;
+		vertical-align: top;
+	}
+
+	.strip-info,
+	.strip-content{
+		display: inline-block;
+		height: 60px;
+		vertical-align: top;
+		div{
+			display: inline-block;
+		}
+	}
+
+	.strip-info{
+
+		.strip-name,
+		.strip-value{
+			margin-top: 20px;
+		}
+
+		.strip-name{
+			margin-left: 10px;
+			width: 160px;
+		}
+
+		.strip-value{
+			width: 80px;
+			text-align: center;
+		}
+	}
+
+	.strip-content{
+		width: 620px;
+	}
+
+	img{
+		margin-top: 5px;
+		margin-left: 2px;
+		width:30px;
+		height: 30px;
+		border-radius: 3px;
+	}
+
+	.subsection{
+		height: 50px;
+	}
+
+}
+
+/*
+*	Time legend styles
+*/
+.timelegend{
+	.axis path{
+  		fill: none;
+	}
+
+	.axis.y .tick line{
+		display: none;
+	}
+
+
+	.axis line{
+		stroke: #ccc;
+	}
+
+	.line{
+		fill: none;
+		stroke-width:2px;
+		stroke-dasharray: 5, 5;
+		stroke-linejoin: round;
+		stroke-linecap: round;
+	}
+}
+
+.data{
+	circle{
+		cursor: pointer;
+		fill-opacity: 0.3;
+		stroke-opacity: 0.45;
+		&:hover{
+			fill-opacity: 0.8;
+		}
+	}
+}
+

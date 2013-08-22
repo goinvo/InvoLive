@@ -11,8 +11,9 @@
 /* Configure for target Browser Set
    Chrome, IE8+
 ============================================*/
-/* line 19, ../scss/partials/_base.scss */
+/* line 27, ../scss/partials/_base.scss */
 body, html {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
+  font-size: 16px;
 }

@@ -8,14 +8,9 @@ html {
 	margin-bottom: 1px;
 }
 
-html, body{
-		// background-color: #eee;
-}
-
 body {
 	@include reset-box-model;
-	background-color: rgb(252,247,234);
-	// background-image: url(/img/white_wall_hash.png);
+	background-color: $light-yellow;
 }
 
 .group {

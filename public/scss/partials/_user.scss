@@ -1,0 +1,58 @@
+/*
+	File Overview:	live SCSS
+	Author: Ivan DiLernia <ivan@goinvo.com>
+	Description: Includes styles for user blocks
+*/
+
+.user{
+	
+	cursor: pointer;
+	border-radius: 8px;
+
+	&:hover, &.active{
+		background: white;
+
+		.user-stats{
+			-webkit-filter: grayscale(0%);
+       		-moz-filter: grayscale(0%);
+         	-o-filter: grayscale(0%);
+        	-ms-filter: grayscale(0%);
+            filter: grayscale(0%); 
+		}
+
+	}
+
+	div{
+		text-align: center;
+	}
+
+	.user-stats{
+		width: 200px;
+		margin: 0 auto;
+		border-radius: 10px;
+		-webkit-filter: grayscale(100%);
+	       -moz-filter: grayscale(100%);
+	         -o-filter: grayscale(100%);
+	        -ms-filter: grayscale(100%);
+	            filter: grayscale(100%);
+	}
+
+	.user-icon{
+		img{
+			border-radius: 5px;
+			text-align: center;
+			margin-top: -30px;
+			width: 70px;
+		}
+	}
+
+	.user-name{
+		margin-top: 25px;
+		margin-bottom: 15px;
+	}
+}
+
+.user-details{
+	display: none;
+	margin-top: 20px;
+}

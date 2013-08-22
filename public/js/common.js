@@ -130,14 +130,14 @@ function initPreloader(){
 function startPreloader(duration){
 	preloader.play();
 	$preloader.fadeIn(duration);
-	$('#results-content').animate({opacity : 0}, 200);
+	$('.container').animate({opacity : 0}, 200);
 }
 
 function stopPreloader(){
 	preloader.stop();
 	$preloader.fadeOut(100);
 	setTimeout(function(){
-		$('#results-content').animate({opacity : 1}, 200);
+		$('.container').animate({opacity : 1}, 200);
 	}, 300);
 }
 
