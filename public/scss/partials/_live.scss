@@ -116,6 +116,7 @@ hr{
 
 .footer{
 	text-align: center;
+	
 
 	a, span{
 		color: black;
@@ -123,6 +124,17 @@ hr{
 
 	a{
 		text-decoration: underline;
+	}
+
+	&:before,
+	&:after{
+		content: '';
+		border-bottom: solid 1px black;
+		display: inline-block;
+		height: 5px;
+		width: 300px;
+		position: relative;
+		top: -3px;
 	}
 }
 

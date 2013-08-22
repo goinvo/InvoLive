@@ -166,13 +166,23 @@ hr {
 .footer {
   text-align: center;
 }
-/* line 120, ../scss/partials/_live.scss */
+/* line 121, ../scss/partials/_live.scss */
 .footer a, .footer span {
   color: black;
 }
-/* line 124, ../scss/partials/_live.scss */
+/* line 125, ../scss/partials/_live.scss */
 .footer a {
   text-decoration: underline;
+}
+/* line 130, ../scss/partials/_live.scss */
+.footer:before, .footer:after {
+  content: '';
+  border-bottom: solid 1px black;
+  display: inline-block;
+  height: 5px;
+  width: 300px;
+  position: relative;
+  top: -3px;
 }
 
 /*
