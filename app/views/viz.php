@@ -70,11 +70,13 @@
         </div>
 
         <div class="footer">
-            <span> <a href="http://goinvo.com"> by Involution Studios</a> </span> 
-            <span> - </span>
-            <span> <a href="http://github.com/goinvo/InvoLive"> Code</a> </span> 
-            <span> - </span>
-            <span> <a  href="mailto:live-internal@goinvo.com?subject=Feedback"> Feedback </a> </span>
+            <div style="margin: 0 10px 0 10px; display:inline-block;">
+                <span> <a href="http://goinvo.com"> by Involution Studios</a> </span> 
+                <span> - </span>
+                <span> <a href="http://github.com/goinvo/InvoLive"> Code</a> </span> 
+                <span> - </span>
+                <span> <a  href="mailto:live-internal@goinvo.com?subject=Feedback"> Feedback </a> </span>
+            </div>
         </div>
 
     </div>
